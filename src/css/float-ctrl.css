@@ -1,0 +1,23 @@
+/* float-ctrl.css — Floating row action panel */
+#float-ctrl {
+  position: fixed; z-index: 500;
+  background: #1e1e1e; border: 1px solid #444; border-radius: 6px;
+  padding: 3px 5px; box-shadow: 0 3px 12px rgba(0,0,0,.45);
+  display: flex; gap: 3px; align-items: center; pointer-events: auto;
+}
+#float-ctrl.hidden { display: none !important; }
+.fc-btn {
+  background: none; border: 1px solid #444; padding: 3px 8px;
+  border-radius: 4px; color: #ccc; font-size: 10pt; cursor: pointer;
+  line-height: 1; white-space: nowrap; font-family: var(--F);
+}
+.fc-btn:hover     { background: #4a6a9a; color: #fff; border-color: #7aacdd; }
+.fc-btn.del:hover { background: #7a1010; color: #fff; border-color: #c03030; }
+.fc-btn.dup:hover { background: #2a5a2a; color: #fff; border-color: #5aaa5a; }
+.fc-sep  { width: 1px; height: 18px; background: #444; }
+.drag-h  {
+  cursor: grab; color: #888; font-size: 14pt; padding: 0 4px;
+  user-select: none; border: 1px solid #444; border-radius: 3px;
+  background: #2a2a2a; line-height: 1.4;
+}
+.drag-h:active { cursor: grabbing; background: #3a3a3a; }

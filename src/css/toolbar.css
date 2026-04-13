@@ -1,0 +1,19 @@
+/* toolbar.css — App bar, mode toggle, TVA input, save indicator */
+#appbar { background: #1e2535 !important; }
+.navbar-brand { font-family: var(--F); font-size: 13pt; font-weight: bold; letter-spacing: .5px; }
+.tva-inp {
+  width: 56px; padding: 3px 6px; border: 1px solid #495057; border-radius: 4px;
+  background: #2d3748; color: #e2e8f0; text-align: right; font-size: 11pt; font-family: var(--F);
+}
+.tva-inp:focus { outline: none; border-color: #4a90d9; }
+.toolbar-sep { width: 1px; height: 24px; background: #444; margin: 0 2px; flex-shrink: 0; }
+.mode-grp { background: #111; border-radius: 5px; padding: 2px; display: flex; gap: 2px; }
+.mbtn {
+  padding: 3px 14px; border: none; border-radius: 4px; font-weight: bold;
+  font-size: 10pt; color: #888; background: transparent; cursor: pointer; font-family: var(--F);
+}
+.mbtn.on { background: #1a56a0; color: #fff; }
+.mbtn:hover:not(.on) { color: #fff; }
+#save-ind { font-size: 9pt; color: #888; transition: color 0.3s; }
+#save-ind.saved { color: #6fd86f; }
+#save-ind.error { color: #ff6b6b; }

@@ -1,0 +1,11 @@
+/* footer.css — Bottom status bar with totals */
+#foot {
+  background: #1e2535; border-top: 2px solid #111;
+  padding: 6px 16px; display: flex; align-items: center;
+  gap: 18px; flex-wrap: wrap; flex-shrink: 0;
+}
+.fi   { display: flex; flex-direction: column; gap: 1px; }
+.fl   { font-size: 7.5pt; font-weight: bold; color: #7a90b0; letter-spacing: 1px; text-transform: uppercase; font-family: var(--F); }
+.fv   { font-size: 13pt; font-weight: bold; color: #fff; font-family: var(--F); }
+.fv.big { color: #6fd86f; }
+.fsep { width: 1px; height: 28px; background: #3a4a5a; }

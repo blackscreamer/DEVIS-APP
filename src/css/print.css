@@ -1,0 +1,17 @@
+/* print.css — Print & PDF export styles */
+@media print {
+  #appbar, #foot, #nf, #float-ctrl, .offcanvas, .offcanvas-backdrop { display: none !important; }
+  body, #wrap { height: auto; overflow: visible; background: #fff; }
+  #doc  { box-shadow: none; border: none; padding: 0; max-width: 100%; }
+  tr.sel-row td, tr.sel-multi td { outline: none; }
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  thead { display: table-header-group; }
+  tr    { page-break-inside: avoid; }
+
+  /* no-prices in print: transparent text, rows stay */
+  #tbl.no-prices .price-cell                              { color: transparent !important; }
+  #tbl.no-prices .price-cell input                        { color: transparent !important; }
+  #tbl.no-prices .rgt  td, #tbl.no-prices .rtva td, #tbl.no-prices .rttc td  { color: transparent !important; }
+  #tbl.no-prices .rgt  .tot-val,  #tbl.no-prices .rtva .tot-val,  #tbl.no-prices .rttc .tot-val  { color: transparent !important; }
+  #tbl.no-prices .rgt  .tot-label,#tbl.no-prices .rtva .tot-label,#tbl.no-prices .rttc .tot-label{ color: transparent !important; }
+}
