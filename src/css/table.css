@@ -1,12 +1,21 @@
 /* table.css — Table structure, inputs, row types, no-prices mode */
-#tbl { width: 100%; border-collapse: collapse; table-layout: fixed; }
-col.cn    { width: 70px; }
-col.cd    { width: auto; }
-col.cu    { width: 46px; }
-col.cq    { width: 82px;  min-width: 82px; }
-col.cp    { width: 92px;  min-width: 92px; }
-col.ct    { width: 92px;  min-width: 92px; }
-col.cp-bpu{ width: 130px; }
+#tbl { width: 100%; border-collapse: collapse; table-layout: auto; }
+
+/* Fixed-width columns via col elements */
+col.cn    { width: 68px; }
+col.cd    { /* auto — takes remaining space */ }
+col.cu    { width: 48px; }
+col.cq    { width: 80px; }
+col.cp    { width: 100px; }
+col.ct    { width: 110px; }
+col.cp-bpu{ width: 140px; }
+
+/* Reinforce fixed widths through thead */
+#tbl thead th:nth-child(1) { width: 68px; }
+#tbl thead th:nth-child(3) { width: 48px; }
+#tbl thead th:nth-child(4) { width: 80px; }
+#tbl thead th:nth-child(5) { width: 100px; }
+#tbl thead th:nth-child(6) { width: 110px; }
 
 thead th {
   border: 1px solid #000; padding: 4px; text-align: center;
@@ -63,10 +72,22 @@ tr.sel-multi td { outline: 2px solid #2a8a2a; outline-offset: -1px; }
 .dov-bot td  { border-bottom: 3px solid #1a56a0 !important; }
 
 /* ══ NO-PRICES MODE ══
-   Text becomes transparent — cell background & borders stay visible.
-   Rows (rts, rtc, rgt, rtva, rttc) are never hidden — only text color is cleared. */
-#tbl.no-prices .price-cell                             { color: transparent !important; }
-#tbl.no-prices .price-cell input                       { color: transparent !important; pointer-events: none; }
-#tbl.no-prices .rgt td,  #tbl.no-prices .rtva td,  #tbl.no-prices .rttc td  { color: transparent !important; }
-#tbl.no-prices .rgt  .tot-val,  #tbl.no-prices .rtva  .tot-val,  #tbl.no-prices .rttc  .tot-val  { color: transparent !important; }
-#tbl.no-prices .rgt  .tot-label,#tbl.no-prices .rtva  .tot-label,#tbl.no-prices .rttc  .tot-label{ color: transparent !important; }
+   Text becomes transparent on price cells only.
+   Row backgrounds, borders, and labels stay fully visible.
+   
+   - Article/subart price cells (Prix U, Montant HT): transparent
+   - Sub-chap total rows (rts): only the value cell transparent, label stays
+   - Chap total rows (rtc): same
+   - Grand total rows (rgt, rtva, rttc): only value cell transparent, label stays
+*/
+#tbl.no-prices .price-cell                     { color: transparent !important; }
+#tbl.no-prices .price-cell input               { color: transparent !important; pointer-events: none; }
+
+/* Sub-chap / chap total: hide value only */
+#tbl.no-prices .rts .tot-val,
+#tbl.no-prices .rtc .tot-val                   { color: transparent !important; }
+
+/* Grand total / TVA / TTC: hide value only, keep label */
+#tbl.no-prices .rgt  .tot-val,
+#tbl.no-prices .rtva .tot-val,
+#tbl.no-prices .rttc .tot-val                  { color: transparent !important; }

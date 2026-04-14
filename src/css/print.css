@@ -8,10 +8,12 @@
   thead { display: table-header-group; }
   tr    { page-break-inside: avoid; }
 
-  /* no-prices in print: transparent text, rows stay */
-  #tbl.no-prices .price-cell                              { color: transparent !important; }
-  #tbl.no-prices .price-cell input                        { color: transparent !important; }
-  #tbl.no-prices .rgt  td, #tbl.no-prices .rtva td, #tbl.no-prices .rttc td  { color: transparent !important; }
-  #tbl.no-prices .rgt  .tot-val,  #tbl.no-prices .rtva .tot-val,  #tbl.no-prices .rttc .tot-val  { color: transparent !important; }
-  #tbl.no-prices .rgt  .tot-label,#tbl.no-prices .rtva .tot-label,#tbl.no-prices .rttc .tot-label{ color: transparent !important; }
+  /* no-prices in print: transparent text on value cells only */
+  #tbl.no-prices .price-cell                    { color: transparent !important; }
+  #tbl.no-prices .price-cell input              { color: transparent !important; pointer-events: none; }
+  #tbl.no-prices .rts .tot-val,
+  #tbl.no-prices .rtc .tot-val                  { color: transparent !important; }
+  #tbl.no-prices .rgt  .tot-val,
+  #tbl.no-prices .rtva .tot-val,
+  #tbl.no-prices .rttc .tot-val                 { color: transparent !important; }
 }

@@ -33,7 +33,6 @@ function artParentTotal(r) {
 function artTotal(r) {
   if (r.type !== 'art' && r.type !== 'subart') return 0;
   if (mode === 'BPU') {
-    // En BPU, utilise bpu_pu si défini, sinon pu
     return num(r.bpu_pu !== undefined ? r.bpu_pu : r.pu);
   }
   return num(r.qty) * num(r.pu);
@@ -79,7 +78,7 @@ function recalc() {
   const isBPU = mode === 'BPU';
 
   if (!isBPU) {
-    // Montant HT des articles
+    // Montant HT des articles (sans DA, price-cell toujours présente)
     rows.filter(r => r.type === 'art' || r.type === 'subart').forEach(r => {
       const el = document.getElementById('at-' + r.id);
       if (!el) return;
@@ -107,10 +106,9 @@ function recalc() {
     rows.filter(r => r.type === 'art' || r.type === 'subart').forEach(r => {
       const sl = document.getElementById('sl-' + r.id);
       if (sl) {
+        if (r.type === 'art' && artHasSubarts(r.id)) { sl.textContent = ''; return; }
         const bPu    = r.bpu_pu    !== undefined ? r.bpu_pu    : r.pu;
         const bUnite = r.bpu_unite !== undefined ? r.bpu_unite : r.unite;
-        // Pas de subline sur article parent (hasKids)
-        if (r.type === 'art' && artHasSubarts(r.id)) { sl.textContent = ''; return; }
         sl.textContent = buildBpuSubline(bUnite, num(bPu));
       }
     });
@@ -124,21 +122,22 @@ function recalc() {
   adjustColumns();
 }
 
-/** Ajuste dynamiquement la largeur de la colonne Montant HT */
+/**
+ * Ajuste la largeur de la colonne Montant HT selon la valeur la plus large.
+ * Avec table-layout:auto le navigateur gère les autres colonnes automatiquement.
+ */
 function adjustColumns() {
-  const cols = {
-    pu:  document.querySelector('col.cp'),
-    tot: document.querySelector('col.ct'),
-    qty: document.querySelector('col.cq'),
-  };
+  const ctCol = document.querySelector('col.ct');
+  if (!ctCol) return;
   const fTot = document.getElementById('fttc');
+  if (!fTot) return;
   const span = document.createElement('span');
-  span.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;font-family:"Times New Roman",Times,serif;font-weight:bold;font-size:12pt;padding:0 10px';
-  document.body.appendChild(span);
+  span.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;font-family:"Times New Roman",Times,serif;font-weight:bold;font-size:12pt;padding:0 12px';
   span.textContent = fTot.textContent;
-  let maxW = Math.max(span.offsetWidth + 10, 75);
+  document.body.appendChild(span);
+  const w = Math.max(span.offsetWidth + 4, 100);
   document.body.removeChild(span);
-  if (cols.pu)  cols.pu.style.width  = '92px';
-  if (cols.tot) cols.tot.style.width = maxW + 'px';
-  if (cols.qty) cols.qty.style.width = '82px';
+  ctCol.style.width = w + 'px';
+  const cpCol = document.querySelector('col.cp');
+  if (cpCol) cpCol.style.width = Math.max(w - 10, 90) + 'px';
 }
