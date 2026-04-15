@@ -15,18 +15,17 @@ function render() {
   /* ── Helpers : lignes totaux (DQE uniquement) ── */
   const subTotRow = (sub, vis) => {
     const h = vis ? '' : 'style="display:none"';
+    // 6 cols: N°(1) + label(4) + val(1) = 6
     return `<tr class="rts" data-ts="${sub.id}" ${h}>
       <td style="background:${C.tsBg}"></td>
-      <td colspan="3" style="background:${C.tsBg}"><span class="tot-label" style="color:${C.tsFg}">Total ${esc(sub.desig || '')}</span></td>
-      <td style="background:${C.tsBg}"></td>
+      <td colspan="4" style="background:${C.tsBg}"><span class="tot-label" style="color:${C.tsFg}">Total ${esc(sub.desig || '')}</span></td>
       <td class="tot-val price-cell" style="background:${C.tsBg};color:${C.tsFg}" id="st-${sub.id}"></td>
     </tr>`;
   };
 
   const chapTotRow = (chap) => `<tr class="rtc" data-tc="${chap.id}">
     <td style="background:${C.tcBg}"></td>
-    <td colspan="3" style="background:${C.tcBg}"><span class="tot-label" style="color:${C.tcFg}">Total ${esc(chap.desig || '')}</span></td>
-    <td style="background:${C.tcBg}"></td>
+    <td colspan="4" style="background:${C.tcBg}"><span class="tot-label" style="color:${C.tcFg}">Total ${esc(chap.desig || '')}</span></td>
     <td class="tot-val price-cell" style="background:${C.tcBg};color:${C.tcFg}" id="ct-${chap.id}"></td>
   </tr>`;
 
@@ -48,13 +47,11 @@ function render() {
       const cs = isBPU ? '1' : '4'; // colspan désignation
       html += `<tr class="rc${selCls}" id="ro-${r.id}" draggable="false" onclick="selectRow('${r.id}',this,event)">
         <td class="nc" style="background:${C.chapBg};color:${C.chapFg};cursor:pointer" onclick="toggleCollapse('${r.id}',event)">${r.collapsed ? '▸' : '▾'} ${esc(n)}</td>
-        <td colspan="${cs}" style="background:${C.chapBg}">
+        <td colspan="${isBPU ? 2 : 5}" style="background:${C.chapBg}">
           <input class="di" value="${esc(r.desig)}" placeholder="Nom du chapitre…"
             style="color:${C.chapFg}!important;-webkit-text-fill-color:${C.chapFg};caret-color:${C.chapFg};font-weight:bold;font-size:12pt;text-transform:uppercase"
             oninput="upd('${r.id}','desig',this.value)"/>
         </td>
-        ${isBPU ? '' : `<td style="background:${C.chapBg}"></td>`}
-        <td style="background:${C.chapBg}"></td>
       </tr>`;
     }
 
@@ -70,13 +67,11 @@ function render() {
       const cs = isBPU ? '1' : '4';
       html += `<tr class="rs${selCls}" id="ro-${r.id}" ${h} onclick="selectRow('${r.id}',this,event)">
         <td class="nc" style="background:${bg};color:${fg};cursor:pointer;font-weight:bold" onclick="toggleCollapse('${r.id}',event)">${r.collapsed ? '▸' : '▾'} ${esc(n)}</td>
-        <td colspan="${cs}" style="background:${bg}">
+        <td colspan="${isBPU ? 2 : 5}" style="background:${bg}">
           <input class="di" value="${esc(r.desig)}" placeholder="Nom du sous-chapitre…"
             style="color:${fg}!important;-webkit-text-fill-color:${fg};caret-color:${fg};font-weight:bold;text-transform:uppercase;padding-left:${pl}px"
             oninput="upd('${r.id}','desig',this.value)"/>
         </td>
-        ${isBPU ? '' : `<td style="background:${bg}"></td>`}
-        <td style="background:${bg}"></td>
       </tr>`;
     }
 
@@ -213,20 +208,17 @@ function render() {
     const tvaLbl  = document.getElementById('tva').value;
     html += `<tr class="rgt">
       <td style="background:${C.gtBg}"></td>
-      <td colspan="3" style="background:${C.gtBg}"><span class="tot-label" style="color:${C.gtFg};font-size:12pt">TOTAL GÉNÉRAL HT</span></td>
-      <td style="background:${C.gtBg}"></td>
+      <td colspan="4" style="background:${C.gtBg}"><span class="tot-label" style="color:${C.gtFg};font-size:12pt">TOTAL GÉNÉRAL HT</span></td>
       <td class="tot-val price-cell" style="background:${C.gtBg};color:${C.gtFg};font-size:12pt" id="gt-val">${da(grand)}</td>
     </tr>
     <tr class="rtva">
       <td style="background:${C.gtBg}"></td>
-      <td colspan="3" style="background:${C.gtBg}"><span class="tot-label" id="tva-label" style="color:${C.gtFg}">TVA (${tvaLbl}%)</span></td>
-      <td style="background:${C.gtBg}"></td>
+      <td colspan="4" style="background:${C.gtBg}"><span class="tot-label" id="tva-label" style="color:${C.gtFg}">TVA (${tvaLbl}%)</span></td>
       <td class="tot-val price-cell" style="background:${C.gtBg};color:${C.gtFg}" id="tva-val">${da(tvaAmt)}</td>
     </tr>
     <tr class="rttc">
       <td style="background:${C.gtBg}"></td>
-      <td colspan="3" style="background:${C.gtBg}"><span class="tot-label" style="color:${C.gtFg};font-size:12pt">TOTAL TTC</span></td>
-      <td style="background:${C.gtBg}"></td>
+      <td colspan="4" style="background:${C.gtBg}"><span class="tot-label" style="color:${C.gtFg};font-size:12pt">TOTAL TTC</span></td>
       <td class="tot-val price-cell" style="background:${C.gtBg};color:${C.gtFg};font-size:12pt" id="ttc-val">${da(grand + tvaAmt)}</td>
     </tr>`;
   }

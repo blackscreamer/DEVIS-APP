@@ -34,3 +34,15 @@ let saveTimeout = null;
 
 /** Drag IDs (multi-row drag) */
 let dragIds = [];
+
+/** Page layout settings for print/PDF */
+let pageLayout = {
+  size:        'A4',       // 'A4' | 'A3' | 'Letter' | 'Legal'
+  orient:      'portrait', // 'portrait' | 'landscape'
+  mt: 15, mb: 15,          // margins in mm
+  ml: 15, mr: 15,
+  header:      '',         // custom header text (left side)
+  footer:      '',         // custom footer text (left side)
+  showPageNum: true,       // show page number (right side of footer)
+  showDate:    false,      // show date (right side of header)
+};
