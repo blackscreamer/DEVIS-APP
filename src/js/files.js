@@ -1,16 +1,18 @@
 /**
- * files.js — Sauvegarde et chargement des projets.
- * Utilise l'API Electron (window.electronAPI) si disponible,
- * sinon tombe en mode navigateur (download / FileReader).
+ * files.js — Sauvegarde, chargement, autosave, backup.
+ *
+ * Backup logic:
+ *   Every 5 minutes, if a project file is open, write
+ *   "projectname.backup.json" in the same directory.
+ *   The backup is separate from the main file so it never overwrites it.
  */
 
 const isElectron = !!(window.electronAPI);
 
-/* ── Données à sauvegarder ── */
+/* ── Données sérialisées ── */
 function getSaveData() {
   return {
-    v: 8,
-    rows, mode, nid, C, showPrices,
+    v: 8, rows, mode, nid, C, showPrices,
     tva: document.getElementById('tva').value,
     l1:  document.getElementById('hl1').value,
     l2:  document.getElementById('hl2').value,
@@ -18,7 +20,6 @@ function getSaveData() {
   };
 }
 
-/* ── Appliquer les données chargées ── */
 function applyLoadedData(d) {
   rows = d.rows || [];
   nid  = d.nid  || 1;
@@ -31,7 +32,7 @@ function applyLoadedData(d) {
   setMode(d.mode || 'DQE');
 }
 
-/* ── Autosave localStorage (debounced 500ms) ── */
+/* ── Autosave localStorage (debounced) ── */
 function triggerAutosave() {
   clearTimeout(saveTimeout);
   saveTimeout = setTimeout(saveLocal, AUTOSAVE_DELAY);
@@ -45,24 +46,25 @@ function loadLocal() {
   try { applyLoadedData(JSON.parse(str)); return true; } catch { return false; }
 }
 
-/* ── Sauvegarder ── */
+/* ── Sauvegarder projet (Ctrl+S / menu) ── */
 async function fileSave(saveAs) {
-  const data     = getSaveData();
-  const json     = JSON.stringify(data, null, 2);
-  const defName  = (data.l1 || 'devis').replace(/\s+/g, '_').substring(0, 40) + '.json';
+  const data    = getSaveData();
+  const json    = JSON.stringify(data, null, 2);
+  const defName = (data.l1 || 'devis').replace(/\s+/g,'_').substring(0,40) + '.json';
 
   if (isElectron) {
-    const path = saveAs
+    const savedPath = saveAs
       ? await window.electronAPI.saveProjectAs(json, defName)
       : await window.electronAPI.saveProject(json, defName, currentFilePath);
-    if (path) {
-      currentFilePath = path;
-      updateFileLabel(path);
-      notif('✓ Fichier sauvegardé');
+    if (savedPath) {
+      currentFilePath = savedPath;
+      updateFileLabel(savedPath);
+      setSaveIndicator('saved');
+      setTimeout(() => setSaveIndicator(''), 2000);
       saveLocal();
+      notif('✓ Projet sauvegardé');
     }
   } else {
-    // Navigateur — download
     const a = document.createElement('a');
     a.href = URL.createObjectURL(new Blob([json], { type: 'application/json' }));
     a.download = defName; a.click();
@@ -70,67 +72,92 @@ async function fileSave(saveAs) {
   }
 }
 
-/* ── Ouvrir via input[type=file] (navigateur) ── */
-function importProjectFile(inp) {
-  const f = inp.files[0]; if (!f) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    try {
-      const d = JSON.parse(e.target.result);
-      if (!d.rows) throw 0;
-      applyLoadedData(d);
-      currentFilePath = null;
-      updateFileLabel('');
-      render(); snapshot(); saveLocal();
-      notif('✓ Projet chargé');
-    } catch { notif('⚠ Fichier invalide'); }
-  };
-  reader.readAsText(f);
-  inp.value = '';
-}
-
-/* ── Mettre à jour le label du fichier courant en pied de page ── */
-function updateFileLabel(path) {
-  const el = document.getElementById('current-file-label');
-  if (el) el.textContent = path ? '📄 ' + path.split(/[\\/]/).pop() : '';
-}
-
-/* ── Autosave fichier toutes les 5 min (Electron) ── */
-if (isElectron) {
+/* ── Backup automatique toutes les 5 minutes ──
+   Écrit projectname.backup.json dans le même répertoire que le fichier projet.
+   Ne touche jamais au fichier principal.                                       */
+function startBackupTimer() {
   setInterval(async () => {
-    if (currentFilePath) {
-      const data = getSaveData();
-      const path = await window.electronAPI.saveProject(JSON.stringify(data, null, 2), '', currentFilePath);
-      if (path) {
-        const ind = document.getElementById('save-ind');
+    if (!currentFilePath) return;
+    const json = JSON.stringify(getSaveData(), null, 2);
+    const backupPath = await window.electronAPI.saveBackup(json, currentFilePath);
+    if (backupPath) {
+      const ind = document.getElementById('save-ind');
+      if (ind) {
+        const prev = ind.innerHTML;
+        ind.innerHTML = '<i class="bi bi-shield-check"></i> Backup';
         ind.classList.add('saved');
-        ind.innerHTML = '<i class="bi bi-cloud-check"></i> Auto-saved';
-        setTimeout(() => { ind.classList.remove('saved'); ind.innerHTML = '<i class="bi bi-cloud-check"></i> Auto'; }, 2000);
+        setTimeout(() => { ind.innerHTML = prev; ind.classList.remove('saved'); }, 2000);
       }
     }
-  }, AUTOSAVE_FILE_MS);
+  }, AUTOSAVE_FILE_MS); // 5 min, défini dans constants.js
+}
 
-  /* Écoute des événements menu Electron */
-  window.electronAPI.onMenuNew(()     => { if (confirm('Nouveau projet ? Les modifications non sauvegardées seront perdues.')) { rows=[]; nid=1; currentFilePath=null; updateFileLabel(''); render(); snapshot(); } });
-  window.electronAPI.onMenuSave(()    => fileSave(false));
-  window.electronAPI.onMenuSaveAs(()  => fileSave(true));
-  window.electronAPI.onMenuUndo(()    => undo());
-  window.electronAPI.onMenuRedo(()    => redo());
-  window.electronAPI.onMenuMode(m     => setMode(m));
-  window.electronAPI.onMenuCollapseAll(v => collapseAll(v));
-  window.electronAPI.onMenuTogglePrices(() => togglePrices());
-  window.electronAPI.onMenuExportExcel(()  => doExport());
+/* ── Label fichier courant ── */
+function updateFileLabel(filePath) {
+  const el = document.getElementById('current-file-label');
+  if (el) el.textContent = filePath ? '📄 ' + filePath.split(/[\\/]/).pop() : '';
+}
 
+/* ── PDF export ── */
+async function doExportPdf() {
+  const data    = getSaveData();
+  const defName = (data.l1 || 'devis').replace(/\s+/g,'_').substring(0,40) + '.pdf';
+  if (isElectron) {
+    const p = await window.electronAPI.exportPdf(defName);
+    if (p) notif('✓ PDF exporté');
+  } else {
+    window.print();
+  }
+}
+
+/* ── Impression silencieuse — envoie directement à l'imprimante par défaut ── */
+async function doPrint() {
+  if (isElectron) {
+    notif('🖨 Impression en cours…');
+    const ok = await window.electronAPI.printSilent();
+    notif(ok ? '✓ Document envoyé à l\'imprimante' : '⚠ Erreur impression');
+  } else {
+    // En mode navigateur : avertissement — pas d'impression silencieuse possible
+    notif('⚠ Impression silencieuse disponible uniquement dans l\'app Electron');
+  }
+}
+
+/* ── Wiring Electron events ── */
+if (isElectron) {
+
+  // Start the 5-minute backup timer
+  startBackupTimer();
+
+  window.electronAPI.onMenuNew(() => {
+    if (confirm('Nouveau projet ? Les modifications non sauvegardées seront perdues.')) {
+      rows = []; nid = 1; currentFilePath = null;
+      updateFileLabel('');
+      render(); snapshot(); saveLocal();
+    }
+  });
+
+  window.electronAPI.onMenuSave(()        => fileSave(false));
+  window.electronAPI.onMenuSaveAs(()      => fileSave(true));
+  window.electronAPI.onMenuExportExcel(() => doExport());
+  window.electronAPI.onMenuExportPdf(()   => doExportPdf());
+  window.electronAPI.onMenuPrint(()       => doPrint());
+  window.electronAPI.onMenuUndo(()        => undo());
+  window.electronAPI.onMenuRedo(()        => redo());
+  window.electronAPI.onMenuMode(m         => setMode(m));
+  window.electronAPI.onMenuCollapseAll(v  => collapseAll(v));
+  window.electronAPI.onMenuTogglePrices(()=> togglePrices());
+
+  // File opened via OS association or menu
   window.electronAPI.onFileOpened(({ path, content }) => {
     try {
       const d = JSON.parse(content);
-      if (!d.rows) throw 0;
+      if (!d.rows) throw new Error('Format invalide');
       applyLoadedData(d);
       currentFilePath = path;
       updateFileLabel(path);
       render(); snapshot(); saveLocal();
-      notif('✓ Projet chargé');
-    } catch { notif('⚠ Fichier invalide'); }
+      notif('✓ ' + path.split(/[\\/]/).pop() + ' chargé');
+    } catch (e) { notif('⚠ ' + e.message); }
   });
 
   window.electronAPI.onFileImportExcel(buf => importExcelBuffer(buf));

@@ -75,14 +75,20 @@
             data-bs-toggle="offcanvas" data-bs-target="#colorpop" onclick="syncColorPicker()"
             title="Couleurs"><i class="bi bi-palette-fill"></i> <span class="d-none d-lg-inline">Couleurs</span></button>
 
+    <!-- Column widths -->
+    <button class="btn btn-sm btn-outline-secondary text-light border-secondary"
+            data-bs-toggle="offcanvas" data-bs-target="#colpop"
+            title="Largeur des colonnes"><i class="bi bi-layout-three-columns"></i> <span class="d-none d-lg-inline">Colonnes</span></button>
+
     <div class="toolbar-sep"></div>
 
     <!-- File actions -->
     <button class="btn btn-sm btn-outline-secondary text-light border-secondary" onclick="fileSave(false)" title="Sauvegarder (Ctrl+S)"><i class="bi bi-floppy-fill"></i> <span class="d-none d-lg-inline">Sauvegarder</span></button>
     <button class="btn btn-sm btn-outline-secondary text-light border-secondary" onclick="fileSave(true)"  title="Sauvegarder sous…"><i class="bi bi-file-earmark-plus"></i> <span class="d-none d-lg-inline">Nouveau Fichier</span></button>
     <label  class="btn btn-sm btn-outline-secondary text-light border-secondary mb-0" title="Importer Excel"><i class="bi bi-file-earmark-spreadsheet"></i> <span class="d-none d-lg-inline">Import XLS</span><input type="file" accept=".xlsx,.xls" onchange="importExcelFile(this)" style="display:none"/></label>
-    <button class="btn btn-sm btn-outline-success"   onclick="doExport()"  title="Exporter Excel"><i class="bi bi-file-earmark-excel-fill"></i> <span class="d-none d-lg-inline">Excel</span></button>
-    <button class="btn btn-sm btn-outline-light"     onclick="doPrint()"   title="Imprimer / PDF"><i class="bi bi-printer-fill"></i> <span class="d-none d-lg-inline">Imprimer</span></button>
+    <button class="btn btn-sm btn-outline-success"   onclick="doExport()"    title="Exporter Excel avec mise en forme"><i class="bi bi-file-earmark-excel-fill"></i> <span class="d-none d-lg-inline">Excel</span></button>
+    <button class="btn btn-sm btn-outline-danger"    onclick="doExportPdf()" title="Exporter PDF (mise en forme préservée)"><i class="bi bi-file-earmark-pdf-fill"></i> <span class="d-none d-lg-inline">PDF</span></button>
+    <button class="btn btn-sm btn-outline-light"     onclick="doPrint()"     title="Imprimer directement (sans dialogue)"><i class="bi bi-printer-fill"></i> <span class="d-none d-lg-inline">Imprimer</span></button>
 
     <div class="toolbar-sep"></div>
 
@@ -132,6 +138,37 @@
   </div>
 </div>
 
+<!-- ═══ COLUMN WIDTHS (Offcanvas) ═══ -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="colpop">
+  <div class="offcanvas-header">
+    <h6 class="offcanvas-title mb-0"><i class="bi bi-layout-three-columns me-2"></i>Largeur des colonnes</h6>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+  </div>
+  <div class="offcanvas-body">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <span style="font-size:11px;font-family:sans-serif">Ajustement automatique</span>
+      <div class="form-check form-switch mb-0">
+        <input class="form-check-input" type="checkbox" id="col-autofit" onchange="toggleAutofit(this.checked)" checked/>
+      </div>
+    </div>
+    <hr class="my-2"/>
+    <div id="col-manual" style="display:none">
+      <p class="text-muted mb-2" style="font-size:11px">Largeurs manuelles (px) :</p>
+      <div class="col-row"><label>N°</label>              <input type="number" id="cw-num"  value="68"  min="30"  max="200" oninput="applyColWidths()"/></div>
+      <div class="col-row"><label>Désignation</label>     <input type="number" id="cw-desig" value="300" min="100" max="700" oninput="applyColWidths()"/></div>
+      <div class="col-row dqe-col"><label>Unité</label>   <input type="number" id="cw-unit" value="48"  min="30"  max="120" oninput="applyColWidths()"/></div>
+      <div class="col-row dqe-col"><label>Quantité</label><input type="number" id="cw-qty"  value="80"  min="50"  max="200" oninput="applyColWidths()"/></div>
+      <div class="col-row"><label>Prix U HT</label>       <input type="number" id="cw-pu"   value="100" min="60"  max="200" oninput="applyColWidths()"/></div>
+      <div class="col-row dqe-col"><label>Montant HT</label><input type="number" id="cw-tot" value="110" min="70" max="250" oninput="applyColWidths()"/></div>
+    </div>
+    <div id="col-auto-hint" style="font-size:11px;color:#666;font-family:sans-serif;line-height:1.6">
+      En mode automatique, les colonnes s'ajustent à leur contenu.<br/>
+      Désactivez pour définir des largeurs fixes.
+    </div>
+    <button class="btn btn-sm btn-secondary w-100 mt-3" data-bs-dismiss="offcanvas">Fermer</button>
+  </div>
+</div>
+
 <!-- ═══ DOCUMENT ═══ -->
 <div id="wrap">
 <div id="doc">
@@ -159,6 +196,18 @@
     </thead>
     <tbody id="body"></tbody>
   </table>
+
+  <!-- ═══ RÉSUMÉ TTC ═══ -->
+  <div id="ttc-summary" style="margin-top:18px;font-family:'Times New Roman',Times,serif;font-size:12pt;color:#000;line-height:2.2">
+    <div style="border-top:2px solid #000;padding-top:10px">
+      <span style="font-weight:normal">Le montant total TTC en chiffres : </span>
+      <span id="ttc-chiffres" style="font-weight:bold;text-decoration:underline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    </div>
+    <div>
+      <span style="font-weight:normal">Le montant total TTC en lettres : </span>
+      <span id="ttc-lettres" style="font-weight:bold;font-style:italic;text-transform:uppercase">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    </div>
+  </div>
 </div>
 </div>
 
@@ -190,6 +239,8 @@
 <!-- ═══ SCRIPTS ═══ -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<!-- ExcelJS for styled Excel export (colors, fonts, borders matching app) -->
+<script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
 
 <!-- App modules (order matters) -->
 <script src="js/constants.js"></script>

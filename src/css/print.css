@@ -17,3 +17,7 @@
   #tbl.no-prices .rtva .tot-val,
   #tbl.no-prices .rttc .tot-val                 { color: transparent !important; }
 }
+
+  /* TTC summary: page-break-inside avoid, always show */
+  #ttc-summary { page-break-inside: avoid; }
+  #tbl.no-prices ~ #ttc-summary { visibility: hidden; }

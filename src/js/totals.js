@@ -120,6 +120,33 @@ function recalc() {
   document.getElementById('fpct').textContent = document.getElementById('tva').value;
   document.getElementById('fcnt').textContent = rows.filter(r => r.type === 'art').length;
   adjustColumns();
+
+  /* ── TTC summary lines below the table ── */
+  const summaryDiv = document.getElementById('ttc-summary');
+  if (summaryDiv) {
+    if (isBPU) {
+      summaryDiv.style.display = 'none';
+    } else {
+      summaryDiv.style.display = '';
+      const grand   = grandTotal();
+      const tvaPct  = num(document.getElementById('tva').value) / 100;
+      const ttcVal  = grand + grand * tvaPct;
+      const elChif  = document.getElementById('ttc-chiffres');
+      const elLett  = document.getElementById('ttc-lettres');
+      if (elChif) elChif.textContent = ttcVal ? da(ttcVal) : '—';
+      if (elLett) {
+        if (ttcVal) {
+          const intPart = Math.floor(ttcVal);
+          const dec     = Math.round((ttcVal - intPart) * 100);
+          let txt = numToWordsFr(intPart) + ' DINAR' + (intPart > 1 ? 'S' : '') + ' ALGÉRIEN' + (intPart > 1 ? 'S' : '');
+          if (dec > 0) txt += ' ET ' + numToWordsFr(dec) + ' CENTIME' + (dec > 1 ? 'S' : '');
+          elLett.textContent = txt;
+        } else {
+          elLett.textContent = '—';
+        }
+      }
+    }
+  }
 }
 
 /**

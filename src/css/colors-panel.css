@@ -1,4 +1,4 @@
-/* colors-panel.css — Offcanvas color picker panel */
+/* colors-panel.css — Offcanvas color picker panel + column widths panel */
 .offcanvas { max-width: 280px; }
 .offcanvas-header { background: #1e2535; color: #fff; }
 .offcanvas-header .btn-close { filter: invert(1); }
@@ -12,4 +12,15 @@
 .cp-row input[type=color] {
   width: 32px; height: 26px; border: 1px solid #ccc;
   background: none; cursor: pointer; border-radius: 3px; padding: 2px;
+}
+
+/* Column width rows */
+.col-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px; margin-bottom: 7px;
+}
+.col-row label { font-size: 11px; color: #333; flex: 1; font-family: sans-serif; }
+.col-row input[type=number] {
+  width: 70px; padding: 3px 6px; border: 1px solid #ccc; border-radius: 4px;
+  font-size: 11px; text-align: right; background: #fff;
 }

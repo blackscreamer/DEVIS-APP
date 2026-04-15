@@ -71,23 +71,14 @@ tr.sel-multi td { outline: 2px solid #2a8a2a; outline-offset: -1px; }
 .dov-top td  { border-top:    3px solid #1a56a0 !important; }
 .dov-bot td  { border-bottom: 3px solid #1a56a0 !important; }
 
-/* ══ NO-PRICES MODE ══
-   Text becomes transparent on price cells only.
-   Row backgrounds, borders, and labels stay fully visible.
-   
-   - Article/subart price cells (Prix U, Montant HT): transparent
-   - Sub-chap total rows (rts): only the value cell transparent, label stays
-   - Chap total rows (rtc): same
-   - Grand total rows (rgt, rtva, rttc): only value cell transparent, label stays
-*/
+/* ══ NO-PRICES MODE ══ */
 #tbl.no-prices .price-cell                     { color: transparent !important; }
 #tbl.no-prices .price-cell input               { color: transparent !important; pointer-events: none; }
-
-/* Sub-chap / chap total: hide value only */
 #tbl.no-prices .rts .tot-val,
 #tbl.no-prices .rtc .tot-val                   { color: transparent !important; }
-
-/* Grand total / TVA / TTC: hide value only, keep label */
 #tbl.no-prices .rgt  .tot-val,
 #tbl.no-prices .rtva .tot-val,
 #tbl.no-prices .rttc .tot-val                  { color: transparent !important; }
+/* Also hide TTC summary lines when prices are hidden */
+#tbl.no-prices ~ #ttc-summary,
+body.no-prices #ttc-summary                    { visibility: hidden; }

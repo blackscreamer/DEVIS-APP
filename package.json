@@ -4,15 +4,33 @@
   "description": "Application de Devis BTP — DQE / BPU",
   "main": "src/main.js",
   "scripts": {
-    "start":  "electron .",
-    "dev":    "electron . --dev",
-    "build":  "electron-builder --win --x64",
+    "start":     "electron .",
+    "dev":       "electron . --dev",
+    "build":     "electron-builder --win --x64",
     "build-all": "electron-builder --win --mac --linux"
   },
   "build": {
     "appId": "com.devis.btp",
     "productName": "Devis BTP",
     "directories": { "output": "build/dist" },
+
+    "fileAssociations": [
+      {
+        "ext":         "json",
+        "name":        "Projet Devis BTP",
+        "description": "Fichier de projet Devis BTP (DQE/BPU)",
+        "icon":        "src/assets/icon.ico",
+        "role":        "Editor"
+      },
+      {
+        "ext":         "devis",
+        "name":        "Projet Devis BTP",
+        "description": "Fichier de projet Devis BTP",
+        "icon":        "src/assets/icon.ico",
+        "role":        "Editor"
+      }
+    ],
+
     "win": {
       "target": [{ "target": "nsis", "arch": ["x64"] }],
       "icon": "src/assets/icon.ico"
@@ -28,12 +46,16 @@
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
-      "installerLanguages": ["fr_FR", "en_US"]
+      "installerLanguages": ["fr_FR", "en_US"],
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
     }
   },
   "devDependencies": {
-    "electron": "^28.0.0",
+    "electron":         "^28.0.0",
     "electron-builder": "^24.0.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "exceljs": "^4.4.0"
+  }
 }
