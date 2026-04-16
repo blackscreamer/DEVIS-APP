@@ -33,4 +33,5 @@ function redo() {
 document.addEventListener('keydown', e => {
   if (e.ctrlKey && e.key === 'z') { e.preventDefault(); undo(); }
   if (e.ctrlKey && e.key === 'y') { e.preventDefault(); redo(); }
+  if (e.ctrlKey && e.key === 'p') { e.preventDefault(); if(typeof doPreview==='function') doPreview(); }
 });

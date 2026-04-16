@@ -5,16 +5,13 @@ contextBridge.exposeInMainWorld('electronAPI', {
   saveProjectAs: (content, defaultName)              => ipcRenderer.invoke('dialog:saveAs',   { content, defaultName }),
   saveBackup:    (content, currentPath)              => ipcRenderer.invoke('file:saveBackup', { content, currentPath }),
   saveExcel:     (buffer, defaultName)               => ipcRenderer.invoke('dialog:saveExcel',{ buffer, defaultName }),
-  // print and exportPdf receive the full page HTML string
-  printDoc:      (html)                              => ipcRenderer.invoke('file:print',      { html }),
-  exportPdf:     (html, defaultName)                 => ipcRenderer.invoke('file:exportPdf',  { html, defaultName }),
+  openPreview:   (html)                              => ipcRenderer.invoke('preview:open',    { html }),
 
   onMenuNew:          cb => ipcRenderer.on('menu:new',          () => cb()),
   onMenuSave:         cb => ipcRenderer.on('menu:save',         () => cb()),
   onMenuSaveAs:       cb => ipcRenderer.on('menu:saveAs',       () => cb()),
   onMenuExportExcel:  cb => ipcRenderer.on('menu:exportExcel',  () => cb()),
-  onMenuExportPdf:    cb => ipcRenderer.on('menu:exportPdf',    () => cb()),
-  onMenuPrint:        cb => ipcRenderer.on('menu:print',        () => cb()),
+  onMenuPreview:      cb => ipcRenderer.on('menu:preview',      () => cb()),
   onMenuTogglePrices: cb => ipcRenderer.on('menu:togglePrices', () => cb()),
   onMenuMode:         cb => ipcRenderer.on('menu:mode',         (_, m) => cb(m)),
   onMenuCollapseAll:  cb => ipcRenderer.on('menu:collapseAll',  (_, v) => cb(v)),
