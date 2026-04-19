@@ -1,12 +1,15 @@
 /**
- * files.js
+ * files.js — Save, load, backup, print (browser), PDF (Electron IPC).
  *
- * buildPrintHTML() strategy:
- *   Instead of extracting CSS from the DOM (unreliable in Electron file://),
- *   we rebuild the entire print document from scratch using the data in `rows[]`.
- *   All styles are hardcoded inline — no external dependencies.
- *   The output looks exactly like the target image: clean A4, black borders,
- *   Times New Roman, correct colors per row type.
+ * PRINT:
+ *   buildPrintHTML() creates a complete self-contained HTML with all CSS inline.
+ *   In Electron: sent to main.js → written to temp file → shell.openExternal()
+ *   → opens in user's default browser → browser's native print dialog.
+ *   User gets: full preview, printer selection, copies, margins, PDF option.
+ *
+ * PDF:
+ *   Same HTML sent to main.js → hidden BrowserWindow loads it as file://
+ *   → printToPDF() → saved to disk → opened in default PDF viewer.
  */
 
 const isElectron = !!(window.electronAPI);
@@ -33,6 +36,7 @@ function applyLoadedData(d) {
   if (d.showPrices !== undefined) { showPrices = d.showPrices; applyPricesUI(); }
   setMode(d.mode || 'DQE');
   syncPageLayoutUI();
+  if (typeof updateWorkspaceSize === 'function') updateWorkspaceSize();
 }
 
 /* ── Autosave ── */
@@ -60,7 +64,7 @@ async function fileSave(saveAs) {
       : await window.electronAPI.saveProject(json, defName, currentFilePath);
     if (p) {
       currentFilePath = p; updateFileLabel(p);
-      setSaveIndicator('saved'); setTimeout(()=>setSaveIndicator(''),2000);
+      setSaveIndicator('saved'); setTimeout(()=>setSaveIndicator(''), 2000);
       saveLocal(); notif('✓ Sauvegardé');
     }
   } else {
@@ -110,18 +114,21 @@ function applyPageLayout() {
   pageLayout.footer     = g('pl-footer')?.value || '';
   pageLayout.showPageNum= !!g('pl-pgnum')?.checked;
   pageLayout.showDate   = !!g('pl-date')?.checked;
+  if (typeof updateWorkspaceSize === 'function') updateWorkspaceSize();
   triggerAutosave();
   notif('✓ Mise en page appliquée');
 }
 
-/* ════════════════════════════════════════════════════════
+/* ════════════════════════════════════════════
    BUILD PRINT HTML
    
-   Rebuilds the entire document from rows[] data with all
-   styles hardcoded inline. No external CSS dependencies.
-   Matches the target layout: A4, Times New Roman, black
-   borders, colored rows, totals, TTC summary lines.
-════════════════════════════════════════════════════════ */
+   Generates a fully self-contained HTML document
+   from rows[] data. All styles are inline — no
+   external dependencies. Works in any browser.
+   
+   The @page CSS rule sets paper size and margins.
+   print-color-adjust: exact preserves all colors.
+════════════════════════════════════════════ */
 function buildPrintHTML() {
   const p         = pageLayout;
   const isBPU     = mode === 'BPU';
@@ -135,389 +142,259 @@ function buildPrintHTML() {
   const now       = new Date();
   const dateStr   = now.toLocaleDateString('fr-DZ',{day:'2-digit',month:'2-digit',year:'numeric'});
 
-  // ── Numbering ──
   const { nums, letters } = buildNums();
-
-  // ── Totals ──
-  const { chapT, subT } = computeTotals();
+  const { chapT, subT }   = computeTotals();
   const grand   = grandTotal();
   const tvaAmt  = grand * tvaVal / 100;
   const ttcVal  = grand + tvaAmt;
+  const hide    = !showPrices;
 
-  // ── Cell style helpers (all inline) ──
+  // Cell style constants
   const F    = "'Times New Roman', Times, serif";
   const SZ   = '11pt';
   const BD   = '1px solid #000';
-  const CELL = `font-family:${F};font-size:${SZ};padding:3px 5px;border:${BD};vertical-align:middle;`;
-  const NUM_CELL = CELL + 'text-align:right;font-weight:bold;white-space:nowrap;';
-  const hide = !showPrices;
+  const CELL = `font-family:${F};font-size:${SZ};padding:3px 5px;border:${BD};vertical-align:middle;color:#000;`;
+  const NCELL= CELL + 'text-align:right;font-weight:bold;white-space:nowrap;';
 
-  // ── Row builders ──
-  function chapRow(r, n) {
-    const bg = C.chapBg, fg = C.chapFg;
+  // Row builders
+  const chapRow = (r) => {
     const span = isBPU ? 3 : 6;
-    return `<tr>
-      <td style="${CELL}background:${bg};color:${fg};text-align:center;font-weight:bold;font-size:11pt" colspan="${span}">
-        ${esc(r.desig||'')}
-      </td>
-    </tr>`;
-  }
+    return `<tr><td colspan="${span}" style="${CELL}background:${C.chapBg};color:${C.chapFg};text-align:center;font-weight:bold;font-size:12pt;text-transform:uppercase;">${esc(r.desig||'')}</td></tr>`;
+  };
 
-  function subRow(r, n) {
-    const lv = r.level || 1;
-    const bg = lv===1 ? C.sub1Bg : lv===2 ? C.sub2Bg : C.sub3Bg;
-    const fg = lv===1 ? C.sub1Fg : lv===2 ? C.sub2Fg : C.sub3Fg;
-    const pl = 6 + (lv-1)*14;
+  const subRow = (r, n) => {
+    const lv = r.level||1;
+    const bg = lv===1?C.sub1Bg:lv===2?C.sub2Bg:C.sub3Bg;
+    const fg = lv===1?C.sub1Fg:lv===2?C.sub2Fg:C.sub3Fg;
+    const pl = 6+(lv-1)*14;
     const span = isBPU ? 2 : 5;
     return `<tr>
       <td style="${CELL}background:${bg};color:${fg};font-weight:bold;text-align:center;">${esc(n)}</td>
-      <td style="${CELL}background:${bg};color:${fg};font-weight:bold;padding-left:${pl}px;text-transform:uppercase;" colspan="${span}">
-        ${esc(r.desig||'')}
-      </td>
+      <td colspan="${span}" style="${CELL}background:${bg};color:${fg};font-weight:bold;padding-left:${pl}px;text-transform:uppercase;">${esc(r.desig||'')}</td>
     </tr>`;
-  }
+  };
 
-  function artRow(r, n) {
+  const artRow = (r, n) => {
     const hasKids = artHasSubarts(r.id);
     const t = hasKids ? 0 : artTotal(r);
-    const bg  = C.artBg, fg = C.artFg;
+    const bg = C.artBg, fg = C.artFg;
     if (isBPU) {
-      const bDesig  = r.bpu_desig  !== undefined ? r.bpu_desig  : r.desig;
-      const bPu     = r.bpu_pu     !== undefined ? r.bpu_pu     : r.pu;
-      const bUnite  = r.bpu_unite  !== undefined ? r.bpu_unite  : r.unite;
-      const subline = !hasKids ? buildBpuSubline(bUnite, num(bPu)) : '';
+      const bD = r.bpu_desig!==undefined?r.bpu_desig:r.desig;
+      const bP = r.bpu_pu!==undefined?r.bpu_pu:r.pu;
+      const bU = r.bpu_unite!==undefined?r.bpu_unite:r.unite;
+      const sl = !hasKids ? buildBpuSubline(bU, num(bP)) : '';
       return `<tr>
         <td style="${CELL}background:${bg};color:${fg};text-align:center;">${esc(n)}</td>
-        <td style="${CELL}background:${bg};color:${fg};">${esc(bDesig)}${subline?`<br/><em style="font-size:9pt">${esc(subline)}</em>`:''}</td>
-        <td style="${NUM_CELL}background:${bg};color:${fg};">${!hasKids&&!hide ? daNoUnit(num(bPu)) : ''}</td>
+        <td style="${CELL}background:${bg};color:${fg};">${esc(bD)}${sl?`<br/><em style="font-size:9pt;font-weight:bold;">${esc(sl)}</em>`:''}</td>
+        <td style="${NCELL}background:${bg};color:${fg};">${!hasKids&&!hide?daNoUnit(num(bP)):''}</td>
       </tr>`;
     }
     return `<tr>
       <td style="${CELL}background:${bg};color:${fg};text-align:center;">${esc(n)}</td>
       <td style="${CELL}background:${bg};color:${fg};">${esc(r.desig||'')}</td>
       <td style="${CELL}background:${bg};color:${fg};text-align:center;">${hasKids?'':esc(r.unite||'')}</td>
-      <td style="${NUM_CELL}background:${bg};color:${fg};">${hasKids?'':fmtNum(r.qty)}</td>
-      <td style="${NUM_CELL}background:${bg};color:${fg};">${hasKids||hide?'':daNoUnit(num(r.pu))}</td>
-      <td style="${NUM_CELL}background:${bg};color:${fg};">${t&&!hide?daNoUnit(t):''}</td>
+      <td style="${NCELL}background:${bg};color:${fg};">${hasKids?'':fmtNum(r.qty)}</td>
+      <td style="${NCELL}background:${bg};color:${fg};">${hasKids||hide?'':daNoUnit(num(r.pu))}</td>
+      <td style="${NCELL}background:${bg};color:${fg};">${t&&!hide?daNoUnit(t):''}</td>
     </tr>`;
-  }
+  };
 
-  function subartRow(r, letter) {
+  const subartRow = (r, letter) => {
     const t = artTotal(r);
     const bg = C.saBg, fg = C.saFg;
     if (isBPU) {
-      const bDesig = r.bpu_desig !== undefined ? r.bpu_desig : r.desig;
-      const bPu    = r.bpu_pu   !== undefined ? r.bpu_pu   : r.pu;
-      const bUnite = r.bpu_unite!== undefined ? r.bpu_unite: r.unite;
-      const subline= buildBpuSubline(bUnite, num(bPu));
+      const bD = r.bpu_desig!==undefined?r.bpu_desig:r.desig;
+      const bP = r.bpu_pu!==undefined?r.bpu_pu:r.pu;
+      const bU = r.bpu_unite!==undefined?r.bpu_unite:r.unite;
+      const sl = buildBpuSubline(bU, num(bP));
       return `<tr>
         <td style="${CELL}background:${bg};color:${fg};text-align:center;">${esc(letter)}</td>
-        <td style="${CELL}background:${bg};color:${fg};padding-left:18px;">${esc(bDesig)}${subline?`<br/><em style="font-size:9pt">${esc(subline)}</em>`:''}</td>
-        <td style="${NUM_CELL}background:${bg};color:${fg};">${!hide?daNoUnit(num(bPu)):''}</td>
+        <td style="${CELL}background:${bg};color:${fg};padding-left:18px;">${esc(bD)}${sl?`<br/><em style="font-size:9pt;font-weight:bold;">${esc(sl)}</em>`:''}</td>
+        <td style="${NCELL}background:${bg};color:${fg};">${!hide?daNoUnit(num(bP)):''}</td>
       </tr>`;
     }
     return `<tr>
       <td style="${CELL}background:${bg};color:${fg};text-align:center;">${esc(letter)}</td>
       <td style="${CELL}background:${bg};color:${fg};padding-left:18px;">${esc(r.desig||'')}</td>
       <td style="${CELL}background:${bg};color:${fg};text-align:center;">${esc(r.unite||'')}</td>
-      <td style="${NUM_CELL}background:${bg};color:${fg};">${fmtNum(r.qty)}</td>
-      <td style="${NUM_CELL}background:${bg};color:${fg};">${!hide?daNoUnit(num(r.pu)):''}</td>
-      <td style="${NUM_CELL}background:${bg};color:${fg};">${t&&!hide?daNoUnit(t):''}</td>
+      <td style="${NCELL}background:${bg};color:${fg};">${fmtNum(r.qty)}</td>
+      <td style="${NCELL}background:${bg};color:${fg};">${!hide?daNoUnit(num(r.pu)):''}</td>
+      <td style="${NCELL}background:${bg};color:${fg};">${t&&!hide?daNoUnit(t):''}</td>
     </tr>`;
-  }
+  };
 
-  function blankRow(r) {
+  const blankRow = (r) => {
     const span = isBPU ? 3 : 6;
-    return `<tr><td colspan="${span}" style="${CELL}font-style:italic;color:#444;">${esc(r.desig||'')}</td></tr>`;
-  }
+    return `<tr><td colspan="${span}" style="${CELL}font-style:italic;">${esc(r.desig||'')}</td></tr>`;
+  };
 
-  function subTotRow(desig, total) {
-    const bg = C.tsBg, fg = C.tsFg;
+  const subTotRow = (desig, total) => {
     const span = isBPU ? 2 : 5;
     return `<tr>
-      <td colspan="${span}" style="${CELL}background:${bg};color:${fg};font-weight:bold;text-align:right;text-transform:uppercase;border-top:2px solid #50a050;">
-        Total ${esc(desig)}
-      </td>
-      <td style="${NUM_CELL}background:${bg};color:${fg};border-top:2px solid #50a050;">${!hide?daNoUnit(total):''}</td>
+      <td colspan="${span}" style="${NCELL}background:${C.tsBg};color:${C.tsFg};text-align:right;text-transform:uppercase;border-top:2px solid #50a050;">Total ${esc(desig)}</td>
+      <td style="${NCELL}background:${C.tsBg};color:${C.tsFg};border-top:2px solid #50a050;">${!hide?daNoUnit(total):''}</td>
     </tr>`;
-  }
+  };
 
-  function chapTotRow(desig, total) {
-    const bg = C.tcBg, fg = C.tcFg;
+  const chapTotRow = (desig, total) => {
     const span = isBPU ? 2 : 5;
     return `<tr>
-      <td colspan="${span}" style="${CELL}background:${bg};color:${fg};font-weight:bold;font-size:11pt;text-align:right;text-transform:uppercase;border-top:2px solid #30a030;">
-        Total ${esc(desig)}
-      </td>
-      <td style="${NUM_CELL}background:${bg};color:${fg};font-size:11pt;border-top:2px solid #30a030;">${!hide?daNoUnit(total):''}</td>
+      <td colspan="${span}" style="${NCELL}background:${C.tcBg};color:${C.tcFg};text-align:right;font-size:11pt;text-transform:uppercase;border-top:2px solid #30a030;">Total ${esc(desig)}</td>
+      <td style="${NCELL}background:${C.tcBg};color:${C.tcFg};font-size:11pt;border-top:2px solid #30a030;">${!hide?daNoUnit(total):''}</td>
     </tr>`;
-  }
+  };
 
-  // ── Build table rows ──
+  // Build all rows
   let tableRows = '';
-  let chapStk = [], subStk = [];
+  let chapStk=[], subStk=[];
 
-  const flushSubs = () => {
-    while (subStk.length) {
-      const s = subStk.pop();
-      tableRows += subTotRow(s.desig, subT[s.id]||0);
-    }
-  };
-  const flushChap = () => {
-    if (!chapStk.length) return;
-    const c = chapStk.pop();
-    tableRows += chapTotRow(c.desig, chapT[c.id]||0);
-  };
+  const flushSubs = () => { while(subStk.length){ const s=subStk.pop(); tableRows+=subTotRow(s.desig,subT[s.id]||0); } };
+  const flushChap = () => { if(!chapStk.length)return; const c=chapStk.pop(); tableRows+=chapTotRow(c.desig,chapT[c.id]||0); };
 
-  rows.forEach((r, i) => {
-    const n      = nums[i];
-    const letter = letters[i];
-
-    if (r.type === 'chap') {
-      flushSubs(); flushChap();
-      chapStk.push({ id: r.id, desig: r.desig });
-      tableRows += chapRow(r, n);
-    } else if (r.type === 'sub') {
-      const lv = r.level || 1;
-      while (subStk.length && subStk[subStk.length-1].level >= lv) {
-        const s = subStk.pop();
-        tableRows += subTotRow(s.desig, subT[s.id]||0);
-      }
-      subStk.push({ id: r.id, desig: r.desig, level: lv });
-      tableRows += subRow(r, n);
-    } else if (r.type === 'art') {
-      tableRows += artRow(r, n);
-    } else if (r.type === 'subart') {
-      tableRows += subartRow(r, letter);
-    } else if (r.type === 'blank') {
-      tableRows += blankRow(r);
-    }
+  rows.forEach((r,i) => {
+    const n=nums[i], letter=letters[i];
+    if(r.type==='chap')         { flushSubs();flushChap();chapStk.push({id:r.id,desig:r.desig});tableRows+=chapRow(r); }
+    else if(r.type==='sub')     { const lv=r.level||1;while(subStk.length&&subStk[subStk.length-1].level>=lv){const s=subStk.pop();tableRows+=subTotRow(s.desig,subT[s.id]||0);}subStk.push({id:r.id,desig:r.desig,level:lv});tableRows+=subRow(r,n); }
+    else if(r.type==='art')     { tableRows+=artRow(r,n); }
+    else if(r.type==='subart')  { tableRows+=subartRow(r,letter); }
+    else if(r.type==='blank')   { tableRows+=blankRow(r); }
   });
-
   flushSubs(); flushChap();
 
-  // ── Grand total rows ──
-  const gtBg = C.gtBg, gtFg = C.gtFg;
+  // Grand total rows (DQE only)
   const span5 = isBPU ? 2 : 5;
   if (!isBPU) {
     tableRows += `
-    <tr>
-      <td colspan="${span5}" style="${CELL}background:${gtBg};color:${gtFg};font-weight:bold;font-size:12pt;text-align:right;text-transform:uppercase;border-top:3px solid #060;">TOTAL GÉNÉRAL HT</td>
-      <td style="${NUM_CELL}background:${gtBg};color:${gtFg};font-size:12pt;border-top:3px solid #060;">${!hide?daNoUnit(grand):''}</td>
-    </tr>
-    <tr>
-      <td colspan="${span5}" style="${CELL}background:${gtBg};color:${gtFg};font-weight:bold;text-align:right;">TVA (${tvaVal}%)</td>
-      <td style="${NUM_CELL}background:${gtBg};color:${gtFg};">${!hide?daNoUnit(tvaAmt):''}</td>
-    </tr>
-    <tr>
-      <td colspan="${span5}" style="${CELL}background:${gtBg};color:${gtFg};font-weight:bold;font-size:12pt;text-align:right;text-transform:uppercase;border-top:2px solid #000;">TOTAL TTC</td>
-      <td style="${NUM_CELL}background:${gtBg};color:${gtFg};font-size:12pt;border-top:2px solid #000;">${!hide?da(ttcVal):''}</td>
-    </tr>`;
+    <tr><td colspan="${span5}" style="${NCELL}background:${C.gtBg};color:${C.gtFg};font-size:12pt;text-transform:uppercase;border-top:3px solid #000;">TOTAL GÉNÉRAL HT</td>
+        <td style="${NCELL}background:${C.gtBg};color:${C.gtFg};font-size:12pt;border-top:3px solid #000;">${!hide?daNoUnit(grand):''}</td></tr>
+    <tr><td colspan="${span5}" style="${NCELL}background:${C.gtBg};color:${C.gtFg};">TVA (${tvaVal}%)</td>
+        <td style="${NCELL}background:${C.gtBg};color:${C.gtFg};">${!hide?daNoUnit(tvaAmt):''}</td></tr>
+    <tr><td colspan="${span5}" style="${NCELL}background:${C.gtBg};color:${C.gtFg};font-size:12pt;text-transform:uppercase;border-top:2px solid #000;">TOTAL TTC</td>
+        <td style="${NCELL}background:${C.gtBg};color:${C.gtFg};font-size:12pt;border-top:2px solid #000;">${!hide?da(ttcVal):''}</td></tr>`;
   }
 
-  // ── Column headers ──
+  // Column headers
   const thead = isBPU
     ? `<tr style="background:#d9d9d9;">
-        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;width:60px;">N°</th>
+        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;width:55px;">N°</th>
         <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;">DESIGNATION DES OUVRAGES</th>
         <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;width:120px;">${!hide?'PRIX UNITAIRE HT':''}</th>
       </tr>`
     : `<tr style="background:#d9d9d9;">
-        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;width:60px;">N°</th>
+        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;width:55px;">N°</th>
         <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;">DESIGNATION DES OUVRAGES</th>
-        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;width:40px;">U</th>
-        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:right;width:80px;">QUANTITE</th>
-        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:right;width:95px;">${!hide?'P.U EN HT':''}</th>
-        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:right;width:110px;">MONTANT HT</th>
+        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;width:38px;">U</th>
+        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:right;width:78px;">QUANTITE</th>
+        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:right;width:90px;">${!hide?'P.U EN HT':''}</th>
+        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:right;width:108px;">MONTANT HT</th>
       </tr>`;
 
-  // ── TTC summary lines ──
+  // TTC summary lines
   const ttcSummary = (!isBPU && ttcVal) ? `
-  <div style="margin-top:20px;font-family:${F};font-size:11pt;color:#000;line-height:2.4;border-top:2px solid #000;padding-top:12px;">
-    <div>
-      <span>Le montant total TTC en chiffres&nbsp;: </span>
-      <strong>${!hide ? da(ttcVal) : '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}</strong>
-    </div>
-    <div>
-      <span>Le montant total TTC en lettres&nbsp;: </span>
-      <strong><em>${!hide ? numToWordsFr(Math.floor(ttcVal)) + ' DINARS ALGÉRIENS' + (Math.round((ttcVal-Math.floor(ttcVal))*100)>0?' ET '+numToWordsFr(Math.round((ttcVal-Math.floor(ttcVal))*100))+' CENTIMES':'') : '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}</em></strong>
-    </div>
+  <div style="margin-top:20px;font-family:${F};font-size:11pt;line-height:2.4;border-top:2px solid #000;padding-top:12px;">
+    <div>Le montant total TTC en chiffres : <strong>${!hide?da(ttcVal):'___________________'}</strong></div>
+    <div>Le montant total TTC en lettres : <strong><em>${!hide?(numToWordsFr(Math.floor(ttcVal))+(Math.round((ttcVal-Math.floor(ttcVal))*100)>0?' ET '+numToWordsFr(Math.round((ttcVal-Math.floor(ttcVal))*100))+' CENTIMES':'')+' DINARS ALGÉRIENS'):'_________________________________'}</em></strong></div>
   </div>` : '';
 
-  // ── Header / footer lines ──
+  // Header / footer
   const hdrHtml = (p.header||p.showDate) ? `
-  <div style="display:flex;justify-content:space-between;padding-bottom:8px;border-bottom:1px solid #000;margin-bottom:12px;font-family:${F};font-size:10pt;">
+  <div style="display:flex;justify-content:space-between;padding-bottom:6px;border-bottom:1px solid #000;margin-bottom:10px;font-family:${F};font-size:10pt;">
     <span>${esc(p.header||projName)}</span><span>${p.showDate?dateStr:''}</span>
   </div>` : '';
 
   const ftrHtml = (p.footer||p.showPageNum) ? `
-  <div style="display:flex;justify-content:space-between;padding-top:8px;border-top:1px solid #ccc;margin-top:16px;font-family:${F};font-size:10pt;">
-    <span>${esc(p.footer||'')}</span>
-    ${p.showPageNum?'<span id="pg-num">Page 1</span>':''}
+  <div style="display:flex;justify-content:space-between;padding-top:6px;border-top:1px solid #ccc;margin-top:14px;font-family:${F};font-size:10pt;">
+    <span>${esc(p.footer||'')}</span>${p.showPageNum?'<span>Page 1</span>':''}
   </div>` : '';
 
-  // ── Full HTML ──
+  // Assemble
   return `<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8"/>
-<title>${esc(projName)} — Aperçu</title>
+<title>${esc(projName)}</title>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* { box-sizing:border-box; margin:0; padding:0; }
 @page {
   size: ${pageSize};
   margin: ${p.mt}mm ${p.mr}mm ${p.mb}mm ${p.ml}mm;
 }
-body {
-  font-family: ${F};
-  font-size: ${SZ};
-  background: #888;
-  color: #000;
-}
-/* Preview wrapper (hidden when printing) */
-#pv-bar {
-  position: sticky; top: 0; z-index: 9999;
-  background: #1e2535; padding: 10px 18px;
-  display: flex; align-items: center; gap: 10px;
-  font-family: sans-serif; font-size: 13px;
-  box-shadow: 0 2px 8px rgba(0,0,0,.4);
-}
-#pv-bar .pv-title { flex:1; color:#ccc; font-weight:bold; }
-#pv-bar button {
-  padding: 7px 18px; border: none; border-radius: 5px;
-  font-family: sans-serif; font-size: 12px; font-weight: bold; cursor: pointer;
-}
-.pb-print { background:#1a56a0; color:#fff; }
-.pb-print:hover { background:#2266c0; }
-.pb-pdf   { background:#c0392b; color:#fff; }
-.pb-pdf:hover   { background:#e74c3c; }
-.pb-close { background:#555; color:#ccc; }
-.pb-close:hover { background:#777; }
-#page-wrap {
-  background: #fff;
-  max-width: 860px;
-  margin: 20px auto;
-  padding: 24px 28px 32px;
-  box-shadow: 0 4px 28px rgba(0,0,0,.4);
-  min-height: 600px;
-}
-/* Document header */
-.doc-titles { text-align: center; margin-bottom: 12px; }
-.doc-t1 { font-size:12pt; font-weight:bold; text-transform:uppercase; text-decoration:underline; line-height:1.7; }
-.doc-t2 { font-size:11pt; font-weight:bold; text-transform:uppercase; line-height:1.6; }
-.doc-band { border:2px solid #000; padding:5px; text-align:center; font-weight:bold; font-size:12pt; text-transform:uppercase; margin-bottom:10px; }
-/* Table */
-table { width:100%; border-collapse:collapse; font-family:${F}; font-size:${SZ}; }
-/* Print overrides */
-@media print {
-  * { -webkit-print-color-adjust:exact!important; print-color-adjust:exact!important; }
-  body { background:#fff!important; }
-  #pv-bar { display:none!important; }
-  #page-wrap { margin:0!important; padding:0!important; max-width:100%!important; box-shadow:none!important; }
-  thead { display:table-header-group; }
-  tr { page-break-inside:avoid; }
-  .ttc-summary { page-break-inside:avoid; }
-}
+* { -webkit-print-color-adjust:exact!important; print-color-adjust:exact!important; color-adjust:exact!important; }
+body { font-family:${F}; font-size:11pt; background:#fff; color:#000; }
+table { width:100%; border-collapse:collapse; }
+th,td { border:1px solid #000; }
+.doc-titles { text-align:center; margin-bottom:12px; }
+.t1 { font-size:12pt; font-weight:bold; text-transform:uppercase; text-decoration:underline; line-height:1.7; }
+.t2 { font-size:11pt; font-weight:bold; text-transform:uppercase; line-height:1.6; }
+.band { border:2px solid #000; padding:5px; text-align:center; font-weight:bold; font-size:12pt; text-transform:uppercase; margin-bottom:10px; }
+thead { display:table-header-group; }
+tr { page-break-inside:avoid; }
 </style>
 </head>
 <body>
-
-<!-- PREVIEW BAR -->
-<div id="pv-bar">
-  <span class="pv-title">📄 Aperçu — ${esc(projName)}</span>
-  <span style="font-size:10px;color:#7a90b0">Choisissez votre imprimante dans le dialogue système</span>
-  <button class="pb-print" onclick="doPrint()">🖨&nbsp; Imprimer…</button>
-  <button class="pb-pdf"   onclick="doPdf()">⬇&nbsp; PDF…</button>
-  <button class="pb-close" onclick="doClose()">✕&nbsp; Fermer</button>
+${hdrHtml}
+<div class="doc-titles">
+  ${l1?`<div class="t1">${esc(l1)}</div>`:''}
+  ${l2?`<div class="t2">${esc(l2)}</div>`:''}
+  ${l3?`<div class="t2">${esc(l3)}</div>`:''}
 </div>
-
-<!-- PAGE -->
-<div id="page-wrap">
-  ${hdrHtml}
-
-  <!-- Project titles -->
-  <div class="doc-titles">
-    ${l1?`<div class="doc-t1">${esc(l1)}</div>`:''}
-    ${l2?`<div class="doc-t2">${esc(l2)}</div>`:''}
-    ${l3?`<div class="doc-t2">${esc(l3)}</div>`:''}
-  </div>
-  <div class="doc-band">${isBPU?'BORDEREAU DES PRIX UNITAIRES':'DETAIL QUANTITATIF ESTIMATIF'}</div>
-
-  <!-- Table -->
-  <table>
-    <thead>${thead}</thead>
-    <tbody>${tableRows}</tbody>
-  </table>
-
-  ${ttcSummary}
-  ${ftrHtml}
-</div>
-
-<script>
-var projName = ${JSON.stringify(projName)};
-
-function doPrint() {
-  if (window.previewAPI) {
-    window.previewAPI.print();
-  } else {
-    window.print();
-  }
-}
-
-function doPdf() {
-  var defName = projName.replace(/\\s+/g,'_').substring(0,40)+'.pdf';
-  if (window.previewAPI) {
-    window.previewAPI.exportPdf(defName);
-  } else {
-    window.print();
-  }
-}
-
-function doClose() {
-  if (window.previewAPI) window.previewAPI.close();
-  else window.close();
-}
-
-document.addEventListener('keydown', function(e){
-  if((e.ctrlKey||e.metaKey)&&e.key==='p'){ e.preventDefault(); doPrint(); }
-  if(e.key==='Escape') doClose();
-});
-<\/script>
+<div class="band">${isBPU?'BORDEREAU DES PRIX UNITAIRES':'DETAIL QUANTITATIF ESTIMATIF'}</div>
+<table>
+  <thead>${thead}</thead>
+  <tbody>${tableRows}</tbody>
+</table>
+${ttcSummary}
+${ftrHtml}
 </body>
 </html>`;
 }
 
 /* ════════════════════════════════════════
-   PUBLIC ACTIONS
+   PRINT — opens in default browser
 ════════════════════════════════════════ */
-async function doPreview() {
+async function doPrint() {
   const html = buildPrintHTML();
   if (isElectron) {
-    notif('📄 Ouverture de l\'aperçu…');
-    await window.electronAPI.openPreview(html);
+    notif('🖨 Ouverture dans le navigateur…');
+    await window.electronAPI.printInBrowser(html);
+    notif('✓ Utilisez Ctrl+P dans le navigateur pour imprimer');
   } else {
-    const w = window.open('','_blank');
-    w.document.write(html); w.document.close();
+    const w = window.open('','_blank'); w.document.write(html); w.document.close();
+    setTimeout(() => w.print(), 500);
   }
 }
 
-/* Both print and PDF now go through the preview window */
-const doPrint     = doPreview;
-const doExportPdf = doPreview;
+/* ════════════════════════════════════════
+   PDF — hidden window printToPDF
+════════════════════════════════════════ */
+async function doExportPdf() {
+  const html    = buildPrintHTML();
+  const data    = getSaveData();
+  const defName = (data.l1||'devis').replace(/\s+/g,'_').substring(0,40)+'.pdf';
+  if (isElectron) {
+    notif('⏳ Génération du PDF…');
+    const p = await window.electronAPI.exportPdf(html, defName);
+    if (p) notif('✓ PDF exporté');
+    else   notif('⚠ PDF annulé');
+  } else {
+    window.print();
+  }
+}
 
 /* ═══ ELECTRON WIRING ═══ */
 if (isElectron) {
   startBackupTimer();
 
   window.electronAPI.onMenuNew(() => {
-    if(confirm('Nouveau projet ? Données non sauvegardées seront perdues.')) {
+    if (confirm('Nouveau projet ? Données non sauvegardées seront perdues.')) {
       rows=[]; nid=1; currentFilePath=null; updateFileLabel(''); render(); snapshot(); saveLocal();
     }
   });
   window.electronAPI.onMenuSave(()        => fileSave(false));
   window.electronAPI.onMenuSaveAs(()      => fileSave(true));
   window.electronAPI.onMenuExportExcel(() => doExport());
-  window.electronAPI.onMenuPreview(()     => doPreview());
+  window.electronAPI.onMenuExportPdf(()   => doExportPdf());
+  window.electronAPI.onMenuPrint(()       => doPrint());
   window.electronAPI.onMenuUndo(()        => undo());
   window.electronAPI.onMenuRedo(()        => redo());
   window.electronAPI.onMenuMode(m         => setMode(m));

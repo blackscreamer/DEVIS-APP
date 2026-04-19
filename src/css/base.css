@@ -2,15 +2,46 @@
 :root { --F: 'Times New Roman', Times, serif; --SZ: 12pt; }
 
 body {
-  background: #d0d0d0; font-family: var(--F); font-size: var(--SZ);
+  font-family: var(--F); font-size: var(--SZ);
   display: flex; flex-direction: column; height: 100vh; overflow: hidden;
+  background: #888;  /* grey surround = print preview feel */
 }
-#wrap { flex: 1; overflow: auto; padding: 14px; }
+
+/* Scroll area around the page */
+#wrap {
+  flex: 1; overflow: auto;
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background: #777;
+}
+
+/* The document = A4 page representation */
 #doc {
-  background: #fff; max-width: 1000px; margin: 0 auto;
-  border: 1px solid #999; padding: 14px 16px 22px;
-  box-shadow: 0 2px 14px rgba(0,0,0,.2);
+  background: #fff;
+  /* Default A4 portrait at 96dpi: 210mm × 297mm
+     Will be overridden by JS updateWorkspaceSize() when pageLayout changes */
+  width:  794px;   /* 210mm at 96dpi */
+  min-height: 1123px; /* 297mm at 96dpi */
+  flex-shrink: 0;
+  border: 1px solid #aaa;
+  box-shadow: 0 4px 24px rgba(0,0,0,.45);
+  /* Page margins applied as padding (from pageLayout) */
+  padding: 57px 57px 57px 57px; /* 15mm at 96dpi */
+  position: relative;
+  box-sizing: border-box;
 }
+
+/* Page ruler/guide lines (subtle) */
+#doc::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Document header inputs */
 #doc-hdr { text-align: center; margin-bottom: 10px; }
 .hdr-line {
   width: 100%; text-align: center; border: none; outline: none;

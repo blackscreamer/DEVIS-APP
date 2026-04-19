@@ -86,8 +86,9 @@
     <button class="btn btn-sm btn-outline-secondary text-light border-secondary" onclick="fileSave(false)" title="Sauvegarder (Ctrl+S)"><i class="bi bi-floppy-fill"></i> <span class="d-none d-lg-inline">Sauvegarder</span></button>
     <button class="btn btn-sm btn-outline-secondary text-light border-secondary" onclick="fileSave(true)"  title="Sauvegarder sous…"><i class="bi bi-file-earmark-plus"></i> <span class="d-none d-lg-inline">Nouveau Fichier</span></button>
     <label  class="btn btn-sm btn-outline-secondary text-light border-secondary mb-0" title="Importer Excel"><i class="bi bi-file-earmark-spreadsheet"></i> <span class="d-none d-lg-inline">Import XLS</span><input type="file" accept=".xlsx,.xls" onchange="importExcelFile(this)" style="display:none"/></label>
-    <button class="btn btn-sm btn-outline-success"   onclick="doExport()"   title="Exporter Excel"><i class="bi bi-file-earmark-excel-fill"></i> <span class="d-none d-lg-inline">Excel</span></button>
-    <button class="btn btn-sm btn-outline-info text-light" onclick="doPreview()" title="Aperçu — Imprimer / Exporter PDF (Ctrl+P)"><i class="bi bi-printer-fill"></i> <span class="d-none d-lg-inline">Aperçu / Impr.</span></button>
+    <button class="btn btn-sm btn-outline-success"    onclick="doExport()"     title="Exporter Excel (Ctrl+E)"><i class="bi bi-file-earmark-excel-fill"></i> <span class="d-none d-lg-inline">Excel</span></button>
+    <button class="btn btn-sm btn-outline-danger"     onclick="doExportPdf()"  title="Exporter PDF (Ctrl+Shift+E)"><i class="bi bi-file-earmark-pdf-fill"></i> <span class="d-none d-lg-inline">PDF</span></button>
+    <button class="btn btn-sm btn-outline-light"      onclick="doPrint()"      title="Imprimer — ouvre dans le navigateur (Ctrl+P)"><i class="bi bi-printer-fill"></i> <span class="d-none d-lg-inline">Imprimer</span></button>
     <!-- Page layout settings -->
     <button class="btn btn-sm btn-outline-secondary text-light border-secondary"
             data-bs-toggle="offcanvas" data-bs-target="#layoutpop" onclick="syncPageLayoutUI()"

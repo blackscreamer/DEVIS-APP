@@ -20,3 +20,8 @@ window.onload = () => {
   setMode(mode);
   applyPricesUI();
 };
+
+// Apply A4 workspace dimensions after init
+window.addEventListener('load', () => {
+  if (typeof updateWorkspaceSize === 'function') updateWorkspaceSize();
+});
