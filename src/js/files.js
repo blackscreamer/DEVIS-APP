@@ -249,13 +249,20 @@ function buildPrintHTML() {
   let tableRows = '';
   let chapStk=[], subStk=[];
 
-  const flushSubs = () => { while(subStk.length){ const s=subStk.pop(); tableRows+=subTotRow(s.desig,subT[s.id]||0); } };
-  const flushChap = () => { if(!chapStk.length)return; const c=chapStk.pop(); tableRows+=chapTotRow(c.desig,chapT[c.id]||0); };
+  // Only flush totals in DQE — BPU has no sub/chap total rows
+  const flushSubs = () => {
+    if (isBPU) { subStk = []; return; }
+    while (subStk.length) { const s=subStk.pop(); tableRows+=subTotRow(s.desig,subT[s.id]||0); }
+  };
+  const flushChap = () => {
+    if (isBPU || !chapStk.length) { chapStk=[]; return; }
+    const c=chapStk.pop(); tableRows+=chapTotRow(c.desig,chapT[c.id]||0);
+  };
 
   rows.forEach((r,i) => {
     const n=nums[i], letter=letters[i];
     if(r.type==='chap')         { flushSubs();flushChap();chapStk.push({id:r.id,desig:r.desig});tableRows+=chapRow(r); }
-    else if(r.type==='sub')     { const lv=r.level||1;while(subStk.length&&subStk[subStk.length-1].level>=lv){const s=subStk.pop();tableRows+=subTotRow(s.desig,subT[s.id]||0);}subStk.push({id:r.id,desig:r.desig,level:lv});tableRows+=subRow(r,n); }
+    else if(r.type==='sub')     { const lv=r.level||1;if(!isBPU){while(subStk.length&&subStk[subStk.length-1].level>=lv){const s=subStk.pop();tableRows+=subTotRow(s.desig,subT[s.id]||0);}}else{while(subStk.length&&subStk[subStk.length-1].level>=lv)subStk.pop();}subStk.push({id:r.id,desig:r.desig,level:lv});tableRows+=subRow(r,n); }
     else if(r.type==='art')     { tableRows+=artRow(r,n); }
     else if(r.type==='subart')  { tableRows+=subartRow(r,letter); }
     else if(r.type==='blank')   { tableRows+=blankRow(r); }

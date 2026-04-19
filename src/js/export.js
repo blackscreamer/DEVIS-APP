@@ -158,12 +158,14 @@ async function doExport() {
   };
 
   const pushSubTotals = () => {
+    if (isBPU) { subStk = []; return; }
     while (subStk.length) {
       const s = subStk.pop();
       addTotalRow('Total ' + s.desig, subT[s.id] || 0, C.tsBg, C.tsFg, true, true);
     }
   };
   const pushChapTotal = () => {
+    if (isBPU) { chapStk = []; return; }
     if (!chapStk.length) return;
     const c = chapStk.pop();
     addTotalRow('Total ' + c.desig, chapT[c.id] || 0, C.tcBg, C.tcFg, true, true);
@@ -192,9 +194,13 @@ async function doExport() {
     /* ─ SOUS-CHAPITRE ─ */
     else if (r.type === 'sub') {
       const lv = r.level || 1;
-      while (subStk.length && subStk[subStk.length-1].level >= lv) {
-        const s = subStk.pop();
-        addTotalRow('Total ' + s.desig, subT[s.id] || 0, C.tsBg, C.tsFg, true, true);
+      if (!isBPU) {
+        while (subStk.length && subStk[subStk.length-1].level >= lv) {
+          const s = subStk.pop();
+          addTotalRow('Total ' + s.desig, subT[s.id] || 0, C.tsBg, C.tsFg, true, true);
+        }
+      } else {
+        while (subStk.length && subStk[subStk.length-1].level >= lv) subStk.pop();
       }
       subStk.push({ id: r.id, desig: r.desig, level: lv });
       const bg  = lv===1 ? C.sub1Bg : lv===2 ? C.sub2Bg : C.sub3Bg;
@@ -278,11 +284,10 @@ async function doExport() {
   pushSubTotals();
   pushChapTotal();
 
-  /* ── Grand Total / TVA / TTC ── */
-  if (showPrices) {
+  /* ── Grand Total / TVA / TTC (DQE only) ── */
+  if (!isBPU && showPrices) {
     const grand  = grandTotal();
     const tvaAmt = grand * tvaV / 100;
-
     addTotalRow('TOTAL GÉNÉRAL HT', grand, C.gtBg, C.gtFg, true, true);
     addTotalRow(`TVA (${tvaV}%)`, tvaAmt, C.gtBg, C.gtFg, true, false);
     addTotalRow('TOTAL TTC', grand + tvaAmt, C.gtBg, C.gtFg, true, true);

@@ -113,61 +113,51 @@ function toggleAutofit(enabled) {
   applyColWidths();
 }
 
+/**
+ * applyColWidths() — called by the column panel UI.
+ * Reads width values from the input fields, saves them
+ * to colWidths[mode], then applies to the DOM.
+ */
 function applyColWidths() {
   const tbl = document.getElementById('tbl');
   if (!tbl) return;
-  const cw  = colWidths[mode];
-  const g   = id => document.getElementById(id);
+  const cw = colWidths[mode];
+  const g  = id => document.getElementById(id);
 
-  // Read current input values into colWidths[mode]
   const autoEl = g('col-autofit');
   const isAuto = autoEl ? autoEl.checked : false;
 
   if (isAuto) {
+    // Set all values to null = autofit
     Object.keys(cw).forEach(k => cw[k] = null);
     tbl.style.tableLayout = 'auto';
     tbl.querySelectorAll('col').forEach(c => c.style.width = '');
     return;
   }
 
-  // Read values from inputs
-  if (g('cw-num'))   cw.num   = parseInt(g('cw-num').value)   || null;
-  if (g('cw-desig')) cw.desig = parseInt(g('cw-desig').value) || null;
-  if (mode === 'DQE') {
-    if (g('cw-unit')) cw.unit = parseInt(g('cw-unit').value) || null;
-    if (g('cw-qty'))  cw.qty  = parseInt(g('cw-qty').value)  || null;
-  }
-  if (g('cw-pu'))   cw.pu  = parseInt(g('cw-pu').value)  || null;
-  if (mode === 'DQE' && g('cw-tot')) cw.tot = parseInt(g('cw-tot').value) || null;
+  // Read from inputs and SAVE into colWidths[mode]
+  const readPx = id => { const el = g(id); return el ? (parseInt(el.value) || null) : null; };
+  cw.num   = readPx('cw-num');
+  cw.desig = readPx('cw-desig');
+  if (mode === 'DQE') { cw.unit = readPx('cw-unit'); cw.qty = readPx('cw-qty'); }
+  cw.pu  = readPx('cw-pu');
+  if (mode === 'DQE') cw.tot = readPx('cw-tot');
 
-  // Apply to colgroup elements
-  tbl.style.tableLayout = 'fixed';
-  const setCW = (sel, px) => {
-    const col = tbl.querySelector(sel);
-    if (col) col.style.width = px ? px + 'px' : '';
-  };
-
-  if (mode === 'BPU') {
-    setCW('col.cn',      cw.num);
-    setCW('col.cd',      cw.desig);
-    setCW('col.cp-bpu',  cw.pu);
-  } else {
-    setCW('col.cn', cw.num);
-    setCW('col.cd', cw.desig);
-    setCW('col.cu', cw.unit);
-    setCW('col.cq', cw.qty);
-    setCW('col.cp', cw.pu);
-    setCW('col.ct', cw.tot);
-  }
+  // Now apply the saved values
+  applyStoredColWidths();
 }
 
-/** Apply column widths silently (no UI read — uses stored colWidths[mode]) */
+/**
+ * applyStoredColWidths() — applies colWidths[mode] to the DOM.
+ * Never reads from inputs. Safe to call at any time.
+ * Called by: setMode(), init, loadFile.
+ */
 function applyStoredColWidths() {
   const tbl = document.getElementById('tbl');
   if (!tbl) return;
-  const cw  = colWidths[mode];
-  const allNull = Object.values(cw).every(v => v === null);
+  const cw = colWidths[mode] || (mode === 'DQE' ? colWidths.DQE : colWidths.BPU);
 
+  const allNull = Object.values(cw).every(v => v === null);
   if (allNull) {
     tbl.style.tableLayout = 'auto';
     tbl.querySelectorAll('col').forEach(c => c.style.width = '');
@@ -181,9 +171,9 @@ function applyStoredColWidths() {
   };
 
   if (mode === 'BPU') {
-    setCW('col.cn',     cw.num);
-    setCW('col.cd',     cw.desig);
-    setCW('col.cp-bpu', cw.pu);
+    setCW('col.cn',      cw.num);
+    setCW('col.cd',      cw.desig);
+    setCW('col.cp-bpu',  cw.pu);
   } else {
     setCW('col.cn', cw.num);
     setCW('col.cd', cw.desig);
