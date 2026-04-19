@@ -37,12 +37,20 @@ let dragIds = [];
 
 /** Page layout settings for print/PDF */
 let pageLayout = {
-  size:        'A4',       // 'A4' | 'A3' | 'Letter' | 'Legal'
-  orient:      'portrait', // 'portrait' | 'landscape'
-  mt: 15, mb: 15,          // margins in mm
-  ml: 15, mr: 15,
-  header:      '',         // custom header text (left side)
-  footer:      '',         // custom footer text (left side)
-  showPageNum: true,       // show page number (right side of footer)
-  showDate:    false,      // show date (right side of header)
+  size:        'A4',
+  orient:      'portrait',
+  mt: 15, mb: 15, ml: 15, mr: 15,
+  header:      '',
+  footer:      '',
+  showPageNum: true,
+  showDate:    false,
+};
+
+/**
+ * Per-mode column widths (px). Stored separately so DQE and BPU
+ * widths are completely independent. Null = autofit for that column.
+ */
+let colWidths = {
+  DQE: { num: 68, desig: null, unit: 48, qty: 80, pu: 100, tot: 110 },
+  BPU: { num: 68, desig: null, pu: 130 },
 };

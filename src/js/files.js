@@ -17,7 +17,7 @@ const isElectron = !!(window.electronAPI);
 /* ── Data ── */
 function getSaveData() {
   return {
-    v: 8, rows, mode, nid, C, showPrices, pageLayout,
+    v: 8, rows, mode, nid, C, showPrices, pageLayout, colWidths,
     tva: document.getElementById('tva').value,
     l1:  document.getElementById('hl1').value,
     l2:  document.getElementById('hl2').value,
@@ -29,6 +29,7 @@ function applyLoadedData(d) {
   rows = d.rows || []; nid = d.nid || 1;
   if (d.C) C = d.C;
   if (d.pageLayout) Object.assign(pageLayout, d.pageLayout);
+  if (d.colWidths)  Object.assign(colWidths,  d.colWidths);
   document.getElementById('tva').value = d.tva || 19;
   document.getElementById('hl1').value = d.l1  || '';
   document.getElementById('hl2').value = d.l2  || '';
@@ -231,16 +232,16 @@ function buildPrintHTML() {
   const subTotRow = (desig, total) => {
     const span = isBPU ? 2 : 5;
     return `<tr>
-      <td colspan="${span}" style="${NCELL}background:${C.tsBg};color:${C.tsFg};text-align:right;text-transform:uppercase;border-top:2px solid #50a050;">Total ${esc(desig)}</td>
-      <td style="${NCELL}background:${C.tsBg};color:${C.tsFg};border-top:2px solid #50a050;">${!hide?daNoUnit(total):''}</td>
+      <td colspan="${span}" style="${NCELL}background:${C.tsBg};color:${C.tsFg};text-align:right;text-transform:uppercase;">Total ${esc(desig)}</td>
+      <td style="${NCELL}background:${C.tsBg};color:${C.tsFg};">${!hide?daNoUnit(total):''}</td>
     </tr>`;
   };
 
   const chapTotRow = (desig, total) => {
     const span = isBPU ? 2 : 5;
     return `<tr>
-      <td colspan="${span}" style="${NCELL}background:${C.tcBg};color:${C.tcFg};text-align:right;font-size:11pt;text-transform:uppercase;border-top:2px solid #30a030;">Total ${esc(desig)}</td>
-      <td style="${NCELL}background:${C.tcBg};color:${C.tcFg};font-size:11pt;border-top:2px solid #30a030;">${!hide?daNoUnit(total):''}</td>
+      <td colspan="${span}" style="${NCELL}background:${C.tcBg};color:${C.tcFg};text-align:right;font-size:11pt;text-transform:uppercase;">Total ${esc(desig)}</td>
+      <td style="${NCELL}background:${C.tcBg};color:${C.tcFg};font-size:11pt;">${!hide?daNoUnit(total):''}</td>
     </tr>`;
   };
 

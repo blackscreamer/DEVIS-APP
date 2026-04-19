@@ -23,5 +23,7 @@ window.onload = () => {
 
 // Apply A4 workspace dimensions after init
 window.addEventListener('load', () => {
-  if (typeof updateWorkspaceSize === 'function') updateWorkspaceSize();
+  if (typeof updateWorkspaceSize   === 'function') updateWorkspaceSize();
+  if (typeof applyStoredColWidths  === 'function') applyStoredColWidths();
+  if (typeof syncColWidthUI        === 'function') syncColWidthUI();
 });

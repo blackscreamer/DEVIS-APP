@@ -221,24 +221,51 @@ ipcMain.handle('dialog:saveExcel', async (_, { buffer, defaultName }) => {
 });
 
 /* ════════════════════════════════════════════════
-   PRINT — opens in default browser
+   PRINT — Chromium print dialog inside the app
    
-   The HTML is written to a temp file and opened
-   with shell.openExternal(). The browser provides:
-   ✓ Full print preview
-   ✓ Printer selection
-   ✓ Margins, orientation, copies, page range
-   ✓ Print to PDF option (built into browser)
-   ✓ All CSS/colors preserved
-   No Electron window management needed at all.
+   Loads the HTML in a VISIBLE BrowserWindow (file://),
+   then calls window.print() via executeJavaScript().
+   Chromium shows its native print dialog WITH preview,
+   printer selection, margins — identical to Chrome's Ctrl+P.
+   The preview window stays open until user closes it.
 ════════════════════════════════════════════════ */
 const TEMP_PRINT = path.join(os.tmpdir(), 'devis_print.html');
+let printWin = null;
 
 ipcMain.handle('file:print', async (_, { html }) => {
   try {
     fs.writeFileSync(TEMP_PRINT, html, 'utf-8');
-    // Open in default browser — user gets full native print dialog
-    await shell.openExternal('file://' + TEMP_PRINT);
+
+    // Close existing print window if open
+    if (printWin && !printWin.isDestroyed()) printWin.close();
+
+    printWin = new BrowserWindow({
+      width: 1100, height: 850,
+      minWidth: 800, minHeight: 600,
+      title: 'Impression — Devis BTP',
+      icon: path.join(__dirname, 'assets', 'icon.png'),
+      show: true,
+      webPreferences: {
+        nodeIntegration: false,
+        contextIsolation: true,
+        // No preload — this window only needs window.print()
+      },
+    });
+
+    // Load as file:// so all inline styles work
+    await printWin.loadFile(TEMP_PRINT);
+
+    // Small delay to ensure layout is fully rendered before print dialog
+    await new Promise(res => setTimeout(res, 300));
+
+    // Trigger Chromium's native print dialog (with preview, printer selection, etc.)
+    await printWin.webContents.executeJavaScript('window.print()');
+
+    printWin.on('closed', () => {
+      printWin = null;
+      try { fs.unlinkSync(TEMP_PRINT); } catch(e) {}
+    });
+
     return true;
   } catch (e) {
     dialog.showErrorBox('Erreur impression', e.message);

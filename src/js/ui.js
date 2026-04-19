@@ -1,8 +1,7 @@
 /**
- * ui.js — Helpers d'interface: save indicator, column widths, workspace size, resize.
+ * ui.js — Helpers d'interface: save indicator, column widths (per-mode),
+ * workspace size (A4 layout), resize.
  */
-
-let colAutofit = true;
 
 function setSaveIndicator(state) {
   const ind = document.getElementById('save-ind');
@@ -63,58 +62,137 @@ function updateWorkspaceSize() {
   if (tbl) tbl.style.width = '100%';
 }
 
-/* ── Column widths ── */
-function toggleAutofit(enabled) {
-  colAutofit = enabled;
-  document.getElementById('col-manual').style.display    = enabled ? 'none'  : 'block';
-  document.getElementById('col-auto-hint').style.display = enabled ? 'block' : 'none';
+/* ── Column widths — per mode ── */
+
+/**
+ * Sync column panel inputs FROM the current mode's colWidths.
+ * Called when the panel opens or mode changes.
+ */
+function syncColWidthUI() {
+  const cw = colWidths[mode] || colWidths.DQE;
+  const g  = id => document.getElementById(id);
+  const isDQE = mode === 'DQE';
+
+  // Autofit = all null
+  const allNull = Object.values(cw).every(v => v === null);
+  const autoEl  = g('col-autofit');
+  if (autoEl) autoEl.checked = allNull;
+  if (g('col-manual'))    g('col-manual').style.display    = allNull ? 'none' : 'block';
+  if (g('col-auto-hint')) g('col-auto-hint').style.display = allNull ? 'block' : 'none';
+
+  // DQE cols
+  if (g('cw-num'))   g('cw-num').value   = cw.num   ?? 68;
+  if (g('cw-desig')) g('cw-desig').value = cw.desig ?? 300;
+  if (isDQE) {
+    if (g('cw-unit')) g('cw-unit').value = cw.unit ?? 48;
+    if (g('cw-qty'))  g('cw-qty').value  = cw.qty  ?? 80;
+  }
+  if (g('cw-pu'))    g('cw-pu').value    = cw.pu   ?? (isDQE ? 100 : 130);
+  if (isDQE && g('cw-tot')) g('cw-tot').value = cw.tot ?? 110;
+
+  // Show/hide DQE-only rows
   document.querySelectorAll('.dqe-col').forEach(el =>
-    el.style.display = mode === 'BPU' ? 'none' : 'flex'
+    el.style.display = isDQE ? 'flex' : 'none'
   );
+}
+
+function toggleAutofit(enabled) {
+  const cw = colWidths[mode];
+  if (enabled) {
+    // Set all to null = autofit
+    Object.keys(cw).forEach(k => cw[k] = null);
+  } else {
+    // Restore sensible defaults for this mode
+    if (mode === 'DQE') Object.assign(cw, { num: 68, desig: null, unit: 48, qty: 80, pu: 100, tot: 110 });
+    else                Object.assign(cw, { num: 68, desig: null, pu: 130 });
+  }
+  if (document.getElementById('col-manual'))
+    document.getElementById('col-manual').style.display    = enabled ? 'none'  : 'block';
+  if (document.getElementById('col-auto-hint'))
+    document.getElementById('col-auto-hint').style.display = enabled ? 'block' : 'none';
   applyColWidths();
 }
 
 function applyColWidths() {
   const tbl = document.getElementById('tbl');
   if (!tbl) return;
+  const cw  = colWidths[mode];
+  const g   = id => document.getElementById(id);
 
-  if (colAutofit) {
+  // Read current input values into colWidths[mode]
+  const autoEl = g('col-autofit');
+  const isAuto = autoEl ? autoEl.checked : false;
+
+  if (isAuto) {
+    Object.keys(cw).forEach(k => cw[k] = null);
+    tbl.style.tableLayout = 'auto';
+    tbl.querySelectorAll('col').forEach(c => c.style.width = '');
+    return;
+  }
+
+  // Read values from inputs
+  if (g('cw-num'))   cw.num   = parseInt(g('cw-num').value)   || null;
+  if (g('cw-desig')) cw.desig = parseInt(g('cw-desig').value) || null;
+  if (mode === 'DQE') {
+    if (g('cw-unit')) cw.unit = parseInt(g('cw-unit').value) || null;
+    if (g('cw-qty'))  cw.qty  = parseInt(g('cw-qty').value)  || null;
+  }
+  if (g('cw-pu'))   cw.pu  = parseInt(g('cw-pu').value)  || null;
+  if (mode === 'DQE' && g('cw-tot')) cw.tot = parseInt(g('cw-tot').value) || null;
+
+  // Apply to colgroup elements
+  tbl.style.tableLayout = 'fixed';
+  const setCW = (sel, px) => {
+    const col = tbl.querySelector(sel);
+    if (col) col.style.width = px ? px + 'px' : '';
+  };
+
+  if (mode === 'BPU') {
+    setCW('col.cn',      cw.num);
+    setCW('col.cd',      cw.desig);
+    setCW('col.cp-bpu',  cw.pu);
+  } else {
+    setCW('col.cn', cw.num);
+    setCW('col.cd', cw.desig);
+    setCW('col.cu', cw.unit);
+    setCW('col.cq', cw.qty);
+    setCW('col.cp', cw.pu);
+    setCW('col.ct', cw.tot);
+  }
+}
+
+/** Apply column widths silently (no UI read — uses stored colWidths[mode]) */
+function applyStoredColWidths() {
+  const tbl = document.getElementById('tbl');
+  if (!tbl) return;
+  const cw  = colWidths[mode];
+  const allNull = Object.values(cw).every(v => v === null);
+
+  if (allNull) {
     tbl.style.tableLayout = 'auto';
     tbl.querySelectorAll('col').forEach(c => c.style.width = '');
     return;
   }
 
   tbl.style.tableLayout = 'fixed';
-  const setCW = (sel, inputId) => {
-    const el  = document.getElementById(inputId);
+  const setCW = (sel, px) => {
     const col = tbl.querySelector(sel);
-    if (el && col) col.style.width = el.value + 'px';
+    if (col) col.style.width = px ? px + 'px' : '';
   };
 
   if (mode === 'BPU') {
-    setCW('col.cn',      'cw-num');
-    setCW('col.cd',      'cw-desig');
-    setCW('col.cp-bpu',  'cw-pu');
+    setCW('col.cn',     cw.num);
+    setCW('col.cd',     cw.desig);
+    setCW('col.cp-bpu', cw.pu);
   } else {
-    setCW('col.cn', 'cw-num');
-    setCW('col.cd', 'cw-desig');
-    setCW('col.cu', 'cw-unit');
-    setCW('col.cq', 'cw-qty');
-    setCW('col.cp', 'cw-pu');
-    setCW('col.ct', 'cw-tot');
+    setCW('col.cn', cw.num);
+    setCW('col.cd', cw.desig);
+    setCW('col.cu', cw.unit);
+    setCW('col.cq', cw.qty);
+    setCW('col.cp', cw.pu);
+    setCW('col.ct', cw.tot);
   }
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-  const colpop = document.getElementById('colpop');
-  if (colpop) {
-    colpop.addEventListener('show.bs.offcanvas', () => {
-      document.querySelectorAll('.dqe-col').forEach(el =>
-        el.style.display = mode === 'BPU' ? 'none' : 'flex'
-      );
-    });
-  }
-});
 
 window.addEventListener('resize', () => {
   document.querySelectorAll('textarea.di').forEach(t => ar(t));

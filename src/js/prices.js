@@ -41,15 +41,6 @@ function setMode(m) {
   document.getElementById('doc-band').textContent =
     m === 'DQE' ? 'DETAIL QUANTITATIF ESTIMATIF' : 'BORDEREAU DES PRIX UNITAIRES';
 
-  // Save current manual column widths BEFORE rebuilding colgroup
-  const savedWidths = {};
-  if (!colAutofit) {
-    ['cw-num','cw-desig','cw-unit','cw-qty','cw-pu','cw-tot'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) savedWidths[id] = el.value;
-    });
-  }
-
   // Rebuild colgroup and thead for the new mode
   const cg = document.querySelector('#tbl colgroup');
   if (cg) cg.innerHTML = m === 'DQE'
@@ -59,20 +50,13 @@ function setMode(m) {
   const th = document.querySelector('#tbl thead tr');
   if (th) th.innerHTML = m === 'DQE'
     ? `<th>N°</th><th>DESIGNATION DES OUVRAGES</th><th>U</th><th>Quantité</th><th>PRIX U HT</th><th>MONTANT HT</th>`
-    : `<th style="width:70px">N°</th><th>DESIGNATION DES OUVRAGES</th><th style="width:130px">PRIX UNITAIRE HT</th>`;
+    : `<th>N°</th><th>DESIGNATION DES OUVRAGES</th><th>PRIX UNITAIRE HT</th>`;
 
-  // Restore manual widths if applicable
-  if (!colAutofit) {
-    Object.entries(savedWidths).forEach(([id, val]) => {
-      const el = document.getElementById(id); if (el) el.value = val;
-    });
-    applyColWidths();
-  }
+  // Apply THIS mode's stored column widths (independent from the other mode)
+  if (typeof applyStoredColWidths === 'function') applyStoredColWidths();
 
-  // Update column panel visibility
-  document.querySelectorAll('.dqe-col').forEach(el =>
-    el.style.display = m === 'BPU' ? 'none' : 'flex'
-  );
+  // Sync the column panel UI if it's open
+  if (typeof syncColWidthUI === 'function') syncColWidthUI();
 
   render();
 }
