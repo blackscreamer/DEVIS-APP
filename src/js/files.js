@@ -17,11 +17,8 @@ const isElectron = !!(window.electronAPI);
 /* ── Data ── */
 function getSaveData() {
   return {
-    v: 8, rows, mode, nid, C, showPrices, pageLayout, colWidths,
+    v: 9, rows, mode, nid, C, showPrices, pageLayout, colWidths, headerLines,
     tva: document.getElementById('tva').value,
-    l1:  document.getElementById('hl1').value,
-    l2:  document.getElementById('hl2').value,
-    l3:  document.getElementById('hl3').value,
   };
 }
 
@@ -30,14 +27,23 @@ function applyLoadedData(d) {
   if (d.C) C = d.C;
   if (d.pageLayout) Object.assign(pageLayout, d.pageLayout);
   if (d.colWidths)  Object.assign(colWidths,  d.colWidths);
+  if (d.headerLines && Array.isArray(d.headerLines)) {
+    headerLines = d.headerLines;
+  } else {
+    // Migrate from old format (l1/l2/l3)
+    headerLines = [];
+    if (d.l1) headerLines.push({ text: d.l1, style: 't1' });
+    if (d.l2) headerLines.push({ text: d.l2, style: 't2' });
+    if (d.l3) headerLines.push({ text: d.l3, style: 't2' });
+    if (!headerLines.length) headerLines = [{ text:'',style:'t1'},{text:'',style:'t2'}];
+  }
   document.getElementById('tva').value = d.tva || 19;
-  document.getElementById('hl1').value = d.l1  || '';
-  document.getElementById('hl2').value = d.l2  || '';
-  document.getElementById('hl3').value = d.l3  || '';
   if (d.showPrices !== undefined) { showPrices = d.showPrices; applyPricesUI(); }
   setMode(d.mode || 'DQE');
   syncPageLayoutUI();
-  if (typeof updateWorkspaceSize === 'function') updateWorkspaceSize();
+  if (typeof updateWorkspaceSize  === 'function') updateWorkspaceSize();
+  if (typeof renderHeaderLines    === 'function') renderHeaderLines();
+}
 }
 
 /* ── Autosave ── */
@@ -135,11 +141,8 @@ function buildPrintHTML() {
   const isBPU     = mode === 'BPU';
   const landscape = p.orient === 'landscape';
   const pageSize  = landscape ? p.size + ' landscape' : p.size;
-  const l1        = document.getElementById('hl1').value;
-  const l2        = document.getElementById('hl2').value;
-  const l3        = document.getElementById('hl3').value;
+  const projName  = (headerLines[0]?.text) || 'Devis BTP';
   const tvaVal    = num(document.getElementById('tva').value);
-  const projName  = l1 || 'Devis BTP';
   const now       = new Date();
   const dateStr   = now.toLocaleDateString('fr-DZ',{day:'2-digit',month:'2-digit',year:'numeric'});
 
@@ -154,13 +157,16 @@ function buildPrintHTML() {
   const F    = "'Times New Roman', Times, serif";
   const SZ   = '11pt';
   const BD   = '1px solid #000';
-  const CELL = `font-family:${F};font-size:${SZ};padding:3px 5px;border:${BD};vertical-align:middle;color:#000;`;
-  const NCELL= CELL + 'text-align:right;font-weight:bold;white-space:nowrap;';
+  const CELL = `font-family:${F};font-size:${SZ};padding:3px 5px;border:${BD};vertical-align:middle;color:#000;white-space:pre-wrap;word-break:break-word;`;
+  const NCELL= `font-family:${F};font-size:${SZ};padding:3px 5px;border:${BD};vertical-align:middle;color:#000;text-align:right;font-weight:bold;white-space:nowrap;`;
+
+  // Escape HTML but preserve newlines as <br/>
+  const escNl = s => esc(s||'').replace(/\n/g,'<br/>');
 
   // Row builders
   const chapRow = (r) => {
     const span = isBPU ? 3 : 6;
-    return `<tr><td colspan="${span}" style="${CELL}background:${C.chapBg};color:${C.chapFg};text-align:center;font-weight:bold;font-size:12pt;text-transform:uppercase;">${esc(r.desig||'')}</td></tr>`;
+    return `<tr><td colspan="${span}" style="${CELL}background:${C.chapBg};color:${C.chapFg};text-align:center;font-weight:bold;font-size:12pt;text-transform:uppercase;">${escNl(r.desig||'')}</td></tr>`;
   };
 
   const subRow = (r, n) => {
@@ -171,7 +177,7 @@ function buildPrintHTML() {
     const span = isBPU ? 2 : 5;
     return `<tr>
       <td style="${CELL}background:${bg};color:${fg};font-weight:bold;text-align:center;">${esc(n)}</td>
-      <td colspan="${span}" style="${CELL}background:${bg};color:${fg};font-weight:bold;padding-left:${pl}px;text-transform:uppercase;">${esc(r.desig||'')}</td>
+      <td colspan="${span}" style="${CELL}background:${bg};color:${fg};font-weight:bold;padding-left:${pl}px;text-transform:uppercase;">${escNl(r.desig||'')}</td>
     </tr>`;
   };
 
@@ -186,13 +192,13 @@ function buildPrintHTML() {
       const sl = !hasKids ? buildBpuSubline(bU, num(bP)) : '';
       return `<tr>
         <td style="${CELL}background:${bg};color:${fg};text-align:center;">${esc(n)}</td>
-        <td style="${CELL}background:${bg};color:${fg};">${esc(bD)}${sl?`<br/><em style="font-size:9pt;font-weight:bold;">${esc(sl)}</em>`:''}</td>
+        <td style="${CELL}background:${bg};color:${fg};">${escNl(bD)}${sl?`<br/><em style="font-size:9pt;font-weight:bold;">${esc(sl)}</em>`:''}</td>
         <td style="${NCELL}background:${bg};color:${fg};">${!hasKids&&!hide?daNoUnit(num(bP)):''}</td>
       </tr>`;
     }
     return `<tr>
       <td style="${CELL}background:${bg};color:${fg};text-align:center;">${esc(n)}</td>
-      <td style="${CELL}background:${bg};color:${fg};">${esc(r.desig||'')}</td>
+      <td style="${CELL}background:${bg};color:${fg};">${escNl(r.desig||'')}</td>
       <td style="${CELL}background:${bg};color:${fg};text-align:center;">${hasKids?'':esc(r.unite||'')}</td>
       <td style="${NCELL}background:${bg};color:${fg};">${hasKids?'':fmtNum(r.qty)}</td>
       <td style="${NCELL}background:${bg};color:${fg};">${hasKids||hide?'':daNoUnit(num(r.pu))}</td>
@@ -210,13 +216,13 @@ function buildPrintHTML() {
       const sl = buildBpuSubline(bU, num(bP));
       return `<tr>
         <td style="${CELL}background:${bg};color:${fg};text-align:center;">${esc(letter)}</td>
-        <td style="${CELL}background:${bg};color:${fg};padding-left:18px;">${esc(bD)}${sl?`<br/><em style="font-size:9pt;font-weight:bold;">${esc(sl)}</em>`:''}</td>
+        <td style="${CELL}background:${bg};color:${fg};padding-left:18px;">${escNl(bD)}${sl?`<br/><em style="font-size:9pt;font-weight:bold;">${esc(sl)}</em>`:''}</td>
         <td style="${NCELL}background:${bg};color:${fg};">${!hide?daNoUnit(num(bP)):''}</td>
       </tr>`;
     }
     return `<tr>
       <td style="${CELL}background:${bg};color:${fg};text-align:center;">${esc(letter)}</td>
-      <td style="${CELL}background:${bg};color:${fg};padding-left:18px;">${esc(r.desig||'')}</td>
+      <td style="${CELL}background:${bg};color:${fg};padding-left:18px;">${escNl(r.desig||'')}</td>
       <td style="${CELL}background:${bg};color:${fg};text-align:center;">${esc(r.unite||'')}</td>
       <td style="${NCELL}background:${bg};color:${fg};">${fmtNum(r.qty)}</td>
       <td style="${NCELL}background:${bg};color:${fg};">${!hide?daNoUnit(num(r.pu)):''}</td>
@@ -226,7 +232,7 @@ function buildPrintHTML() {
 
   const blankRow = (r) => {
     const span = isBPU ? 3 : 6;
-    return `<tr><td colspan="${span}" style="${CELL}font-style:italic;">${esc(r.desig||'')}</td></tr>`;
+    return `<tr><td colspan="${span}" style="${CELL}font-style:italic;">${escNl(r.desig||'')}</td></tr>`;
   };
 
   const subTotRow = (desig, total) => {
@@ -316,6 +322,13 @@ function buildPrintHTML() {
   </div>` : '';
 
   // Assemble
+  const titleLines = headerLines.map(l => {
+    if (!l.text) return '';
+    return l.style === 't1'
+      ? `<div style="font-family:${F};font-size:12pt;font-weight:bold;text-transform:uppercase;text-decoration:underline;text-align:center;line-height:1.7;">${escNl(l.text)}</div>`
+      : `<div style="font-family:${F};font-size:11pt;font-weight:bold;text-transform:uppercase;text-align:center;line-height:1.6;">${escNl(l.text)}</div>`;
+  }).join('');
+
   return `<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -341,11 +354,7 @@ tr { page-break-inside:avoid; }
 </head>
 <body>
 ${hdrHtml}
-<div class="doc-titles">
-  ${l1?`<div class="t1">${esc(l1)}</div>`:''}
-  ${l2?`<div class="t2">${esc(l2)}</div>`:''}
-  ${l3?`<div class="t2">${esc(l3)}</div>`:''}
-</div>
+<div style="text-align:center;margin-bottom:12px;">${titleLines}</div>
 <div class="band">${isBPU?'BORDEREAU DES PRIX UNITAIRES':'DETAIL QUANTITATIF ESTIMATIF'}</div>
 <table>
   <thead>${thead}</thead>

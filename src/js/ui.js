@@ -13,7 +13,54 @@ function setSaveIndicator(state) {
 }
 
 /* ════════════════════════════════════════════
-   WORKSPACE SIZE — makes #doc match the real
+   DYNAMIC HEADER LINES
+════════════════════════════════════════════ */
+
+function renderHeaderLines() {
+  const container = document.getElementById('hdr-lines');
+  if (!container) return;
+  container.innerHTML = '';
+  headerLines.forEach((line, i) => {
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'display:flex;align-items:center;position:relative;';
+    const inp = document.createElement('input');
+    inp.type        = 'text';
+    inp.value       = line.text;
+    inp.className   = 'hdr-line ' + line.style;
+    inp.placeholder = i === 0 ? 'TITRE DU PROJET…' : 'Sous-titre ligne '+(i+1)+'…';
+    inp.oninput     = () => { headerLines[i].text = inp.value; triggerAutosave(); };
+    // Toggle style on double-click
+    inp.ondblclick  = () => {
+      headerLines[i].style = line.style === 't1' ? 't2' : 't1';
+      triggerAutosave(); renderHeaderLines();
+    };
+    inp.title = 'Double-clic pour changer le style (grand/normal)';
+    wrap.appendChild(inp);
+    // Delete button (keep at least 1 line)
+    if (headerLines.length > 1) {
+      const btn = document.createElement('button');
+      btn.textContent = '✕';
+      btn.title = 'Supprimer cette ligne';
+      btn.style.cssText = 'position:absolute;right:-22px;background:none;border:none;color:#ccc;font-size:11px;cursor:pointer;padding:2px;';
+      btn.onmouseenter = () => btn.style.color = '#c00';
+      btn.onmouseleave = () => btn.style.color = '#ccc';
+      btn.onclick = () => { headerLines.splice(i,1); triggerAutosave(); renderHeaderLines(); };
+      wrap.appendChild(btn);
+    }
+    container.appendChild(wrap);
+  });
+}
+
+function addHeaderLine() {
+  headerLines.push({ text: '', style: 't2' });
+  triggerAutosave();
+  renderHeaderLines();
+  // Focus the new input
+  setTimeout(() => {
+    const inputs = document.querySelectorAll('#hdr-lines input');
+    if (inputs.length) inputs[inputs.length-1].focus();
+  }, 30);
+}
    paper dimensions and margins set in pageLayout.
    
    Paper sizes at 96 DPI:

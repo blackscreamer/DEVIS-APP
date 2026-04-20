@@ -229,9 +229,13 @@
 <div id="wrap">
 <div id="doc">
   <div id="doc-hdr">
-    <input class="hdr-line t1" id="hl1" type="text" placeholder="TITRE DU PROJET…"/>
-    <input class="hdr-line t2" id="hl2" type="text" placeholder="Sous-titre ligne 2…"/>
-    <input class="hdr-line t2" id="hl3" type="text" placeholder="Sous-titre ligne 3…"/>
+    <!-- Dynamic header: each line is a separate styled input -->
+    <div id="hdr-lines">
+      <!-- Lines added dynamically by JS, first line is big+underline, rest are regular -->
+    </div>
+    <button id="hdr-add-btn" onclick="addHeaderLine()"
+      style="display:block;margin:4px auto 0;background:none;border:1px dashed #bbb;color:#aaa;font-size:10px;padding:2px 14px;border-radius:3px;cursor:pointer;font-family:'Times New Roman',Times,serif"
+      title="Ajouter une ligne de titre">＋ ligne</button>
     <div class="doc-band" id="doc-band">DETAIL QUANTITATIF ESTIMATIF</div>
   </div>
 

@@ -35,7 +35,11 @@ let saveTimeout = null;
 /** Drag IDs (multi-row drag) */
 let dragIds = [];
 
-/** Page layout settings for print/PDF */
+/** Header lines — unlimited array of {text, style:'t1'|'t2'} */
+let headerLines = [
+  { text: '', style: 't1' },  // first line: big bold underlined
+  { text: '', style: 't2' },  // subsequent: bold uppercase
+];
 let pageLayout = {
   size:        'A4',
   orient:      'portrait',

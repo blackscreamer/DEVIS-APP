@@ -66,10 +66,8 @@ async function doExport() {
   const { nums, letters } = buildNums();
   const { chapT, subT }   = computeTotals();
   const isBPU             = mode === 'BPU';
-  const l1  = document.getElementById('hl1').value;
-  const l2  = document.getElementById('hl2').value;
-  const l3  = document.getElementById('hl3').value;
-  const tvaV = num(document.getElementById('tva').value);
+  const projName          = (headerLines[0]?.text) || 'Devis BTP';
+  const tvaV              = num(document.getElementById('tva').value);
 
   const ws = wb.addWorksheet(isBPU ? 'BPU' : 'DQE');
 
@@ -104,9 +102,10 @@ async function doExport() {
     cell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
   };
 
-  if (l1) addHeader(l1, true, 13);
-  if (l2) addHeader(l2, false, 11);
-  if (l3) addHeader(l3, false, 11);
+  // All header lines (unlimited)
+  headerLines.forEach((line, i) => {
+    if (line.text) addHeader(line.text, i === 0, i === 0 ? 13 : 11);
+  });
 
   // Band row
   const bandRow = ws.addRow(['']);
@@ -227,13 +226,14 @@ async function doExport() {
 
       let data;
       if (isBPU) {
-        const subline = !hasKids ? (UNIT_WORDS[bUnite] || bUnite) : '';
+        // Full price-in-letters subline (unit + amount in words)
+        const subline = !hasKids ? buildBpuSubline(bUnite, num(bPu)) : '';
         data = [n, bDesig + (subline ? '\n' + subline : ''), showPrices && !hasKids ? num(bPu) : null];
       } else {
         data = [n, r.desig, hasKids?'':r.unite, hasKids?'':num(r.qty)||'', showPrices&&!hasKids ? num(r.pu)||'' : '', showPrices&&!hasKids ? t||'' : ''];
       }
       const row = ws.addRow(data);
-      row.height = 16;
+      row.height = isBPU && !hasKids ? 28 : 16; // taller for BPU rows with subline
       row.eachCell((cell, col) => {
         cell.fill   = fill(C.artBg);
         cell.font   = { name: 'Times New Roman', size: 11, color: { argb: hexToArgb(C.artFg) } };
@@ -252,13 +252,13 @@ async function doExport() {
 
       let data;
       if (isBPU) {
-        const subline = UNIT_WORDS[bUnite] || bUnite;
-        data = [letter, bDesig + '\n' + subline, showPrices ? num(bPu) : null];
+        const subline = buildBpuSubline(bUnite, num(bPu));
+        data = [letter, bDesig + (subline ? '\n' + subline : ''), showPrices ? num(bPu) : null];
       } else {
         data = [letter, r.desig, r.unite, num(r.qty)||'', showPrices ? num(r.pu)||'' : '', showPrices ? t||'' : ''];
       }
       const row = ws.addRow(data);
-      row.height = 16;
+      row.height = isBPU ? 28 : 16;
       row.eachCell((cell, col) => {
         cell.fill   = fill(C.saBg);
         cell.font   = { name: 'Times New Roman', size: 11, color: { argb: hexToArgb(C.saFg) } };
@@ -294,11 +294,11 @@ async function doExport() {
   }
 
   /* ── Freeze header rows ── */
-  const frozenRows = (l1 ? 1 : 0) + (l2 ? 1 : 0) + (l3 ? 1 : 0) + 2 + 1; // headers + band + spacer + thead
+  const frozenRows = headerLines.filter(l => l.text).length + 2 + 1; // titles + band + spacer + thead
   ws.views = [{ state: 'frozen', ySplit: frozenRows, xSplit: 0 }];
 
   /* ── Generate buffer and save ── */
-  const defName = (l1 || 'devis').replace(/\s+/g,'_').substring(0,40) + '_' + mode + (showPrices?'':'_sans-prix') + '.xlsx';
+  const defName = projName.replace(/\s+/g,'_').substring(0,40) + '_' + mode + (showPrices?'':'_sans-prix') + '.xlsx';
 
   const buffer = await wb.xlsx.writeBuffer();
 
@@ -320,41 +320,45 @@ async function doExportBasic() {
   const wb = XLSX.utils.book_new();
   const { nums, letters } = buildNums();
   const { chapT, subT }   = computeTotals();
-  const l1 = document.getElementById('hl1').value;
+  const isBPU = mode === 'BPU';
+  const projName = (headerLines[0]?.text) || 'Devis BTP';
   const data = [];
 
-  data.push([l1]);
-  data.push([document.getElementById('hl2').value]);
-  data.push([document.getElementById('hl3').value]);
+  // All header lines
+  headerLines.forEach(l => data.push([l.text || '']));
   data.push([]);
-  data.push([mode==='DQE' ? 'DETAIL QUANTITATIF ESTIMATIF' : 'BORDEREAU DES PRIX UNITAIRES']);
+  data.push([isBPU ? 'BORDEREAU DES PRIX UNITAIRES' : 'DETAIL QUANTITATIF ESTIMATIF']);
   data.push([]);
 
-  const hdr = mode==='BPU'
+  const hdr = isBPU
     ? ['N°','DESIGNATION DES OUVRAGES', showPrices?'PRIX U HT':'']
     : ['N°','DESIGNATION','U','QTE','PRIX U HT','MONTANT HT'];
   data.push(hdr);
 
   let cStk=[], sStk=[];
-  const pst=()=>{ while(sStk.length){const s=sStk.pop();data.push(['','Total '+s.desig,'','','',showPrices?subT[s.id]||0:'']);} };
-  const pct=()=>{ if(!cStk.length)return;const c=cStk.pop();data.push(['','Total '+c.desig,'','','',showPrices?chapT[c.id]||0:'']); };
+  const pst=()=>{ if(isBPU){sStk=[];return;} while(sStk.length){const s=sStk.pop();data.push(['','Total '+s.desig,'','','',showPrices?subT[s.id]||0:'']);} };
+  const pct=()=>{ if(isBPU||!cStk.length)return;const c=cStk.pop();data.push(['','Total '+c.desig,'','','',showPrices?chapT[c.id]||0:'']); };
 
   rows.forEach((r,i)=>{
     const n=nums[i], l=letters[i];
-    if(r.type==='chap'){pst();pct();cStk.push({id:r.id,desig:r.desig});data.push([n,r.desig,'','','','']);}
-    else if(r.type==='sub'){const lv=r.level||1;while(sStk.length&&sStk[sStk.length-1].level>=lv){const s=sStk.pop();data.push(['','Total '+s.desig,'','','',showPrices?subT[s.id]||0:'']);}sStk.push({id:r.id,desig:r.desig,level:lv});data.push([n,r.desig,'','','','']);}
-    else if(r.type==='art'){const hasKids=artHasSubarts(r.id);const t=hasKids?artParentTotal(r):artTotal(r);data.push([n,r.desig,hasKids?'':r.unite,hasKids?'':num(r.qty),showPrices&&!hasKids?num(r.pu):'',showPrices?t:'']);}
-    else if(r.type==='subart'){const t=artTotal(r);data.push([l,r.desig,r.unite,num(r.qty),showPrices?num(r.pu):'',showPrices?t:'']);}
+    if(r.type==='chap')   {pst();pct();cStk.push({id:r.id,desig:r.desig});data.push([n,r.desig,'','','','']);}
+    else if(r.type==='sub'){const lv=r.level||1;if(!isBPU){while(sStk.length&&sStk[sStk.length-1].level>=lv){const s=sStk.pop();data.push(['','Total '+s.desig,'','','',showPrices?subT[s.id]||0:'']);}}else{while(sStk.length&&sStk[sStk.length-1].level>=lv)sStk.pop();}sStk.push({id:r.id,desig:r.desig,level:lv});data.push([n,r.desig,'','','','']);}
+    else if(r.type==='art'){const hasKids=artHasSubarts(r.id);const t=hasKids?artParentTotal(r):artTotal(r);
+      if(isBPU){const bD=r.bpu_desig!==undefined?r.bpu_desig:r.desig;const bP=r.bpu_pu!==undefined?r.bpu_pu:r.pu;const bU=r.bpu_unite!==undefined?r.bpu_unite:r.unite;const sl=!hasKids?buildBpuSubline(bU,num(bP)):'';data.push([n,bD+(sl?'\n'+sl:''),showPrices&&!hasKids?num(bP):'']);}
+      else{data.push([n,r.desig,hasKids?'':r.unite,hasKids?'':num(r.qty),showPrices&&!hasKids?num(r.pu):'',showPrices?t:'']);}}
+    else if(r.type==='subart'){const t=artTotal(r);
+      if(isBPU){const bD=r.bpu_desig!==undefined?r.bpu_desig:r.desig;const bP=r.bpu_pu!==undefined?r.bpu_pu:r.pu;const bU=r.bpu_unite!==undefined?r.bpu_unite:r.unite;const sl=buildBpuSubline(bU,num(bP));data.push([l,bD+(sl?'\n'+sl:''),showPrices?num(bP):'']);}
+      else{data.push([l,r.desig,r.unite,num(r.qty),showPrices?num(r.pu):'',showPrices?t:'']);}}
     else if(r.type==='blank'){data.push(['',r.desig,'','','','']);}
   });
   pst();pct();
-  if(showPrices){const g=grandTotal();const tv=num(document.getElementById('tva').value)/100;data.push([]);data.push(['','TOTAL HT','','','',g]);data.push(['','TVA','','','',g*tv]);data.push(['','TOTAL TTC','','','',g+g*tv]);}
+  if(!isBPU&&showPrices){const g=grandTotal();const tv=num(document.getElementById('tva').value)/100;data.push([]);data.push(['','TOTAL HT','','','',g]);data.push(['','TVA','','','',g*tv]);data.push(['','TOTAL TTC','','','',g+g*tv]);}
 
   const ws=XLSX.utils.aoa_to_sheet(data);
   ws['!cols']=[{wch:10},{wch:55},{wch:7},{wch:10},{wch:14},{wch:16}];
   XLSX.utils.book_append_sheet(wb,ws,mode);
 
-  const defName=(l1||'devis').replace(/\s+/g,'_').substring(0,40)+'_'+mode+'.xlsx';
+  const defName = projName.replace(/\s+/g,'_').substring(0,40)+'_'+mode+'.xlsx';
   if(isElectron){const buf=XLSX.write(wb,{type:'array',bookType:'xlsx'});await window.electronAPI.saveExcel(Array.from(buf),defName);}
   else{XLSX.writeFile(wb,defName);}
   notif('✓ Excel exporté (sans styles)');
