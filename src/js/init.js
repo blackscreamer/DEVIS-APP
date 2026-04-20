@@ -1,30 +1,28 @@
 /**
  * init.js — Démarrage de l'application.
- * Ce fichier est chargé en dernier — tous les modules sont déjà disponibles.
+ * Chargé en dernier — tous les modules sont disponibles.
  */
 
 window.onload = () => {
-  // Restaurer depuis localStorage si disponible
-  if (!loadLocal()) {
+  let loaded = false;
+  try { loaded = loadLocal(); } catch(e) { console.warn('loadLocal error:', e); }
+
+  if (!loaded) {
     rows = [];
-    render();
-  } else {
-    render();
-    notif('✓ Données restaurées');
+    // Ensure headerLines is initialized
+    if (!Array.isArray(headerLines) || !headerLines.length) {
+      headerLines = [{ text: '', style: 't1' }, { text: '', style: 't2' }];
+    }
   }
 
-  // Premier snapshot undo
-  snapshot();
+  render();
+  if (loaded) notif('✓ Données restaurées');
 
-  // Afficher le mode courant dans le menu
+  snapshot();
   setMode(mode);
   applyPricesUI();
+  updateWorkspaceSize();
+  applyStoredColWidths();
+  syncColWidthUI();
+  renderHeaderLines();
 };
-
-// Apply A4 workspace dimensions after init
-window.addEventListener('load', () => {
-  if (typeof updateWorkspaceSize  === 'function') updateWorkspaceSize();
-  if (typeof applyStoredColWidths === 'function') applyStoredColWidths();
-  if (typeof syncColWidthUI       === 'function') syncColWidthUI();
-  if (typeof renderHeaderLines    === 'function') renderHeaderLines();
-});

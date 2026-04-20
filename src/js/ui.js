@@ -24,6 +24,12 @@ function setSaveIndicator(state) {
 function renderHeaderLines() {
   const container = document.getElementById('hdr-lines');
   if (!container) return;
+
+  // Self-heal: ensure headerLines is always a valid array
+  if (!Array.isArray(headerLines) || headerLines.length === 0) {
+    headerLines = [{ text: '', style: 't1' }, { text: '', style: 't2' }];
+  }
+
   container.innerHTML = '';
 
   headerLines.forEach((line, i) => {
@@ -69,6 +75,10 @@ function renderHeaderLines() {
 }
 
 function addHeaderLine() {
+  // Guard: ensure headerLines is a valid array
+  if (!Array.isArray(headerLines) || headerLines.length === 0) {
+    headerLines = [{ text: '', style: 't1' }, { text: '', style: 't2' }];
+  }
   headerLines.push({ text: '', style: 't2' });
   triggerAutosave();
   renderHeaderLines();

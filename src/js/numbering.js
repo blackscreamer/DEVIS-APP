@@ -48,10 +48,13 @@ function buildNums() {
 
     } else if (r.type === 'art') {
       artN++; saIdx = 0;
-      // Article number uses the level-1 sub counter (main sub-chapter)
-      const subNum = subCounters[0] || 0;
+      // Use the deepest active sub-chapter number as prefix
+      // e.g. if under sub "3.1", article is "3.1.01"
+      let subPrefix = String(subCounters[0] || 0);
+      if (subCounters[1] > 0) subPrefix += '.' + subCounters[1];
+      if (subCounters[2] > 0) subPrefix += '.' + subCounters[2];
       const a = artN < 10 ? '0' + artN : String(artN);
-      nums.push(subNum + '.' + a);
+      nums.push(subPrefix + '.' + a);
       letters.push('');
 
     } else if (r.type === 'subart') {

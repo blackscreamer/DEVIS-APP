@@ -23,27 +23,51 @@ function getSaveData() {
 }
 
 function applyLoadedData(d) {
-  rows = d.rows || []; nid = d.nid || 1;
+  rows = d.rows || [];
+  nid  = d.nid  || 1;
+
+  // Clean up subart rows whose desig was corrupted by old bug
+  // (letter like "a) " was prepended to desig in render and saved back)
+  rows.forEach(r => {
+    if (r.type === 'subart' && r.desig) {
+      // Remove leading "a) ", "b) ", etc. that may have been saved
+      r.desig  = r.desig.replace(/^[a-z]\)\s*/i, '');
+      if (r.bpu_desig) r.bpu_desig = r.bpu_desig.replace(/^[a-z]\)\s*/i, '');
+    }
+  });
+
   if (d.C) C = d.C;
   if (d.pageLayout) Object.assign(pageLayout, d.pageLayout);
-  if (d.colWidths)  Object.assign(colWidths,  d.colWidths);
-  if (d.headerLines && Array.isArray(d.headerLines)) {
-    headerLines = d.headerLines;
+  if (d.colWidths && typeof d.colWidths === 'object') {
+    if (d.colWidths.DQE) Object.assign(colWidths.DQE, d.colWidths.DQE);
+    if (d.colWidths.BPU) Object.assign(colWidths.BPU, d.colWidths.BPU);
+  }
+
+  // Header lines — supports all old formats
+  if (d.headerLines && Array.isArray(d.headerLines) && d.headerLines.length > 0) {
+    headerLines = d.headerLines.map(l => ({
+      text:  typeof l.text  === 'string' ? l.text  : '',
+      style: l.style === 't1' || l.style === 't2' ? l.style : 't2',
+    }));
   } else {
-    // Migrate from old format (l1/l2/l3)
+    // Migrate from old l1/l2/l3 format (v1–v8)
     headerLines = [];
     if (d.l1) headerLines.push({ text: d.l1, style: 't1' });
     if (d.l2) headerLines.push({ text: d.l2, style: 't2' });
     if (d.l3) headerLines.push({ text: d.l3, style: 't2' });
-    if (!headerLines.length) headerLines = [{ text:'',style:'t1'},{text:'',style:'t2'}];
+    // Even older: might be stored as proj, l2 etc.
+    if (!headerLines.length && d.projet) headerLines.push({ text: d.projet, style: 't1' });
+    // Always ensure at least 2 lines
+    while (headerLines.length < 2) headerLines.push({ text: '', style: headerLines.length === 0 ? 't1' : 't2' });
   }
+
   document.getElementById('tva').value = d.tva || 19;
   if (d.showPrices !== undefined) { showPrices = d.showPrices; applyPricesUI(); }
+
   setMode(d.mode || 'DQE');
   syncPageLayoutUI();
-  if (typeof updateWorkspaceSize  === 'function') updateWorkspaceSize();
-  if (typeof renderHeaderLines    === 'function') renderHeaderLines();
-}
+  if (typeof updateWorkspaceSize === 'function') updateWorkspaceSize();
+  if (typeof renderHeaderLines   === 'function') renderHeaderLines();
 }
 
 /* ── Autosave ── */
