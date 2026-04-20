@@ -139,10 +139,13 @@ function render() {
         const bUnite = r.bpu_unite!== undefined ? r.bpu_unite: r.unite;
         const subline= buildBpuSubline(bUnite, num(bPu));
         html += `<tr class="rsa${selCls}" id="ro-${r.id}" ${h} onclick="selectRow('${r.id}',this,event)">
-          <td class="nc" style="background:${C.saBg};color:${C.saFg};padding-left:14px">${esc(letter)}</td>
-          <td style="background:${C.saBg}">
-            <textarea class="di" rows="1" placeholder="${esc(r.desig||'Sous-article BPU…')}" style="color:${C.saFg};padding-left:18px"
-              oninput="upd('${r.id}','bpu_desig',this.value);ar(this)" onfocus="ar(this)">${esc(bDesig)}</textarea>
+          <td class="nc" style="background:${C.saBg};color:${C.saFg};"></td>
+          <td style="background:${C.saBg};padding:0">
+            <div style="display:flex;align-items:flex-start;padding:2px 5px 0">
+              <span style="font-family:var(--F);font-size:var(--SZ);color:${C.saFg};font-weight:bold;white-space:nowrap;padding-top:2px;min-width:22px;flex-shrink:0">${esc(letter)}</span>
+              <textarea class="di" rows="1" placeholder="Sous-article BPU…" style="color:${C.saFg};padding:0;flex:1"
+                oninput="upd('${r.id}','bpu_desig',this.value);ar(this)" onfocus="ar(this)">${esc(bDesig)}</textarea>
+            </div>
             <div class="bpu-subline" id="sl-${r.id}">${subline}</div>
           </td>
           <td class="price-cell" style="background:${C.saBg}">
@@ -155,10 +158,13 @@ function render() {
       } else {
         const t = artTotal(r);
         html += `<tr class="rsa${selCls}" id="ro-${r.id}" ${h} onclick="selectRow('${r.id}',this,event)">
-          <td class="nc" style="background:${C.saBg};color:${C.saFg};padding-left:14px">${esc(letter)}</td>
-          <td style="background:${C.saBg}">
-            <textarea class="di" rows="1" placeholder="Sous-article (ex: ø 110mm)…" style="color:${C.saFg};padding-left:18px"
-              oninput="upd('${r.id}','desig',this.value);ar(this)" onfocus="ar(this)">${esc(r.desig)}</textarea>
+          <td class="nc" style="background:${C.saBg};color:${C.saFg};"></td>
+          <td style="background:${C.saBg};padding:0">
+            <div style="display:flex;align-items:flex-start;padding:2px 5px 0">
+              <span style="font-family:var(--F);font-size:var(--SZ);color:${C.saFg};font-weight:bold;white-space:nowrap;padding-top:2px;min-width:22px;flex-shrink:0">${esc(letter)}</span>
+              <textarea class="di" rows="1" placeholder="Sous-article (ex: ø 110mm)…" style="color:${C.saFg};padding:0;flex:1"
+                oninput="upd('${r.id}','desig',this.value);ar(this)" onfocus="ar(this)">${esc(r.desig)}</textarea>
+            </div>
           </td>
           <td style="background:${C.saBg}">
             <select class="ui" style="color:${C.saFg}" onchange="upd('${r.id}','unite',this.value)">
