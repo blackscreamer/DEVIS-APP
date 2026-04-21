@@ -9,6 +9,7 @@ function render() {
   const { nums, letters }= buildNums();
   const { chapT, subT }  = computeTotals();
   const isBPU            = mode === 'BPU';
+  if (typeof computeSearchResults === 'function') computeSearchResults();
   let html               = '';
   let chapStk = [], subStk = [];
 
@@ -29,12 +30,28 @@ function render() {
     <td class="tot-val price-cell" style="background:${C.tcBg};color:${C.tcFg}" id="ct-${chap.id}"></td>
   </tr>`;
 
+  const addHereRow = () => `<tr class="add-here-row">
+    <td colspan="${isBPU ? 3 : 6}">
+      <div class="add-here-box">
+        <span class="add-here-label">+ Ajouter ici</span>
+        <button class="add-here-btn action" type="button" onclick="dupSelected();event.stopPropagation()">Dupliquer</button>
+        <button class="add-here-btn action danger" type="button" onclick="delSelected();event.stopPropagation()">Supprimer</button>
+        <button class="add-here-btn" type="button" onclick="addRowHere('chap');event.stopPropagation()">Chapitre</button>
+        <button class="add-here-btn" type="button" onclick="addRowHere('sub',1);event.stopPropagation()">Sous-chapitre</button>
+        <button class="add-here-btn" type="button" onclick="addRowHere('art');event.stopPropagation()">Article</button>
+        <button class="add-here-btn" type="button" onclick="addRowHere('subart');event.stopPropagation()">Sous-article</button>
+        <button class="add-here-btn" type="button" onclick="addRowHere('blank');event.stopPropagation()">Ligne vide</button>
+      </div>
+    </td>
+  </tr>`;
+
   /* ── Itération des lignes ── */
   rows.forEach((r, i) => {
     const vis    = !hidden.has(i);
     const h      = vis ? '' : 'style="display:none"';
     const n      = nums[i];
     const letter = letters[i];
+    const matchCls = typeof getSearchRowClass === 'function' ? getSearchRowClass(r.id) : '';
     const selCls = selIds.has(r.id)
       ? (selIds.size === 1 ? ' sel-row' : r.id === selId ? ' sel-row' : ' sel-multi')
       : '';
@@ -45,7 +62,7 @@ function render() {
       else         { subStk = []; chapStk = []; }
       chapStk.push({ id: r.id, desig: r.desig });
       const cs = isBPU ? '1' : '4'; // colspan désignation
-      html += `<tr class="rc${selCls}" id="ro-${r.id}" draggable="false" onclick="selectRow('${r.id}',this,event)">
+      html += `<tr class="rc${selCls}${matchCls}" id="ro-${r.id}" draggable="false" onclick="selectRow('${r.id}',this,event)">
         <td class="nc" style="background:${C.chapBg};color:${C.chapFg};cursor:pointer" onclick="toggleCollapse('${r.id}',event)">${r.collapsed ? '▸' : '▾'} ${esc(n)}</td>
         <td colspan="${isBPU ? 2 : 5}" style="background:${C.chapBg}">
           <input class="di" value="${esc(r.desig)}" placeholder="Nom du chapitre…"
@@ -53,6 +70,7 @@ function render() {
             oninput="upd('${r.id}','desig',this.value)"/>
         </td>
       </tr>`;
+      if (selIds.size === 1 && selId === r.id && vis) html += addHereRow();
     }
 
     /* ─ SOUS-CHAPITRE ─ */
@@ -65,7 +83,7 @@ function render() {
       const fg = lv===1 ? C.sub1Fg : lv===2 ? C.sub2Fg : C.sub3Fg;
       const pl = (lv-1)*20 + 8;
       const cs = isBPU ? '1' : '4';
-      html += `<tr class="rs${selCls}" id="ro-${r.id}" ${h} onclick="selectRow('${r.id}',this,event)">
+      html += `<tr class="rs${selCls}${matchCls}" id="ro-${r.id}" ${h} onclick="selectRow('${r.id}',this,event)">
         <td class="nc" style="background:${bg};color:${fg};cursor:pointer;font-weight:bold" onclick="toggleCollapse('${r.id}',event)">${r.collapsed ? '▸' : '▾'} ${esc(n)}</td>
         <td colspan="${isBPU ? 2 : 5}" style="background:${bg}">
           <input class="di" value="${esc(r.desig)}" placeholder="Nom du sous-chapitre…"
@@ -73,6 +91,7 @@ function render() {
             oninput="upd('${r.id}','desig',this.value)"/>
         </td>
       </tr>`;
+      if (selIds.size === 1 && selId === r.id && vis) html += addHereRow();
     }
 
     /* ─ ARTICLE ─ */
@@ -83,7 +102,7 @@ function render() {
         const bPu     = r.bpu_pu     !== undefined ? r.bpu_pu     : r.pu;
         const bUnite  = r.bpu_unite  !== undefined ? r.bpu_unite  : r.unite;
         const subline = !hasKids ? buildBpuSubline(bUnite, num(bPu)) : '';
-        html += `<tr class="ra${selCls}" id="ro-${r.id}" ${h} onclick="selectRow('${r.id}',this,event)">
+        html += `<tr class="ra${selCls}${matchCls}" id="ro-${r.id}" ${h} onclick="selectRow('${r.id}',this,event)">
           <td class="nc" style="background:${C.artBg};color:${C.artFg}">${esc(n)}</td>
           <td style="background:${C.artBg}">
             <textarea class="di" rows="1" placeholder="${esc(r.desig || 'Désignation BPU…')}" style="color:${C.artFg}"
@@ -99,9 +118,10 @@ function render() {
                   oninput="niInput(this,'${r.id}','bpu_pu')"/>
               </td>`}
         </tr>`;
+        if (selIds.size === 1 && selId === r.id && vis) html += addHereRow();
       } else {
         const t = hasKids ? 0 : artTotal(r);
-        html += `<tr class="ra${selCls}" id="ro-${r.id}" ${h} onclick="selectRow('${r.id}',this,event)">
+        html += `<tr class="ra${selCls}${matchCls}" id="ro-${r.id}" ${h} onclick="selectRow('${r.id}',this,event)">
           <td class="nc" style="background:${C.artBg};color:${C.artFg}">${esc(n)}</td>
           <td style="background:${C.artBg}">
             <textarea class="di" rows="1" placeholder="Désignation de l'article…" style="color:${C.artFg}"
@@ -128,6 +148,7 @@ function render() {
               </td>`}
           <td class="tc${t?' v':''} price-cell" style="background:${C.artBg};color:${C.artFg}" id="at-${r.id}">${t ? daNoUnit(t) : ''}</td>
         </tr>`;
+        if (selIds.size === 1 && selId === r.id && vis) html += addHereRow();
       }
     }
 
@@ -138,7 +159,7 @@ function render() {
         const bPu    = r.bpu_pu   !== undefined ? r.bpu_pu   : r.pu;
         const bUnite = r.bpu_unite!== undefined ? r.bpu_unite: r.unite;
         const subline= buildBpuSubline(bUnite, num(bPu));
-        html += `<tr class="rsa${selCls}" id="ro-${r.id}" ${h} onclick="selectRow('${r.id}',this,event)">
+        html += `<tr class="rsa${selCls}${matchCls}" id="ro-${r.id}" ${h} onclick="selectRow('${r.id}',this,event)">
           <td class="nc" style="background:${C.saBg};color:${C.saFg};"></td>
           <td style="background:${C.saBg};padding:0">
             <div style="display:flex;align-items:flex-start;padding:2px 5px 0">
@@ -155,9 +176,10 @@ function render() {
               oninput="niInput(this,'${r.id}','bpu_pu')"/>
           </td>
         </tr>`;
+        if (selIds.size === 1 && selId === r.id && vis) html += addHereRow();
       } else {
         const t = artTotal(r);
-        html += `<tr class="rsa${selCls}" id="ro-${r.id}" ${h} onclick="selectRow('${r.id}',this,event)">
+        html += `<tr class="rsa${selCls}${matchCls}" id="ro-${r.id}" ${h} onclick="selectRow('${r.id}',this,event)">
           <td class="nc" style="background:${C.saBg};color:${C.saFg};"></td>
           <td style="background:${C.saBg};padding:0">
             <div style="display:flex;align-items:flex-start;padding:2px 5px 0">
@@ -185,13 +207,14 @@ function render() {
           </td>
           <td class="tc${t?' v':''} price-cell" style="background:${C.saBg};color:${C.saFg}" id="at-${r.id}">${t ? daNoUnit(t) : ''}</td>
         </tr>`;
+        if (selIds.size === 1 && selId === r.id && vis) html += addHereRow();
       }
     }
 
     /* ─ LIGNE VIDE / DESCRIPTION ─ */
     else if (r.type === 'blank') {
       const cs = isBPU ? '1' : '4';
-      html += `<tr class="rb${selCls}" id="ro-${r.id}" ${h} onclick="selectRow('${r.id}',this,event)">
+      html += `<tr class="rb${selCls}${matchCls}" id="ro-${r.id}" ${h} onclick="selectRow('${r.id}',this,event)">
         <td style="background:#fff"></td>
         <td colspan="${cs}" style="background:#fff">
           <input class="di" value="${esc(r.desig)}" placeholder="Note / description…"
@@ -200,6 +223,7 @@ function render() {
         ${isBPU ? '' : `<td style="background:#fff"></td>`}
         <td style="background:#fff"></td>
       </tr>`;
+      if (selIds.size === 1 && selId === r.id && vis) html += addHereRow();
     }
   });
 
@@ -238,22 +262,33 @@ function render() {
     tr.addEventListener('drop',      e => dp2(e, tr));
   });
 
+  document.querySelectorAll('#body tr[id^="ro-"] input, #body tr[id^="ro-"] textarea, #body tr[id^="ro-"] select').forEach(el => {
+    el.addEventListener('focus', () => {
+      const tr = el.closest('tr[id^="ro-"]');
+      if (!tr) return;
+      const id = tr.id.replace('ro-', '');
+      if (!selIds.has(id) || selIds.size !== 1) selectRowSoft(id, tr);
+    });
+    el.addEventListener('mousedown', () => {
+      const tr = el.closest('tr[id^="ro-"]');
+      if (!tr) return;
+      const id = tr.id.replace('ro-', '');
+      if (!selIds.has(id) || selIds.size !== 1) selectRowSoft(id, tr);
+    });
+  });
+
   /* Rétablir les hauteurs des textareas */
   document.querySelectorAll('textarea.di').forEach(t => { t.style.height = 'auto'; t.style.height = t.scrollHeight + 'px'; });
 
   /* Rétablir la sélection visuelle */
   if (selIds.size) {
-    let lastTr = null;
-    selIds.forEach(sid => {
-      const tr = document.getElementById('ro-' + sid);
-      if (tr) { tr.classList.add(selIds.size===1||sid===selId ? 'sel-row' : 'sel-multi'); lastTr = tr; }
-    });
-    if (lastTr) positionFloatCtrl(document.getElementById('ro-' + selId) || lastTr);
+    if (typeof markSelectionUI === 'function') markSelectionUI();
   } else {
-    clearSelection();
+    clearSelection(false);
   }
 
   recalc();
+  if (typeof syncSearchUI === 'function') syncSearchUI();
 }
 
 /* Keyboard nav Tab entre cellules numériques */

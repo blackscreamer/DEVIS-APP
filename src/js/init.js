@@ -25,4 +25,5 @@ window.onload = () => {
   applyStoredColWidths();
   syncColWidthUI();
   renderHeaderLines();
+  syncSearchUI();
 };

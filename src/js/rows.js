@@ -3,9 +3,10 @@
  */
 
 /* ── Indice d'insertion (après la ligne sélectionnée) ── */
-function insertIdx() {
-  if (selId === null) return rows.length;
-  const idx = rows.findIndex(r => r.id === selId);
+function insertIdx(afterId) {
+  const anchorId = afterId === undefined ? selId : afterId;
+  if (anchorId === null) return rows.length;
+  const idx = rows.findIndex(r => r.id === anchorId);
   return idx < 0 ? rows.length : idx + 1;
 }
 
@@ -19,10 +20,10 @@ function lastUniteBefore(idx) {
 }
 
 /* ── Ajouter une ligne ── */
-function addRow(type, level) {
+function addRow(type, level, afterId) {
   snapshot();
   const id  = uid();
-  const idx = insertIdx();
+  const idx = insertIdx(afterId);
   let obj;
   if (type === 'chap')   obj = { type, id, desig: '', collapsed: false };
   if (type === 'sub')    obj = { type, id, desig: '', level: level || 1, collapsed: false };
@@ -37,6 +38,11 @@ function addRow(type, level) {
     if (tr) { tr.classList.add('sel-row'); positionFloatCtrl(tr); const inp = tr.querySelector('input.di,textarea.di'); if (inp) { inp.focus(); inp.select(); } }
   }, 35);
   triggerAutosave();
+}
+
+function addRowHere(type, level) {
+  if (!selId) return addRow(type, level);
+  addRow(type, level, selId);
 }
 
 /* Raccourci clavier + → ajouter article */

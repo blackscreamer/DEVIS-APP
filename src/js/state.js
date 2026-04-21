@@ -11,6 +11,9 @@ let selId      = null;     // ancre de sélection
 let selIds     = new Set();// multi-sélection
 let showPrices = true;     // afficher/masquer les prix
 let currentFilePath = null;// chemin du fichier ouvert (Electron)
+let searchQuery = '';      // texte courant de recherche
+let searchResults = [];    // ids de lignes correspondant a la recherche
+let searchIndex = -1;      // index actif dans searchResults
 
 /** Palette de couleurs par type de ligne */
 let C = {

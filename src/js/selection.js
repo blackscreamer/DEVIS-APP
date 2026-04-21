@@ -5,6 +5,7 @@
 
 function selectRow(id, trEl, e) {
   if (e && (e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'||e.target.tagName==='SELECT')) return;
+  if (e) e.stopPropagation();
 
   if (e && (e.ctrlKey || e.metaKey)) {
     if (selIds.has(id)) selIds.delete(id); else selIds.add(id);
@@ -18,15 +19,27 @@ function selectRow(id, trEl, e) {
     selIds.clear(); selIds.add(id); selId = id;
   }
 
+  render();
+}
+
+function markSelectionUI() {
   document.querySelectorAll('tr.sel-row,tr.sel-multi').forEach(t => t.classList.remove('sel-row','sel-multi'));
+  let lastTr = null;
   selIds.forEach(sid => {
     const tr = document.getElementById('ro-' + sid);
-    if (tr) tr.classList.add(selIds.size===1 ? 'sel-row' : 'sel-multi');
+    if (tr) {
+      tr.classList.add(selIds.size===1 || sid===selId ? 'sel-row' : 'sel-multi');
+      lastTr = tr;
+    }
   });
-  if (trEl) {
-    if (selIds.size > 1) { trEl.classList.remove('sel-multi'); trEl.classList.add('sel-row'); }
-    positionFloatCtrl(trEl);
-  }
+  if (lastTr) positionFloatCtrl(document.getElementById('ro-' + selId) || lastTr);
+}
+
+function selectRowSoft(id, trEl) {
+  selIds.clear();
+  selIds.add(id);
+  selId = id;
+  markSelectionUI();
 }
 
 function positionFloatCtrl(trEl) {
@@ -56,10 +69,11 @@ function positionFloatCtrl(trEl) {
   };
 }
 
-function clearSelection() {
+function clearSelection(shouldRender = true) {
   selId = null; selIds.clear();
   document.querySelectorAll('tr.sel-row,tr.sel-multi').forEach(t => t.classList.remove('sel-row','sel-multi'));
   document.getElementById('float-ctrl').classList.add('hidden');
+  if (shouldRender) render();
 }
 
 document.addEventListener('click', e => {
