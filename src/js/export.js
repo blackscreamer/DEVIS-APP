@@ -250,12 +250,14 @@ async function doExport() {
       const bPu    = r.bpu_pu   !== undefined ? r.bpu_pu   : r.pu;
       const bUnite = r.bpu_unite!== undefined ? r.bpu_unite: r.unite;
 
+      // N° cell is empty — letter prefix goes inside the designation cell
       let data;
       if (isBPU) {
         const subline = buildBpuSubline(bUnite, num(bPu));
-        data = [letter, bDesig + (subline ? '\n' + subline : ''), showPrices ? num(bPu) : null];
+        const fullDesig = letter + ' ' + bDesig + (subline ? '\n' + subline : '');
+        data = ['', fullDesig, showPrices ? num(bPu) : null];
       } else {
-        data = [letter, r.desig, r.unite, num(r.qty)||'', showPrices ? num(r.pu)||'' : '', showPrices ? t||'' : ''];
+        data = ['', letter + ' ' + r.desig, r.unite, num(r.qty)||'', showPrices ? num(r.pu)||'' : '', showPrices ? t||'' : ''];
       }
       const row = ws.addRow(data);
       row.height = isBPU ? 28 : 16;
@@ -347,8 +349,8 @@ async function doExportBasic() {
       if(isBPU){const bD=r.bpu_desig!==undefined?r.bpu_desig:r.desig;const bP=r.bpu_pu!==undefined?r.bpu_pu:r.pu;const bU=r.bpu_unite!==undefined?r.bpu_unite:r.unite;const sl=!hasKids?buildBpuSubline(bU,num(bP)):'';data.push([n,bD+(sl?'\n'+sl:''),showPrices&&!hasKids?num(bP):'']);}
       else{data.push([n,r.desig,hasKids?'':r.unite,hasKids?'':num(r.qty),showPrices&&!hasKids?num(r.pu):'',showPrices?t:'']);}}
     else if(r.type==='subart'){const t=artTotal(r);
-      if(isBPU){const bD=r.bpu_desig!==undefined?r.bpu_desig:r.desig;const bP=r.bpu_pu!==undefined?r.bpu_pu:r.pu;const bU=r.bpu_unite!==undefined?r.bpu_unite:r.unite;const sl=buildBpuSubline(bU,num(bP));data.push([l,bD+(sl?'\n'+sl:''),showPrices?num(bP):'']);}
-      else{data.push([l,r.desig,r.unite,num(r.qty),showPrices?num(r.pu):'',showPrices?t:'']);}}
+      if(isBPU){const bD=r.bpu_desig!==undefined?r.bpu_desig:r.desig;const bP=r.bpu_pu!==undefined?r.bpu_pu:r.pu;const bU=r.bpu_unite!==undefined?r.bpu_unite:r.unite;const sl=buildBpuSubline(bU,num(bP));data.push(['',l+' '+bD+(sl?'\n'+sl:''),showPrices?num(bP):'']);}
+      else{data.push(['',l+' '+r.desig,r.unite,num(r.qty),showPrices?num(r.pu):'',showPrices?t:'']);}}
     else if(r.type==='blank'){data.push(['',r.desig,'','','','']);}
   });
   pst();pct();

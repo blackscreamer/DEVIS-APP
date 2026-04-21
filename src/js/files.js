@@ -233,20 +233,22 @@ function buildPrintHTML() {
   const subartRow = (r, letter) => {
     const t = artTotal(r);
     const bg = C.saBg, fg = C.saFg;
+    // N° cell is always empty — letter goes inside the designation cell as bold prefix
+    const letterSpan = `<strong style="white-space:nowrap;padding-right:4px;">${esc(letter)}</strong>`;
     if (isBPU) {
       const bD = r.bpu_desig!==undefined?r.bpu_desig:r.desig;
       const bP = r.bpu_pu!==undefined?r.bpu_pu:r.pu;
       const bU = r.bpu_unite!==undefined?r.bpu_unite:r.unite;
       const sl = buildBpuSubline(bU, num(bP));
       return `<tr>
-        <td style="${CELL}background:${bg};color:${fg};text-align:center;">${esc(letter)}</td>
-        <td style="${CELL}background:${bg};color:${fg};padding-left:18px;">${escNl(bD)}${sl?`<br/><em style="font-size:9pt;font-weight:bold;">${esc(sl)}</em>`:''}</td>
+        <td style="${CELL}background:${bg};color:${fg};"></td>
+        <td style="${CELL}background:${bg};color:${fg};">${letterSpan}${escNl(bD)}${sl?`<br/><em style="font-size:9pt;font-weight:bold;">${esc(sl)}</em>`:''}</td>
         <td style="${NCELL}background:${bg};color:${fg};">${!hide?daNoUnit(num(bP)):''}</td>
       </tr>`;
     }
     return `<tr>
-      <td style="${CELL}background:${bg};color:${fg};text-align:center;">${esc(letter)}</td>
-      <td style="${CELL}background:${bg};color:${fg};padding-left:18px;">${escNl(r.desig||'')}</td>
+      <td style="${CELL}background:${bg};color:${fg};"></td>
+      <td style="${CELL}background:${bg};color:${fg};">${letterSpan}${escNl(r.desig||'')}</td>
       <td style="${CELL}background:${bg};color:${fg};text-align:center;">${esc(r.unite||'')}</td>
       <td style="${NCELL}background:${bg};color:${fg};">${fmtNum(r.qty)}</td>
       <td style="${NCELL}background:${bg};color:${fg};">${!hide?daNoUnit(num(r.pu)):''}</td>
