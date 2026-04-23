@@ -14,6 +14,7 @@
 .fc-btn:hover     { background: #4a6a9a; color: #fff; border-color: #7aacdd; }
 .fc-btn.del:hover { background: #7a1010; color: #fff; border-color: #c03030; }
 .fc-btn.dup:hover { background: #2a5a2a; color: #fff; border-color: #5aaa5a; }
+.fc-btn.add:hover { background: #51663a; color: #fff; border-color: #a5c07f; }
 .fc-sep  { width: 1px; height: 18px; background: #444; }
 .drag-h  {
   cursor: grab; color: #888; font-size: 14pt; padding: 0 4px;
