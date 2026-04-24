@@ -20,4 +20,7 @@
 
   /* TTC summary: page-break-inside avoid, always show */
   #ttc-summary { page-break-inside: avoid; }
-  #tbl.no-prices ~ #ttc-summary { visibility: hidden; }
+  /* no-prices: titles stay, only the value spans go transparent */
+  #tbl.no-prices ~ #ttc-summary                    { visibility: visible; }
+  #tbl.no-prices ~ #ttc-summary #ttc-chiffres,
+  #tbl.no-prices ~ #ttc-summary #ttc-lettres       { color: transparent !important; }

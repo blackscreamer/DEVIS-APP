@@ -213,15 +213,15 @@ function render() {
 
     /* ─ LIGNE VIDE / DESCRIPTION ─ */
     else if (r.type === 'blank') {
-      const cs = isBPU ? '1' : '4';
+      // DQE: 6 cols → N°(1) + desig colspan=5 = 6
+      // BPU: 3 cols → N°(1) + desig colspan=2 = 3
+      const cs = isBPU ? '2' : '5';
       html += `<tr class="rb${selCls}${matchCls}" id="ro-${r.id}" ${h} onclick="selectRow('${r.id}',this,event)">
         <td style="background:#fff"></td>
         <td colspan="${cs}" style="background:#fff">
           <input class="di" value="${esc(r.desig)}" placeholder="Note / description…"
             style="font-style:italic;color:#333" oninput="upd('${r.id}','desig',this.value)"/>
         </td>
-        ${isBPU ? '' : `<td style="background:#fff"></td>`}
-        <td style="background:#fff"></td>
       </tr>`;
       if (selIds.size === 1 && selId === r.id && vis) html += addHereRow();
     }

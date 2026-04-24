@@ -120,9 +120,11 @@ async function doExport() {
   ws.addRow([]); // spacer
 
   /* ── THEAD ── */
+  // Always include price column headers so column widths are preserved.
+  // The cell value is always set — just the data cells will be empty when !showPrices.
   const headData = isBPU
-    ? ['N°', 'DESIGNATION DES OUVRAGES', showPrices ? 'PRIX UNITAIRE HT (DA)' : '']
-    : ['N°', 'DESIGNATION DES OUVRAGES', 'U', 'QUANTITE', 'PRIX U HT (DA)', 'MONTANT HT (DA)'];
+    ? ['N°', 'DESIGNATION DES OUVRAGES', 'PRIX UNITAIRE HT (DA)']
+    : ['N°', 'DESIGNATION DES OUVRAGES', 'U', 'QTÉ', 'PRIX U HT (DA)', 'MONTANT HT (DA)'];
 
   const headRow = ws.addRow(headData);
   headRow.height = 28;
@@ -333,8 +335,8 @@ async function doExportBasic() {
   data.push([]);
 
   const hdr = isBPU
-    ? ['N°','DESIGNATION DES OUVRAGES', showPrices?'PRIX U HT':'']
-    : ['N°','DESIGNATION','U','QTE','PRIX U HT','MONTANT HT'];
+    ? ['N°','DESIGNATION DES OUVRAGES', 'PRIX U HT']
+    : ['N°','DESIGNATION','U','QTÉ','PRIX U HT','MONTANT HT'];
   data.push(hdr);
 
   let cStk=[], sStk=[];

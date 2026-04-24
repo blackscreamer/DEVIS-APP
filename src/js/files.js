@@ -313,27 +313,34 @@ function buildPrintHTML() {
         <td style="${NCELL}background:${C.gtBg};color:${C.gtFg};font-size:12pt;border-top:2px solid #000;">${!hide?da(ttcVal):''}</td></tr>`;
   }
 
-  // Column headers
+  // Column headers — always render price headers to preserve column widths.
+  // When prices are hidden, make price header text transparent (column stays same width).
+  const priceColor = hide ? 'color:transparent;' : '';
   const thead = isBPU
     ? `<tr style="background:#d9d9d9;">
         <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;width:55px;">N°</th>
         <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;">DESIGNATION DES OUVRAGES</th>
-        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;width:120px;">${!hide?'PRIX UNITAIRE HT':''}</th>
+        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;width:120px;${priceColor}">PRIX UNITAIRE HT</th>
       </tr>`
     : `<tr style="background:#d9d9d9;">
         <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;width:55px;">N°</th>
         <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;">DESIGNATION DES OUVRAGES</th>
         <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;width:38px;">U</th>
-        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:right;width:78px;">QUANTITE</th>
-        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:right;width:90px;">${!hide?'P.U EN HT':''}</th>
+        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:right;width:90px;">QTÉ</th>
+        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:right;width:90px;${priceColor}">P.U EN HT</th>
         <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:right;width:108px;">MONTANT HT</th>
       </tr>`;
 
   // TTC summary lines
-  const ttcSummary = (!isBPU && ttcVal) ? `
-  <div style="margin-top:20px;font-family:${F};font-size:11pt;line-height:2.4;border-top:2px solid #000;padding-top:12px;">
-    <div>Le montant total TTC en chiffres : <strong>${!hide?da(ttcVal):'___________________'}</strong></div>
-    <div>Le montant total TTC en lettres : <strong><em>${!hide?(numToWordsFr(Math.floor(ttcVal))+(Math.round((ttcVal-Math.floor(ttcVal))*100)>0?' ET '+numToWordsFr(Math.round((ttcVal-Math.floor(ttcVal))*100))+' CENTIMES':'')+' DINARS ALGÉRIENS'):'_________________________________'}</em></strong></div>
+  const ttcLetters = !isBPU && ttcVal
+    ? numToWordsFr(Math.floor(ttcVal)) + (Math.round((ttcVal - Math.floor(ttcVal)) * 100) > 0 ? ' ET ' + numToWordsFr(Math.round((ttcVal - Math.floor(ttcVal)) * 100)) + ' CENTIMES' : '') + ' DINARS ALGÉRIENS'
+    : '';
+
+  // Always show the summary lines in DQE — titles visible always, values transparent when hide=true
+  const ttcSummary = !isBPU ? `
+  <div style="margin-top:20px;font-family:${F};font-size:11pt;color:#000;line-height:2.4;border-top:2px solid #000;padding-top:12px;">
+    <div>Le montant total TTC en chiffres&nbsp;: <strong style="color:${hide?'transparent':'inherit'}">${da(ttcVal)}</strong></div>
+    <div>Le montant total TTC en lettres&nbsp;: <strong style="color:${hide?'transparent':'inherit'}"><em>${ttcLetters}</em></strong></div>
   </div>` : '';
 
   // Header / footer

@@ -6,36 +6,78 @@
   background: #2d3748; color: #e2e8f0; text-align: right; font-size: 11pt; font-family: var(--F);
 }
 .tva-inp:focus { outline: none; border-color: #4a90d9; }
-.toolbar-sep { width: 1px; height: 24px; background: #444; margin: 0 2px; flex-shrink: 0; }
-.mode-grp { background: #111; border-radius: 5px; padding: 2px; display: flex; gap: 2px; }
+.toolbar-sep { width: 1px; height: 24px; background: #3a4a5a; margin: 0 3px; flex-shrink: 0; }
+.mode-grp { background: #0d1520; border-radius: 6px; padding: 2px; display: flex; gap: 2px; }
 .mbtn {
   padding: 3px 14px; border: none; border-radius: 4px; font-weight: bold;
-  font-size: 10pt; color: #888; background: transparent; cursor: pointer; font-family: var(--F);
+  font-size: 10pt; color: #667; background: transparent; cursor: pointer; font-family: var(--F);
+  transition: color .15s, background .15s;
 }
 .mbtn.on { background: #1a56a0; color: #fff; }
-.mbtn:hover:not(.on) { color: #fff; }
-#save-ind { font-size: 9pt; color: #888; transition: color 0.3s; }
+.mbtn:hover:not(.on) { color: #cce; background: rgba(255,255,255,.06); }
+#save-ind { font-size: 9pt; color: #667; transition: color 0.3s; white-space: nowrap; }
 #save-ind.saved { color: #6fd86f; }
 #save-ind.error { color: #ff6b6b; }
 
+/* ══ SEARCH BAR ══ */
 #search-wrap {
-  display: flex; align-items: center; gap: 6px;
-  min-width: 280px; max-width: 420px;
-  padding: 3px 8px; border: 1px solid #435163; border-radius: 8px;
-  background: #273142;
+  display: flex; align-items: center; gap: 5px;
+  min-width: 240px; max-width: 380px; flex-shrink: 1;
+  padding: 0 4px 0 10px;
+  border: 1.5px solid #2e3f52;
+  border-radius: 20px;          /* full pill */
+  background: #161f2c;
+  height: 30px;
+  transition: border-color .2s, box-shadow .2s, background .2s;
 }
-#search-wrap:focus-within { border-color: #6a95cf; box-shadow: 0 0 0 1px rgba(106,149,207,.2); }
-.search-ico { color: #8aa0bc; font-size: 10pt; }
+#search-wrap:focus-within {
+  border-color: #4a90d9;
+  box-shadow: 0 0 0 3px rgba(74,144,217,.18);
+  background: #1a2638;
+}
+.search-ico {
+  color: #4a6a8a; font-size: 11pt; flex-shrink: 0;
+  transition: color .2s;
+}
+#search-wrap:focus-within .search-ico { color: #7aacdd; }
+
 #search-input {
   flex: 1; min-width: 0; border: none; outline: none; background: transparent;
-  color: #edf2f7; font-family: var(--F); font-size: 10pt;
+  color: #d0e0f0; font-family: var(--F); font-size: 10.5pt; padding: 0;
 }
-#search-input::placeholder { color: #8aa0bc; }
+#search-input::placeholder { color: #3d5570; font-size: 10pt; }
+
 #search-clear {
-  border: none; background: transparent; color: #8aa0bc;
-  width: 22px; height: 22px; border-radius: 5px; display: none;
+  border: none; background: transparent; color: #4a6a8a;
+  width: 20px; height: 20px; border-radius: 50%;
+  display: none; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 9pt; flex-shrink: 0;
+  transition: background .15s, color .15s;
+  padding: 0;
 }
-#search-clear:hover { background: rgba(255,255,255,.08); color: #fff; }
+#search-clear:hover { background: rgba(255,255,255,.1); color: #fff; }
+
+/* Navigation arrows inside search */
+#search-prev, #search-next {
+  border: none; background: transparent; color: #4a6a8a;
+  width: 20px; height: 20px; border-radius: 4px;
+  cursor: pointer; font-size: 10pt; display: none;
+  align-items: center; justify-content: center;
+  flex-shrink: 0; padding: 0; transition: background .15s, color .15s;
+}
+#search-prev:hover, #search-next:hover { background: rgba(255,255,255,.08); color: #7aacdd; }
+#search-wrap:focus-within #search-prev,
+#search-wrap:focus-within #search-next { display: flex; }
+
 #search-count {
-  font-size: 9pt; color: #9cb0c8; white-space: nowrap; min-width: 34px; text-align: right;
+  font-size: 9pt; color: #4a6a8a; white-space: nowrap;
+  min-width: 30px; text-align: center;
+  background: #1e2d3d; border-radius: 10px;
+  padding: 1px 7px; flex-shrink: 0;
+  transition: color .2s;
 }
+#search-count:not(:empty) { color: #7aacdd; }
+/* No match state */
+#search-wrap.no-match { border-color: #7a2020; background: #1f1010; }
+#search-wrap.no-match .search-ico { color: #c04040; }
+#search-wrap.no-match #search-count { color: #c04040; background: #2a1010; }

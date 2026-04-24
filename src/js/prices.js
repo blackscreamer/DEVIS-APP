@@ -49,7 +49,7 @@ function setMode(m) {
 
   const th = document.querySelector('#tbl thead tr');
   if (th) th.innerHTML = m === 'DQE'
-    ? `<th>N°</th><th>DESIGNATION DES OUVRAGES</th><th>U</th><th>Quantité</th><th>PRIX U HT</th><th>MONTANT HT</th>`
+    ? `<th>N°</th><th>DESIGNATION DES OUVRAGES</th><th>U</th><th>Qté</th><th>PRIX U HT</th><th>MONTANT HT</th>`
     : `<th>N°</th><th>DESIGNATION DES OUVRAGES</th><th>PRIX UNITAIRE HT</th>`;
 
   // Apply THIS mode's stored column widths (independent from the other mode)

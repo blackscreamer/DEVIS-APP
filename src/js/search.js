@@ -35,12 +35,32 @@ function syncSearchUI() {
   const input = document.getElementById('search-input');
   const count = document.getElementById('search-count');
   const clear = document.getElementById('search-clear');
+  const wrap  = document.getElementById('search-wrap');
+  const prev  = document.getElementById('search-prev');
+  const next  = document.getElementById('search-next');
+
   if (input && input.value !== searchQuery) input.value = searchQuery;
-  if (clear) clear.style.display = searchQuery ? '' : 'none';
+
+  // Clear button
+  if (clear) clear.style.display = searchQuery ? 'flex' : 'none';
+
+  // Prev/next buttons — show when there are results
+  if (prev) prev.style.display = searchResults.length > 1 ? 'flex' : 'none';
+  if (next) next.style.display = searchResults.length > 1 ? 'flex' : 'none';
+
+  // Result counter
   if (count) {
-    count.textContent = searchResults.length
-      ? `${searchIndex + 1}/${searchResults.length}`
-      : (searchQuery ? '0' : '');
+    if (searchResults.length) {
+      count.textContent = `${searchIndex + 1}/${searchResults.length}`;
+    } else {
+      count.textContent = searchQuery ? '0' : '';
+    }
+  }
+
+  // No-match visual state
+  if (wrap) {
+    const noMatch = !!searchQuery && searchResults.length === 0;
+    wrap.classList.toggle('no-match', noMatch);
   }
 }
 
