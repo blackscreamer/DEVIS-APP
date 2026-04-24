@@ -313,22 +313,40 @@ function buildPrintHTML() {
         <td style="${NCELL}background:${C.gtBg};color:${C.gtFg};font-size:12pt;border-top:2px solid #000;">${!hide?da(ttcVal):''}</td></tr>`;
   }
 
-  // Column headers — always render price headers to preserve column widths.
-  // When prices are hidden, make price header text transparent (column stays same width).
-  const priceColor = hide ? 'color:transparent;' : '';
+  // Colgroup locks column widths with table-layout:fixed — the ONLY reliable way
+  // to keep widths identical whether prices are shown or hidden.
+  // Width on <th> alone is ignored when table-layout is auto.
+  const colgroup = isBPU
+    ? `<colgroup>
+        <col style="width:55px"/>
+        <col/>
+        <col style="width:120px"/>
+      </colgroup>`
+    : `<colgroup>
+        <col style="width:55px"/>
+        <col/>
+        <col style="width:38px"/>
+        <col style="width:90px"/>
+        <col style="width:90px"/>
+        <col style="width:108px"/>
+      </colgroup>`;
+
+  // Column headers — always rendered with actual text so browsers don't collapse.
+  // Price-only headers get color:transparent when hiding so column width stays locked.
+  const pColor = hide ? 'color:transparent;' : '';
   const thead = isBPU
     ? `<tr style="background:#d9d9d9;">
-        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;width:55px;">N°</th>
+        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;">N°</th>
         <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;">DESIGNATION DES OUVRAGES</th>
-        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;width:120px;${priceColor}">PRIX UNITAIRE HT</th>
+        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;${pColor}">PRIX UNITAIRE HT</th>
       </tr>`
     : `<tr style="background:#d9d9d9;">
-        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;width:55px;">N°</th>
+        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;">N°</th>
         <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;">DESIGNATION DES OUVRAGES</th>
-        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;width:38px;">U</th>
-        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:right;width:90px;">QTÉ</th>
-        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:right;width:90px;${priceColor}">P.U EN HT</th>
-        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:right;width:108px;">MONTANT HT</th>
+        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;">U</th>
+        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:right;">QTÉ</th>
+        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:right;${pColor}">P.U EN HT</th>
+        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:right;">MONTANT HT</th>
       </tr>`;
 
   // TTC summary lines
@@ -375,7 +393,7 @@ function buildPrintHTML() {
 }
 * { -webkit-print-color-adjust:exact!important; print-color-adjust:exact!important; color-adjust:exact!important; }
 body { font-family:${F}; font-size:11pt; background:#fff; color:#000; }
-table { width:100%; border-collapse:collapse; }
+table { width:100%; border-collapse:collapse; table-layout:fixed; }
 th,td { border:1px solid #000; }
 .doc-titles { text-align:center; margin-bottom:12px; }
 .t1 { font-size:12pt; font-weight:bold; text-transform:uppercase; text-decoration:underline; line-height:1.7; }
@@ -390,6 +408,7 @@ ${hdrHtml}
 <div style="text-align:center;margin-bottom:12px;">${titleLines}</div>
 <div class="band">${isBPU?'BORDEREAU DES PRIX UNITAIRES':'DETAIL QUANTITATIF ESTIMATIF'}</div>
 <table>
+  ${colgroup}
   <thead>${thead}</thead>
   <tbody>${tableRows}</tbody>
 </table>
