@@ -218,10 +218,13 @@ function applyColWidths() {
 function applyStoredColWidths() {
   const tbl = document.getElementById('tbl');
   if (!tbl) return;
+
   const cw = colWidths[mode] || (mode === 'DQE' ? colWidths.DQE : colWidths.BPU);
 
   const allNull = Object.values(cw).every(v => v === null);
-  if (allNull) {
+
+  // 🔥 FIX: force fixed layout when prices hidden
+  if (allNull && showPrices) {
     tbl.style.tableLayout = 'auto';
     tbl.querySelectorAll('col').forEach(c => c.style.width = '');
     return;

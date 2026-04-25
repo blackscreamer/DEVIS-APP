@@ -1,0 +1,7 @@
+.hidden-price {
+  color: transparent !important;
+}
+
+.no-prices .price-cell {
+  color: transparent !important;
+}

@@ -287,7 +287,7 @@ function render() {
     clearSelection(false);
   }
 
-  recalc();
+  recalc(false);
   if (typeof syncSearchUI === 'function') syncSearchUI();
 }
 

@@ -183,6 +183,7 @@ function buildPrintHTML() {
   const BD   = '1px solid #000';
   const CELL = `font-family:${F};font-size:${SZ};padding:3px 5px;border:${BD};vertical-align:middle;color:#000;white-space:pre-wrap;word-break:break-word;`;
   const NCELL= `font-family:${F};font-size:${SZ};padding:3px 5px;border:${BD};vertical-align:middle;color:#000;text-align:right;font-weight:bold;white-space:nowrap;`;
+  const ph   = '\u00A0'; // non-breaking space — placeholder for hidden price cells, prevents collapse
 
   // Escape HTML but preserve newlines as <br/>
   const escNl = s => esc(s||'').replace(/\n/g,'<br/>');
@@ -217,23 +218,22 @@ function buildPrintHTML() {
       return `<tr>
         <td style="${CELL}background:${bg};color:${fg};text-align:center;">${esc(n)}</td>
         <td style="${CELL}background:${bg};color:${fg};">${escNl(bD)}${sl?`<br/><em style="font-size:9pt;font-weight:bold;">${esc(sl)}</em>`:''}</td>
-        <td style="${NCELL}background:${bg};color:${fg};">${!hasKids&&!hide?daNoUnit(num(bP)):''}</td>
+        <td style="${NCELL}background:${bg};${hide?'color:transparent;':'color:'+fg+';'}">${!hasKids?(hide?ph:daNoUnit(num(bP))):ph}</td>
       </tr>`;
     }
     return `<tr>
       <td style="${CELL}background:${bg};color:${fg};text-align:center;">${esc(n)}</td>
       <td style="${CELL}background:${bg};color:${fg};">${escNl(r.desig||'')}</td>
-      <td style="${CELL}background:${bg};color:${fg};text-align:center;">${hasKids?'':esc(r.unite||'')}</td>
-      <td style="${NCELL}background:${bg};color:${fg};">${hasKids?'':fmtNum(r.qty)}</td>
-      <td style="${NCELL}background:${bg};color:${fg};">${hasKids||hide?'':daNoUnit(num(r.pu))}</td>
-      <td style="${NCELL}background:${bg};color:${fg};">${t&&!hide?daNoUnit(t):''}</td>
+      <td style="${CELL}background:${bg};color:${fg};text-align:center;">${hasKids?ph:esc(r.unite||'')}</td>
+      <td style="${NCELL}background:${bg};color:${fg};">${hasKids?ph:fmtNum(r.qty)||ph}</td>
+      <td style="${NCELL}background:${bg};${hide?'color:transparent;':'color:'+fg+';'}">${hasKids?ph:(hide?ph:daNoUnit(num(r.pu)))}</td>
+      <td style="${NCELL}background:${bg};color:${fg};">${t&&!hide?daNoUnit(t):ph}</td>
     </tr>`;
   };
 
   const subartRow = (r, letter) => {
     const t = artTotal(r);
     const bg = C.saBg, fg = C.saFg;
-    // N° cell is always empty — letter goes inside the designation cell as bold prefix
     const letterSpan = `<strong style="white-space:nowrap;padding-right:4px;">${esc(letter)}</strong>`;
     if (isBPU) {
       const bD = r.bpu_desig!==undefined?r.bpu_desig:r.desig;
@@ -243,16 +243,16 @@ function buildPrintHTML() {
       return `<tr>
         <td style="${CELL}background:${bg};color:${fg};"></td>
         <td style="${CELL}background:${bg};color:${fg};">${letterSpan}${escNl(bD)}${sl?`<br/><em style="font-size:9pt;font-weight:bold;">${esc(sl)}</em>`:''}</td>
-        <td style="${NCELL}background:${bg};color:${fg};">${!hide?daNoUnit(num(bP)):''}</td>
+        <td style="${NCELL}background:${bg};${hide?'color:transparent;':'color:'+fg+';'}">${hide?ph:daNoUnit(num(bP))}</td>
       </tr>`;
     }
     return `<tr>
       <td style="${CELL}background:${bg};color:${fg};"></td>
       <td style="${CELL}background:${bg};color:${fg};">${letterSpan}${escNl(r.desig||'')}</td>
       <td style="${CELL}background:${bg};color:${fg};text-align:center;">${esc(r.unite||'')}</td>
-      <td style="${NCELL}background:${bg};color:${fg};">${fmtNum(r.qty)}</td>
-      <td style="${NCELL}background:${bg};color:${fg};">${!hide?daNoUnit(num(r.pu)):''}</td>
-      <td style="${NCELL}background:${bg};color:${fg};">${t&&!hide?daNoUnit(t):''}</td>
+      <td style="${NCELL}background:${bg};color:${fg};">${fmtNum(r.qty)||ph}</td>
+      <td style="${NCELL}background:${bg};${hide?'color:transparent;':'color:'+fg+';'}">${hide?ph:daNoUnit(num(r.pu))}</td>
+      <td style="${NCELL}background:${bg};color:${fg};">${t&&!hide?daNoUnit(t):ph}</td>
     </tr>`;
   };
 
@@ -265,7 +265,7 @@ function buildPrintHTML() {
     const span = isBPU ? 2 : 5;
     return `<tr>
       <td colspan="${span}" style="${NCELL}background:${C.tsBg};color:${C.tsFg};text-align:right;text-transform:uppercase;">Total ${esc(desig)}</td>
-      <td style="${NCELL}background:${C.tsBg};color:${C.tsFg};">${!hide?daNoUnit(total):''}</td>
+      <td style="${NCELL}background:${C.tsBg};${hide?'color:transparent;':'color:'+C.tsFg+';'}">${hide?ph:daNoUnit(total)}</td>
     </tr>`;
   };
 
@@ -273,7 +273,7 @@ function buildPrintHTML() {
     const span = isBPU ? 2 : 5;
     return `<tr>
       <td colspan="${span}" style="${NCELL}background:${C.tcBg};color:${C.tcFg};text-align:right;font-size:11pt;text-transform:uppercase;">Total ${esc(desig)}</td>
-      <td style="${NCELL}background:${C.tcBg};color:${C.tcFg};font-size:11pt;">${!hide?daNoUnit(total):''}</td>
+      <td style="${NCELL}background:${C.tcBg};${hide?'color:transparent;':'color:'+C.tcFg+';'};font-size:11pt;">${hide?ph:daNoUnit(total)}</td>
     </tr>`;
   };
 
@@ -302,50 +302,57 @@ function buildPrintHTML() {
   flushSubs(); flushChap();
 
   // Grand total rows (DQE only)
-  const span5 = isBPU ? 2 : 5;
   if (!isBPU) {
+    const gtSt = hide ? 'color:transparent;' : `color:${C.gtFg};`;
     tableRows += `
-    <tr><td colspan="${span5}" style="${NCELL}background:${C.gtBg};color:${C.gtFg};font-size:12pt;text-transform:uppercase;border-top:3px solid #000;">TOTAL GÉNÉRAL HT</td>
-        <td style="${NCELL}background:${C.gtBg};color:${C.gtFg};font-size:12pt;border-top:3px solid #000;">${!hide?daNoUnit(grand):''}</td></tr>
-    <tr><td colspan="${span5}" style="${NCELL}background:${C.gtBg};color:${C.gtFg};">TVA (${tvaVal}%)</td>
-        <td style="${NCELL}background:${C.gtBg};color:${C.gtFg};">${!hide?daNoUnit(tvaAmt):''}</td></tr>
-    <tr><td colspan="${span5}" style="${NCELL}background:${C.gtBg};color:${C.gtFg};font-size:12pt;text-transform:uppercase;border-top:2px solid #000;">TOTAL TTC</td>
-        <td style="${NCELL}background:${C.gtBg};color:${C.gtFg};font-size:12pt;border-top:2px solid #000;">${!hide?da(ttcVal):''}</td></tr>`;
+    <tr><td colspan="5" style="${NCELL}background:${C.gtBg};color:${C.gtFg};font-size:12pt;text-transform:uppercase;border-top:3px solid #000;">TOTAL GÉNÉRAL HT</td>
+        <td style="${NCELL}background:${C.gtBg};${gtSt}font-size:12pt;border-top:3px solid #000;">${hide?ph:daNoUnit(grand)}</td></tr>
+    <tr><td colspan="5" style="${NCELL}background:${C.gtBg};color:${C.gtFg};">TVA (${tvaVal}%)</td>
+        <td style="${NCELL}background:${C.gtBg};${gtSt}">${hide?ph:daNoUnit(tvaAmt)}</td></tr>
+    <tr><td colspan="5" style="${NCELL}background:${C.gtBg};color:${C.gtFg};font-size:12pt;text-transform:uppercase;border-top:2px solid #000;">TOTAL TTC</td>
+        <td style="${NCELL}background:${C.gtBg};${gtSt}font-size:12pt;border-top:2px solid #000;">${hide?ph:da(ttcVal)}</td></tr>`;
   }
 
-  // Colgroup locks column widths with table-layout:fixed — the ONLY reliable way
-  // to keep widths identical whether prices are shown or hidden.
-  // Width on <th> alone is ignored when table-layout is auto.
-  const colgroup = isBPU
-    ? `<colgroup>
-        <col style="width:55px"/>
-        <col/>
-        <col style="width:120px"/>
-      </colgroup>`
-    : `<colgroup>
-        <col style="width:55px"/>
-        <col/>
-        <col style="width:38px"/>
-        <col style="width:90px"/>
-        <col style="width:90px"/>
-        <col style="width:108px"/>
-      </colgroup>`;
+  // ── Column width enforcement ──
+  // We use a hidden spacer row with invisible content inside each cell.
+  // This is MORE reliable than colgroup+table-layout:fixed because:
+  //   1. It works in all table-layout modes (auto AND fixed)
+  //   2. min-width on a <div> inside a <td> ALWAYS forces the column width
+  //   3. Chromium's print renderer respects min-width on block elements
+  //   4. Works regardless of whether other cells have content or not
+  //
+  // The spacer row is invisible (height:0, overflow:hidden, font-size:0).
 
-  // Column headers — always rendered with actual text so browsers don't collapse.
-  // Price-only headers get color:transparent when hiding so column width stays locked.
-  const pColor = hide ? 'color:transparent;' : '';
+  const spacerRow = isBPU
+    ? `<tr style="height:0;overflow:hidden;font-size:0;line-height:0;border:none;">
+        <td style="padding:0;border:none;"><div style="min-width:55px;width:55px;height:0;overflow:hidden;"></div></td>
+        <td style="padding:0;border:none;"><div style="min-width:100px;height:0;overflow:hidden;"></div></td>
+        <td style="padding:0;border:none;"><div style="min-width:120px;width:120px;height:0;overflow:hidden;"></div></td>
+      </tr>`
+    : `<tr style="height:0;overflow:hidden;font-size:0;line-height:0;border:none;">
+        <td style="padding:0;border:none;"><div style="min-width:55px;width:55px;height:0;overflow:hidden;"></div></td>
+        <td style="padding:0;border:none;"><div style="min-width:100px;height:0;overflow:hidden;"></div></td>
+        <td style="padding:0;border:none;"><div style="min-width:38px;width:38px;height:0;overflow:hidden;"></div></td>
+        <td style="padding:0;border:none;"><div style="min-width:88px;width:88px;height:0;overflow:hidden;"></div></td>
+        <td style="padding:0;border:none;"><div style="min-width:90px;width:90px;height:0;overflow:hidden;"></div></td>
+        <td style="padding:0;border:none;"><div style="min-width:108px;width:108px;height:0;overflow:hidden;"></div></td>
+      </tr>`;
+
+  // Price header/cell color — transparent keeps layout, hides text
+  const pSt = hide ? 'color:transparent;' : '';
+
   const thead = isBPU
     ? `<tr style="background:#d9d9d9;">
         <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;">N°</th>
         <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;">DESIGNATION DES OUVRAGES</th>
-        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;${pColor}">PRIX UNITAIRE HT</th>
+        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;${pSt}">PRIX UNITAIRE HT</th>
       </tr>`
     : `<tr style="background:#d9d9d9;">
         <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;">N°</th>
         <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;">DESIGNATION DES OUVRAGES</th>
         <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;">U</th>
         <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:right;">QTÉ</th>
-        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:right;${pColor}">P.U EN HT</th>
+        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:right;${pSt}">P.U EN HT</th>
         <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:right;">MONTANT HT</th>
       </tr>`;
 
@@ -393,7 +400,7 @@ function buildPrintHTML() {
 }
 * { -webkit-print-color-adjust:exact!important; print-color-adjust:exact!important; color-adjust:exact!important; }
 body { font-family:${F}; font-size:11pt; background:#fff; color:#000; }
-table { width:100%; border-collapse:collapse; table-layout:fixed; }
+table { width:100%; border-collapse:collapse; table-layout:auto; }
 th,td { border:1px solid #000; }
 .doc-titles { text-align:center; margin-bottom:12px; }
 .t1 { font-size:12pt; font-weight:bold; text-transform:uppercase; text-decoration:underline; line-height:1.7; }
@@ -408,9 +415,8 @@ ${hdrHtml}
 <div style="text-align:center;margin-bottom:12px;">${titleLines}</div>
 <div class="band">${isBPU?'BORDEREAU DES PRIX UNITAIRES':'DETAIL QUANTITATIF ESTIMATIF'}</div>
 <table>
-  ${colgroup}
   <thead>${thead}</thead>
-  <tbody>${tableRows}</tbody>
+  <tbody>${spacerRow}${tableRows}</tbody>
 </table>
 ${ttcSummary}
 ${ftrHtml}
@@ -423,6 +429,7 @@ ${ftrHtml}
 ════════════════════════════════════════ */
 async function doPrint() {
   const html = buildPrintHTML();
+  if (!html) { notif('⚠ Erreur: document vide'); return; }
   if (isElectron) {
     notif('🖨 Ouverture dans le navigateur…');
     await window.electronAPI.printInBrowser(html);

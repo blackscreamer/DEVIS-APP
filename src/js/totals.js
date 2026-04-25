@@ -78,40 +78,69 @@ function recalc() {
   const isBPU = mode === 'BPU';
 
   if (!isBPU) {
-    // Montant HT des articles (sans DA, price-cell toujours présente)
     rows.filter(r => r.type === 'art' || r.type === 'subart').forEach(r => {
       const el = document.getElementById('at-' + r.id);
       if (!el) return;
-      const t = (r.type === 'art' && artHasSubarts(r.id)) ? 0 : artTotal(r);
-      el.textContent = t ? daNoUnit(t) : '';
-      el.className = 'tc' + (t ? ' v' : '') + ' price-cell';
-    });
-    // Totaux sous-chap / chap (sans DA)
-    Object.entries(subT).forEach(([id, t]) => { const el = document.getElementById('st-' + id); if (el) el.textContent = daNoUnit(t); });
-    Object.entries(chapT).forEach(([id, t]) => { const el = document.getElementById('ct-' + id); if (el) el.textContent = daNoUnit(t); });
 
-    // Totaux finaux (avec DA)
+      const t = (r.type === 'art' && artHasSubarts(r.id)) ? 0 : artTotal(r);
+
+      el.textContent = t ? daNoUnit(t) : '';
+      el.className = 'tc price-cell' + (t ? ' v' : '');
+      el.classList.toggle('hidden-price', !showPrices);
+    });
+
+    Object.entries(subT).forEach(([id, t]) => {
+      const el = document.getElementById('st-' + id);
+      if (!el) return;
+      el.textContent = daNoUnit(t);
+      el.classList.add('price-cell');
+      el.classList.toggle('hidden-price', !showPrices);
+    });
+
+    Object.entries(chapT).forEach(([id, t]) => {
+      const el = document.getElementById('ct-' + id);
+      if (!el) return;
+      el.textContent = daNoUnit(t);
+      el.classList.add('price-cell');
+      el.classList.toggle('hidden-price', !showPrices);
+    });
+
     const grand    = grandTotal();
     const tvaPct   = num(document.getElementById('tva').value) / 100;
     const tvaAmt   = grand * tvaPct;
-    const elGt     = document.getElementById('gt-val');   if (elGt)  elGt.textContent  = da(grand);
-    const elTva    = document.getElementById('tva-val');  if (elTva) elTva.textContent  = da(tvaAmt);
-    const elTtc    = document.getElementById('ttc-val');  if (elTtc) elTtc.textContent  = da(grand + tvaAmt);
-    const elTvaLbl = document.getElementById('tva-label');if (elTvaLbl) elTvaLbl.textContent = 'TVA (' + document.getElementById('tva').value + '%)';
+
+    const elGt  = document.getElementById('gt-val');
+    const elTva = document.getElementById('tva-val');
+    const elTtc = document.getElementById('ttc-val');
+
+    if (elGt)  elGt.textContent  = da(grand);
+    if (elTva) elTva.textContent = da(tvaAmt);
+    if (elTtc) elTtc.textContent = da(grand + tvaAmt);
+
+    [elGt, elTva, elTtc].forEach(el => {
+      if (!el) return;
+      el.classList.add('price-cell');
+      el.classList.toggle('hidden-price', !showPrices);
+    });
+
     document.getElementById('fht').textContent  = da(grand);
     document.getElementById('ftva').textContent = da(tvaAmt);
     document.getElementById('fttc').textContent = da(grand + tvaAmt);
+
   } else {
-    // BPU : mise à jour des sublines prix en lettres
     rows.filter(r => r.type === 'art' || r.type === 'subart').forEach(r => {
       const sl = document.getElementById('sl-' + r.id);
       if (sl) {
-        if (r.type === 'art' && artHasSubarts(r.id)) { sl.textContent = ''; return; }
+        if (r.type === 'art' && artHasSubarts(r.id)) {
+          sl.textContent = '';
+          return;
+        }
         const bPu    = r.bpu_pu    !== undefined ? r.bpu_pu    : r.pu;
         const bUnite = r.bpu_unite !== undefined ? r.bpu_unite : r.unite;
         sl.textContent = buildBpuSubline(bUnite, num(bPu));
       }
     });
+
     document.getElementById('fht').textContent  = '—';
     document.getElementById('ftva').textContent = '—';
     document.getElementById('fttc').textContent = '—';
@@ -119,7 +148,9 @@ function recalc() {
 
   document.getElementById('fpct').textContent = document.getElementById('tva').value;
   document.getElementById('fcnt').textContent = rows.filter(r => r.type === 'art').length;
+
   adjustColumns();
+}
 
   /* ── TTC summary lines below the table ── */
   const summaryDiv = document.getElementById('ttc-summary');
@@ -147,7 +178,6 @@ function recalc() {
       }
     }
   }
-}
 
 /**
  * Ajuste la largeur de la colonne Montant HT selon la valeur la plus large.
