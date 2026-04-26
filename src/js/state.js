@@ -54,10 +54,13 @@ let pageLayout = {
 };
 
 /**
- * Per-mode column widths (px). Stored separately so DQE and BPU
- * widths are completely independent. Null = autofit for that column.
+ * Per-mode column widths (px) — always concrete values, never null.
+ * DQE and BPU are completely independent.
+ * Changed by user via column panel inputs or auto-fit button.
+ * Saved to project file so widths persist across sessions.
  */
 let colWidths = {
-  DQE: { num: 68, desig: null, unit: 48, qty: 80, pu: 100, tot: 110 },
-  BPU: { num: 68, desig: null, pu: 130 },
+  DQE: { num: 55, desig: 0, unit: 38, qty: 88, pu: 90, tot: 108 },
+  BPU: { num: 55, desig: 0, pu: 120 },
+  // desig: 0 means "take remaining space" (flex/auto in live app, computed in print)
 };

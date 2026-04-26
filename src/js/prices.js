@@ -18,16 +18,8 @@ function applyPricesUI() {
     btn.classList.toggle('btn-outline-warning', showPrices);
     btn.classList.toggle('btn-outline-danger',  !showPrices);
   }
-
-  const tbl = document.getElementById('tbl');
-  if (tbl) tbl.classList.toggle('no-prices', !showPrices);
-
-  // 🔥 IMPORTANT: hide visually instead of removing content
-  document.querySelectorAll('.price-cell').forEach(el => {
-    el.classList.toggle('hidden-price', !showPrices);
-  });
-
-  // BPU sublines update (unchanged)
+  document.getElementById('tbl').classList.toggle('no-prices', !showPrices);
+  // En BPU, mettre à jour les sublines (avec/sans prix en lettres)
   if (mode === 'BPU') {
     rows.filter(r => r.type === 'art' || r.type === 'subart').forEach(r => {
       if (r.type === 'art' && artHasSubarts(r.id)) return;

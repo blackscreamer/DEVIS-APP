@@ -39,8 +39,22 @@ function applyLoadedData(d) {
   if (d.C) C = d.C;
   if (d.pageLayout) Object.assign(pageLayout, d.pageLayout);
   if (d.colWidths && typeof d.colWidths === 'object') {
-    if (d.colWidths.DQE) Object.assign(colWidths.DQE, d.colWidths.DQE);
-    if (d.colWidths.BPU) Object.assign(colWidths.BPU, d.colWidths.BPU);
+    if (d.colWidths.DQE) {
+      // Merge but replace null values with defaults
+      const dqe = d.colWidths.DQE;
+      colWidths.DQE.num   = dqe.num   || 55;
+      colWidths.DQE.desig = dqe.desig || 0;
+      colWidths.DQE.unit  = dqe.unit  || 38;
+      colWidths.DQE.qty   = dqe.qty   || 88;
+      colWidths.DQE.pu    = dqe.pu    || 90;
+      colWidths.DQE.tot   = dqe.tot   || 108;
+    }
+    if (d.colWidths.BPU) {
+      const bpu = d.colWidths.BPU;
+      colWidths.BPU.num   = bpu.num   || 55;
+      colWidths.BPU.desig = bpu.desig || 0;
+      colWidths.BPU.pu    = bpu.pu    || 120;
+    }
   }
 
   // Header lines — supports all old formats
@@ -183,10 +197,32 @@ function buildPrintHTML() {
   const BD   = '1px solid #000';
   const CELL = `font-family:${F};font-size:${SZ};padding:3px 5px;border:${BD};vertical-align:middle;color:#000;white-space:pre-wrap;word-break:break-word;`;
   const NCELL= `font-family:${F};font-size:${SZ};padding:3px 5px;border:${BD};vertical-align:middle;color:#000;text-align:right;font-weight:bold;white-space:nowrap;`;
-  const ph   = '\u00A0'; // non-breaking space — placeholder for hidden price cells, prevents collapse
+  const ph   = '\u00A0'; // non-breaking space — keeps cells non-empty so min-width div works
 
-  // Escape HTML but preserve newlines as <br/>
-  const escNl = s => esc(s||'').replace(/\n/g,'<br/>');
+  // Column widths from stored settings — used in all row builders and thead
+  const cw = colWidths[mode];
+  const W  = {
+    num:   cw.num   || 55,
+    unit:  cw.unit  || 38,
+    qty:   cw.qty   || 88,
+    pu:    cw.pu    || (isBPU ? 120 : 90),
+    tot:   cw.tot   || 108,
+  };
+
+  // Price text color — transparent when hiding prices, keeps layout identical
+  const PC = hide ? 'transparent' : 'inherit'; // price / PU columns
+  const TC = hide ? 'transparent' : 'inherit'; // total / montant columns
+
+  // Cell wrapper helpers — min-width div forces column width in Chromium print renderer
+  const numDiv   = (content, w, align = 'right') =>
+    `<div style="min-width:${w}px;width:${w}px;padding:3px 5px;text-align:${align};font-family:${F};font-size:${SZ};font-weight:bold;white-space:nowrap;overflow:hidden;">${content || ph}</div>`;
+  const priceDiv = (content, w, color) =>
+    `<div style="min-width:${w}px;width:${w}px;padding:3px 5px;text-align:right;font-family:${F};font-size:${SZ};font-weight:bold;white-space:nowrap;overflow:hidden;color:${color};">${content || ph}</div>`;
+  const thDiv    = (content, w, align, color = '#000') =>
+    `<div style="min-width:${w}px;width:${w}px;padding:4px 5px;text-align:${align};font-family:${F};font-size:10pt;font-weight:bold;text-transform:uppercase;white-space:nowrap;color:${color};">${content}</div>`;
+
+  // Escape HTML preserving newlines as <br/>
+  const escNl = s => esc(s || '').replace(/\n/g, '<br/>');
 
   // Row builders
   const chapRow = (r) => {
@@ -216,18 +252,18 @@ function buildPrintHTML() {
       const bU = r.bpu_unite!==undefined?r.bpu_unite:r.unite;
       const sl = !hasKids ? buildBpuSubline(bU, num(bP)) : '';
       return `<tr>
-        <td style="${CELL}background:${bg};color:${fg};text-align:center;">${esc(n)}</td>
+        <td style="padding:0;border:${BD};background:${bg};">${numDiv(esc(n), W.num, 'center')}</td>
         <td style="${CELL}background:${bg};color:${fg};">${escNl(bD)}${sl?`<br/><em style="font-size:9pt;font-weight:bold;">${esc(sl)}</em>`:''}</td>
-        <td style="${NCELL}background:${bg};${hide?'color:transparent;':'color:'+fg+';'}">${!hasKids?(hide?ph:daNoUnit(num(bP))):ph}</td>
+        <td style="padding:0;border:${BD};background:${bg};">${priceDiv(!hasKids?daNoUnit(num(bP)):ph, W.pu, PC)}</td>
       </tr>`;
     }
     return `<tr>
-      <td style="${CELL}background:${bg};color:${fg};text-align:center;">${esc(n)}</td>
+      <td style="padding:0;border:${BD};background:${bg};">${numDiv(esc(n), W.num, 'center')}</td>
       <td style="${CELL}background:${bg};color:${fg};">${escNl(r.desig||'')}</td>
       <td style="${CELL}background:${bg};color:${fg};text-align:center;">${hasKids?ph:esc(r.unite||'')}</td>
-      <td style="${NCELL}background:${bg};color:${fg};">${hasKids?ph:fmtNum(r.qty)||ph}</td>
-      <td style="${NCELL}background:${bg};${hide?'color:transparent;':'color:'+fg+';'}">${hasKids?ph:(hide?ph:daNoUnit(num(r.pu)))}</td>
-      <td style="${NCELL}background:${bg};color:${fg};">${t&&!hide?daNoUnit(t):ph}</td>
+      <td style="padding:0;border:${BD};background:${bg};">${numDiv(hasKids?ph:(fmtNum(r.qty)||ph), W.qty, 'right')}</td>
+      <td style="padding:0;border:${BD};background:${bg};">${priceDiv(hasKids?ph:daNoUnit(num(r.pu)), W.pu, hasKids?fg:PC)}</td>
+      <td style="padding:0;border:${BD};background:${bg};">${priceDiv(hasKids?ph:(t?daNoUnit(t):ph), W.tot, hasKids?fg:TC)}</td>
     </tr>`;
   };
 
@@ -241,18 +277,18 @@ function buildPrintHTML() {
       const bU = r.bpu_unite!==undefined?r.bpu_unite:r.unite;
       const sl = buildBpuSubline(bU, num(bP));
       return `<tr>
-        <td style="${CELL}background:${bg};color:${fg};"></td>
+        <td style="padding:0;border:${BD};background:${bg};"></td>
         <td style="${CELL}background:${bg};color:${fg};">${letterSpan}${escNl(bD)}${sl?`<br/><em style="font-size:9pt;font-weight:bold;">${esc(sl)}</em>`:''}</td>
-        <td style="${NCELL}background:${bg};${hide?'color:transparent;':'color:'+fg+';'}">${hide?ph:daNoUnit(num(bP))}</td>
+        <td style="padding:0;border:${BD};background:${bg};">${priceDiv(daNoUnit(num(bP)), W.pu, PC)}</td>
       </tr>`;
     }
     return `<tr>
-      <td style="${CELL}background:${bg};color:${fg};"></td>
+      <td style="padding:0;border:${BD};background:${bg};"></td>
       <td style="${CELL}background:${bg};color:${fg};">${letterSpan}${escNl(r.desig||'')}</td>
-      <td style="${CELL}background:${bg};color:${fg};text-align:center;">${esc(r.unite||'')}</td>
-      <td style="${NCELL}background:${bg};color:${fg};">${fmtNum(r.qty)||ph}</td>
-      <td style="${NCELL}background:${bg};${hide?'color:transparent;':'color:'+fg+';'}">${hide?ph:daNoUnit(num(r.pu))}</td>
-      <td style="${NCELL}background:${bg};color:${fg};">${t&&!hide?daNoUnit(t):ph}</td>
+      <td style="${CELL}background:${bg};color:${fg};text-align:center;">${esc(r.unite||'')||ph}</td>
+      <td style="padding:0;border:${BD};background:${bg};">${numDiv(fmtNum(r.qty)||ph, W.qty, 'right')}</td>
+      <td style="padding:0;border:${BD};background:${bg};">${priceDiv(daNoUnit(num(r.pu)), W.pu, PC)}</td>
+      <td style="padding:0;border:${BD};background:${bg};">${priceDiv(t?daNoUnit(t):ph, W.tot, TC)}</td>
     </tr>`;
   };
 
@@ -265,7 +301,7 @@ function buildPrintHTML() {
     const span = isBPU ? 2 : 5;
     return `<tr>
       <td colspan="${span}" style="${NCELL}background:${C.tsBg};color:${C.tsFg};text-align:right;text-transform:uppercase;">Total ${esc(desig)}</td>
-      <td style="${NCELL}background:${C.tsBg};${hide?'color:transparent;':'color:'+C.tsFg+';'}">${hide?ph:daNoUnit(total)}</td>
+      <td style="padding:0;border:${BD};background:${C.tsBg};">${priceDiv(daNoUnit(total), W.tot, TC)}</td>
     </tr>`;
   };
 
@@ -273,7 +309,7 @@ function buildPrintHTML() {
     const span = isBPU ? 2 : 5;
     return `<tr>
       <td colspan="${span}" style="${NCELL}background:${C.tcBg};color:${C.tcFg};text-align:right;font-size:11pt;text-transform:uppercase;">Total ${esc(desig)}</td>
-      <td style="${NCELL}background:${C.tcBg};${hide?'color:transparent;':'color:'+C.tcFg+';'};font-size:11pt;">${hide?ph:daNoUnit(total)}</td>
+      <td style="padding:0;border:${BD};background:${C.tcBg};">${priceDiv(daNoUnit(total), W.tot, TC)}</td>
     </tr>`;
   };
 
@@ -303,57 +339,41 @@ function buildPrintHTML() {
 
   // Grand total rows (DQE only)
   if (!isBPU) {
-    const gtSt = hide ? 'color:transparent;' : `color:${C.gtFg};`;
     tableRows += `
-    <tr><td colspan="5" style="${NCELL}background:${C.gtBg};color:${C.gtFg};font-size:12pt;text-transform:uppercase;border-top:3px solid #000;">TOTAL GÉNÉRAL HT</td>
-        <td style="${NCELL}background:${C.gtBg};${gtSt}font-size:12pt;border-top:3px solid #000;">${hide?ph:daNoUnit(grand)}</td></tr>
-    <tr><td colspan="5" style="${NCELL}background:${C.gtBg};color:${C.gtFg};">TVA (${tvaVal}%)</td>
-        <td style="${NCELL}background:${C.gtBg};${gtSt}">${hide?ph:daNoUnit(tvaAmt)}</td></tr>
-    <tr><td colspan="5" style="${NCELL}background:${C.gtBg};color:${C.gtFg};font-size:12pt;text-transform:uppercase;border-top:2px solid #000;">TOTAL TTC</td>
-        <td style="${NCELL}background:${C.gtBg};${gtSt}font-size:12pt;border-top:2px solid #000;">${hide?ph:da(ttcVal)}</td></tr>`;
+    <tr>
+      <td colspan="5" style="${NCELL}background:${C.gtBg};color:${C.gtFg};font-size:12pt;text-transform:uppercase;border-top:3px solid #000;">TOTAL GÉNÉRAL HT</td>
+      <td style="padding:0;border:${BD};background:${C.gtBg};border-top:3px solid #000;">${priceDiv(daNoUnit(grand), W.tot, TC)}</td>
+    </tr>
+    <tr>
+      <td colspan="5" style="${NCELL}background:${C.gtBg};color:${C.gtFg};">TVA (${tvaVal}%)</td>
+      <td style="padding:0;border:${BD};background:${C.gtBg};">${priceDiv(daNoUnit(tvaAmt), W.tot, TC)}</td>
+    </tr>
+    <tr>
+      <td colspan="5" style="${NCELL}background:${C.gtBg};color:${C.gtFg};font-size:12pt;text-transform:uppercase;border-top:2px solid #000;">TOTAL TTC</td>
+      <td style="padding:0;border:${BD};background:${C.gtBg};border-top:2px solid #000;">${priceDiv(da(ttcVal), W.tot, TC)}</td>
+    </tr>`
   }
 
-  // ── Column width enforcement ──
-  // We use a hidden spacer row with invisible content inside each cell.
-  // This is MORE reliable than colgroup+table-layout:fixed because:
-  //   1. It works in all table-layout modes (auto AND fixed)
-  //   2. min-width on a <div> inside a <td> ALWAYS forces the column width
-  //   3. Chromium's print renderer respects min-width on block elements
-  //   4. Works regardless of whether other cells have content or not
-  //
-  // The spacer row is invisible (height:0, overflow:hidden, font-size:0).
-
-  const spacerRow = isBPU
-    ? `<tr style="height:0;overflow:hidden;font-size:0;line-height:0;border:none;">
-        <td style="padding:0;border:none;"><div style="min-width:55px;width:55px;height:0;overflow:hidden;"></div></td>
-        <td style="padding:0;border:none;"><div style="min-width:100px;height:0;overflow:hidden;"></div></td>
-        <td style="padding:0;border:none;"><div style="min-width:120px;width:120px;height:0;overflow:hidden;"></div></td>
-      </tr>`
-    : `<tr style="height:0;overflow:hidden;font-size:0;line-height:0;border:none;">
-        <td style="padding:0;border:none;"><div style="min-width:55px;width:55px;height:0;overflow:hidden;"></div></td>
-        <td style="padding:0;border:none;"><div style="min-width:100px;height:0;overflow:hidden;"></div></td>
-        <td style="padding:0;border:none;"><div style="min-width:38px;width:38px;height:0;overflow:hidden;"></div></td>
-        <td style="padding:0;border:none;"><div style="min-width:88px;width:88px;height:0;overflow:hidden;"></div></td>
-        <td style="padding:0;border:none;"><div style="min-width:90px;width:90px;height:0;overflow:hidden;"></div></td>
-        <td style="padding:0;border:none;"><div style="min-width:108px;width:108px;height:0;overflow:hidden;"></div></td>
-      </tr>`;
-
-  // Price header/cell color — transparent keeps layout, hides text
-  const pSt = hide ? 'color:transparent;' : '';
+  // ── Column widths from stored colWidths[mode] ──
+  // Each price cell wraps its content in a <div style="min-width:Xpx">
+  // This is the ONLY reliable way in Chromium print renderer:
+  //   - Works in auto AND fixed table-layout
+  //   - min-width on block elements is ALWAYS respected, even in print
+  //   - color:transparent hides text without affecting layout
 
   const thead = isBPU
     ? `<tr style="background:#d9d9d9;">
-        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;">N°</th>
-        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;">DESIGNATION DES OUVRAGES</th>
-        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;${pSt}">PRIX UNITAIRE HT</th>
+        <th style="padding:0;border:${BD};">${thDiv('N°', W.num, 'center')}</th>
+        <th style="padding:0;border:${BD};"><div style="padding:4px 5px;font-family:${F};font-size:10pt;font-weight:bold;text-transform:uppercase;text-align:center;">DESIGNATION DES OUVRAGES</div></th>
+        <th style="padding:0;border:${BD};">${thDiv('PRIX UNITAIRE HT', W.pu, 'center')}</th>
       </tr>`
     : `<tr style="background:#d9d9d9;">
-        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;">N°</th>
-        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;">DESIGNATION DES OUVRAGES</th>
-        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:center;">U</th>
-        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:right;">QTÉ</th>
-        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:right;${pSt}">P.U EN HT</th>
-        <th style="${CELL}font-weight:bold;text-transform:uppercase;text-align:right;">MONTANT HT</th>
+        <th style="padding:0;border:${BD};">${thDiv('N°', W.num, 'center')}</th>
+        <th style="padding:0;border:${BD};"><div style="padding:4px 5px;font-family:${F};font-size:10pt;font-weight:bold;text-transform:uppercase;text-align:center;">DESIGNATION DES OUVRAGES</div></th>
+        <th style="padding:0;border:${BD};">${thDiv('U', W.unit, 'center')}</th>
+        <th style="padding:0;border:${BD};">${thDiv('QTÉ', W.qty, 'center')}</th>
+        <th style="padding:0;border:${BD};">${thDiv('P.U EN HT', W.pu, 'center')}</th>
+        <th style="padding:0;border:${BD};">${thDiv('MONTANT HT', W.tot, 'center')}</th>
       </tr>`;
 
   // TTC summary lines
@@ -416,7 +436,7 @@ ${hdrHtml}
 <div class="band">${isBPU?'BORDEREAU DES PRIX UNITAIRES':'DETAIL QUANTITATIF ESTIMATIF'}</div>
 <table>
   <thead>${thead}</thead>
-  <tbody>${spacerRow}${tableRows}</tbody>
+  <tbody>${tableRows}</tbody>
 </table>
 ${ttcSummary}
 ${ftrHtml}

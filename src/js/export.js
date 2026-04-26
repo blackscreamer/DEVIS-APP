@@ -140,8 +140,8 @@ async function doExport() {
 
   const addTotalRow = (label, value, bgHex, fgHex, isBold, topBorder) => {
     const data = isBPU
-      ? [null, label, value]
-      : [null, label, null, null, null, value];
+      ? [null, label, showPrices ? value : null]
+      : [null, label, null, null, null, showPrices ? value : null];
     const r = ws.addRow(data);
     r.height = 18;
     ws.mergeCells(r.number, 1, r.number, isBPU ? 2 : 5);
