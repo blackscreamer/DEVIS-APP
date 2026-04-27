@@ -1,22 +1,6 @@
 /**
  * main.js — Electron Main Process
- *
- * Print strategy (NEW — simple and reliable):
- *   1. Renderer builds a self-contained HTML string (buildPrintHTML)
- *   2. Main writes it to a temp file
- *   3. shell.openExternal() opens it in the user's DEFAULT BROWSER
- *   4. The browser has a full native print dialog: printer choice, preview,
- *      margins, copies, page range — everything works perfectly
- *   5. User prints or cancels, closes the browser tab
- *
- * Why this works when Electron's own print didn't:
- *   - No Electron window management needed
- *   - Browser print dialog is mature and well-tested
- *   - Colors preserved via print-color-adjust: exact in the HTML
- *   - Zero IPC complexity
- *
- * PDF: still uses printToPDF on a hidden BrowserWindow (works reliably)
- * Excel: unchanged (ExcelJS)
+ * Features: landing page, close dialog, .devis extension, print/PDF
  */
 
 const { app, BrowserWindow, Menu, dialog, ipcMain, shell } = require('electron');
@@ -26,7 +10,42 @@ const os   = require('os');
 
 const isDev = process.argv.includes('--dev');
 
-/* ═══ FILE ASSOCIATION ═══ */
+/* ═══════════════════════════════════════════
+   RECENT FILES — stored in userData/recents.json
+═══════════════════════════════════════════ */
+const RECENTS_PATH = path.join(app.getPath('userData'), 'recents.json');
+const MAX_RECENTS  = 10;
+
+function loadRecents() {
+  try { return JSON.parse(fs.readFileSync(RECENTS_PATH, 'utf-8')); }
+  catch { return []; }
+}
+
+function saveRecents(list) {
+  try { fs.writeFileSync(RECENTS_PATH, JSON.stringify(list), 'utf-8'); } catch {}
+}
+
+function addRecent(filePath) {
+  let list = loadRecents().filter(f => f !== filePath);
+  list.unshift(filePath);
+  if (list.length > MAX_RECENTS) list = list.slice(0, MAX_RECENTS);
+  saveRecents(list);
+  // Refresh landing window if open
+  if (landingWindow && !landingWindow.isDestroyed()) {
+    landingWindow.webContents.send('recents:updated', list);
+  }
+}
+
+/* ═══════════════════════════════════════════
+   DIRTY STATE — track unsaved changes
+═══════════════════════════════════════════ */
+let isDirty = false;
+
+ipcMain.on('dirty:update', (_, dirty) => { isDirty = dirty; });
+
+/* ═══════════════════════════════════════════
+   FILE ASSOCIATION
+═══════════════════════════════════════════ */
 let openFilePath = null;
 
 function getFileFromArgs(argv) {
@@ -41,27 +60,70 @@ openFilePath = getFileFromArgs(process.argv);
 app.on('open-file', (event, filePath) => {
   event.preventDefault();
   openFilePath = filePath;
-  if (mainWindow) sendFileToRenderer(filePath);
+  if (mainWindow && !mainWindow.isDestroyed()) openInEditor(filePath);
+  else if (landingWindow && !landingWindow.isDestroyed()) openFromLanding(filePath);
 });
 
-/* ═══ SINGLE INSTANCE ═══ */
+/* ═══════════════════════════════════════════
+   SINGLE INSTANCE
+═══════════════════════════════════════════ */
 const gotLock = app.requestSingleInstanceLock();
 if (!gotLock) { app.quit(); }
 else {
   app.on('second-instance', (_e, argv) => {
     const fp = getFileFromArgs(argv);
-    if (mainWindow) {
-      if (mainWindow.isMinimized()) mainWindow.restore();
-      mainWindow.focus();
-      if (fp) sendFileToRenderer(fp);
+    if (fp) {
+      if (mainWindow && !mainWindow.isDestroyed()) openInEditor(fp);
+      else if (landingWindow && !landingWindow.isDestroyed()) openFromLanding(fp);
+    } else {
+      const win = mainWindow || landingWindow;
+      if (win) { win.isMinimized() && win.restore(); win.focus(); }
     }
   });
 }
 
-/* ═══ MAIN WINDOW ═══ */
-let mainWindow;
+/* ═══════════════════════════════════════════
+   LANDING WINDOW
+═══════════════════════════════════════════ */
+let landingWindow = null;
+let mainWindow    = null;
 
-function createWindow() {
+function createLanding() {
+  landingWindow = new BrowserWindow({
+    width: 720, height: 560,
+    resizable: false,
+    title: 'Devis BTP',
+    icon: path.join(__dirname, 'assets', 'icon.png'),
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+      preload: path.join(__dirname, 'preload-landing.js'),
+    },
+  });
+  landingWindow.setMenuBarVisibility(false);
+  landingWindow.loadFile(path.join(__dirname, 'landing.html'));
+  landingWindow.on('closed', () => { landingWindow = null; });
+
+  // Send recents once loaded
+  landingWindow.webContents.once('did-finish-load', () => {
+    landingWindow.webContents.send('recents:updated', loadRecents());
+    // If app was launched with a file, open it directly
+    if (openFilePath) openFromLanding(openFilePath);
+  });
+}
+
+function openFromLanding(filePath) {
+  createEditor();
+  mainWindow.webContents.once('did-finish-load', () => {
+    setTimeout(() => sendFileToEditor(filePath), 600);
+  });
+  if (landingWindow && !landingWindow.isDestroyed()) landingWindow.close();
+}
+
+/* ═══════════════════════════════════════════
+   EDITOR WINDOW
+═══════════════════════════════════════════ */
+function createEditor() {
   mainWindow = new BrowserWindow({
     width: 1280, height: 860,
     minWidth: 900, minHeight: 600,
@@ -75,30 +137,112 @@ function createWindow() {
   });
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
   if (isDev) mainWindow.webContents.openDevTools();
-  mainWindow.webContents.once('did-finish-load', () => {
-    if (openFilePath) setTimeout(() => sendFileToRenderer(openFilePath), 600);
-  });
   buildMenu();
+
+  /* ── Close dialog ── */
+  mainWindow.on('close', async (e) => {
+    if (!isDirty) return; // nothing to save, close freely
+    e.preventDefault();
+    const { response } = await dialog.showMessageBox(mainWindow, {
+      type:    'warning',
+      title:   'Modifications non sauvegardées',
+      message: 'Vous avez des modifications non sauvegardées.',
+      detail:  'Voulez-vous sauvegarder avant de quitter ?',
+      buttons: ['Sauvegarder', 'Quitter sans sauvegarder', 'Annuler'],
+      defaultId: 0,
+      cancelId:  2,
+    });
+    if (response === 0) {
+      // Ask renderer to save, then quit
+      mainWindow.webContents.send('menu:save');
+      ipcMain.once('save:done', () => {
+        isDirty = false;
+        mainWindow.destroy();
+      });
+    } else if (response === 1) {
+      isDirty = false;
+      mainWindow.destroy();
+    }
+    // response === 2 → Annuler, do nothing
+  });
+
+  mainWindow.on('closed', () => {
+    mainWindow = null;
+    // Return to landing when editor closes (unless app is quitting)
+    if (!app.isQuitting) createLanding();
+  });
 }
 
-function sendFileToRenderer(fp) {
+function sendFileToEditor(fp) {
   try {
-    mainWindow.webContents.send('file:opened', {
-      path: fp,
-      content: fs.readFileSync(fp, 'utf-8'),
-    });
+    const content = fs.readFileSync(fp, 'utf-8');
+    mainWindow.webContents.send('file:opened', { path: fp, content });
     mainWindow.setTitle(path.basename(fp, path.extname(fp)) + ' — Devis BTP');
+    addRecent(fp);
+    isDirty = false;
   } catch (e) {
     dialog.showErrorBox('Erreur', `Impossible d'ouvrir :\n${fp}\n\n${e.message}`);
   }
 }
 
-app.whenReady().then(createWindow);
-app.on('window-all-closed', () => { if (process.platform !== 'darwin') app.quit(); });
-app.on('activate', () => { if (!BrowserWindow.getAllWindows().length) createWindow(); });
+// Legacy alias for internal use
+const openInEditor = sendFileToEditor;
 
-/* ═══ MENU ═══ */
+app.whenReady().then(createLanding);
+
+app.on('before-quit', () => { app.isQuitting = true; });
+app.on('window-all-closed', () => { if (process.platform !== 'darwin') app.quit(); });
+app.on('activate', () => {
+  if (!BrowserWindow.getAllWindows().length) createLanding();
+});
+
+/* ═══════════════════════════════════════════
+   LANDING IPC
+═══════════════════════════════════════════ */
+ipcMain.handle('landing:new', async (_, mode) => {
+  createEditor();
+  // Tell editor which mode to start in
+  mainWindow.webContents.once('did-finish-load', () => {
+    setTimeout(() => mainWindow.webContents.send('menu:mode', mode || 'DQE'), 400);
+  });
+  if (landingWindow && !landingWindow.isDestroyed()) landingWindow.close();
+});
+
+ipcMain.handle('landing:open', async () => {
+  const r = await dialog.showOpenDialog(landingWindow || mainWindow, {
+    title: 'Ouvrir un projet',
+    filters: [
+      { name: 'Projet Devis BTP', extensions: ['devis', 'json'] },
+      { name: 'Tous les fichiers', extensions: ['*'] },
+    ],
+    properties: ['openFile'],
+  });
+  if (!r.canceled && r.filePaths[0]) openFromLanding(r.filePaths[0]);
+});
+
+ipcMain.handle('landing:openRecent', async (_, filePath) => {
+  if (!fs.existsSync(filePath)) {
+    dialog.showErrorBox('Fichier introuvable', `Le fichier n'existe plus :\n${filePath}`);
+    // Remove from recents
+    const list = loadRecents().filter(f => f !== filePath);
+    saveRecents(list);
+    if (landingWindow) landingWindow.webContents.send('recents:updated', list);
+    return;
+  }
+  openFromLanding(filePath);
+});
+
+ipcMain.handle('landing:removeRecent', async (_, filePath) => {
+  const list = loadRecents().filter(f => f !== filePath);
+  saveRecents(list);
+  return list;
+});
+
+/* ═══════════════════════════════════════════
+   MENU
+═══════════════════════════════════════════ */
 function buildMenu() {
+  if (!mainWindow) return;
   const send = (ch, ...a) => mainWindow.webContents.send(ch, ...a);
   const tpl = [
     { label: 'Fichier', submenu: [
@@ -119,10 +263,8 @@ function buildMenu() {
       { label: 'Annuler',  accelerator: 'CmdOrCtrl+Z', click: () => send('menu:undo') },
       { label: 'Rétablir', accelerator: 'CmdOrCtrl+Y', click: () => send('menu:redo') },
       { type: 'separator' },
-      { label: 'Couper',    role: 'cut'       },
-      { label: 'Copier',    role: 'copy'      },
-      { label: 'Coller',    role: 'paste'     },
-      { label: 'Tout sélectionner', role: 'selectAll' },
+      { label: 'Couper',    role: 'cut' }, { label: 'Copier', role: 'copy' },
+      { label: 'Coller',    role: 'paste' }, { label: 'Tout sélectionner', role: 'selectAll' },
     ]},
     { label: 'Affichage', submenu: [
       { label: 'Mode DQE', click: () => send('menu:mode', 'DQE') },
@@ -148,17 +290,19 @@ function buildMenu() {
   Menu.setApplicationMenu(Menu.buildFromTemplate(tpl));
 }
 
-/* ═══ FILE DIALOGS ═══ */
+/* ═══════════════════════════════════════════
+   FILE DIALOGS (editor)
+═══════════════════════════════════════════ */
 async function menuOpen() {
   const r = await dialog.showOpenDialog(mainWindow, {
     title: 'Ouvrir un projet',
     filters: [
-      { name: 'Projet Devis BTP', extensions: ['json', 'devis'] },
+      { name: 'Projet Devis BTP', extensions: ['devis', 'json'] },
       { name: 'Tous les fichiers', extensions: ['*'] },
     ],
     properties: ['openFile'],
   });
-  if (!r.canceled && r.filePaths[0]) sendFileToRenderer(r.filePaths[0]);
+  if (!r.canceled && r.filePaths[0]) sendFileToEditor(r.filePaths[0]);
 }
 
 async function menuImportExcel() {
@@ -171,45 +315,59 @@ async function menuImportExcel() {
     mainWindow.webContents.send('file:importExcel', fs.readFileSync(r.filePaths[0]));
 }
 
-/* ── Save ── */
 ipcMain.handle('dialog:save', async (_, { content, defaultName, currentPath }) => {
   let savePath = currentPath;
   if (!savePath) {
+    const defName = (defaultName || 'devis').replace(/\.json$/, '') + '.devis';
     const r = await dialog.showSaveDialog(mainWindow, {
-      title: 'Sauvegarder', defaultPath: defaultName || 'devis.json',
-      filters: [{ name: 'Projet Devis BTP', extensions: ['json'] }],
+      title: 'Sauvegarder',
+      defaultPath: defName,
+      filters: [
+        { name: 'Projet Devis BTP', extensions: ['devis'] },
+        { name: 'JSON', extensions: ['json'] },
+      ],
     });
     if (r.canceled) return null;
     savePath = r.filePath;
   }
   fs.writeFileSync(savePath, content, 'utf-8');
-  mainWindow.setTitle(path.basename(savePath, path.extname(savePath)) + ' — Devis BTP');
+  const title = path.basename(savePath, path.extname(savePath)) + ' — Devis BTP';
+  mainWindow.setTitle(title);
+  addRecent(savePath);
+  isDirty = false;
+  ipcMain.emit('save:done');
   return savePath;
 });
 
 ipcMain.handle('dialog:saveAs', async (_, { content, defaultName }) => {
+  const defName = (defaultName || 'devis').replace(/\.json$/, '') + '.devis';
   const r = await dialog.showSaveDialog(mainWindow, {
-    title: 'Sauvegarder sous…', defaultPath: defaultName || 'devis.json',
-    filters: [{ name: 'Projet Devis BTP', extensions: ['json'] }],
+    title: 'Sauvegarder sous…',
+    defaultPath: defName,
+    filters: [
+      { name: 'Projet Devis BTP', extensions: ['devis'] },
+      { name: 'JSON', extensions: ['json'] },
+    ],
   });
   if (r.canceled) return null;
   fs.writeFileSync(r.filePath, content, 'utf-8');
   mainWindow.setTitle(path.basename(r.filePath, path.extname(r.filePath)) + ' — Devis BTP');
+  addRecent(r.filePath);
+  isDirty = false;
+  ipcMain.emit('save:done');
   return r.filePath;
 });
 
-/* ── Backup ── */
 ipcMain.handle('file:saveBackup', async (_, { content, currentPath }) => {
   if (!currentPath) return null;
   const bp = path.join(
     path.dirname(currentPath),
-    path.basename(currentPath, path.extname(currentPath)) + '.backup.json'
+    path.basename(currentPath, path.extname(currentPath)) + '.backup.devis'
   );
   try { fs.writeFileSync(bp, content, 'utf-8'); return bp; }
-  catch (e) { console.error('[backup]', e.message); return null; }
+  catch (e) { return null; }
 });
 
-/* ── Excel ── */
 ipcMain.handle('dialog:saveExcel', async (_, { buffer, defaultName }) => {
   const r = await dialog.showSaveDialog(mainWindow, {
     title: 'Exporter Excel', defaultPath: defaultName || 'devis.xlsx',
@@ -220,52 +378,30 @@ ipcMain.handle('dialog:saveExcel', async (_, { buffer, defaultName }) => {
   return r.filePath;
 });
 
-/* ════════════════════════════════════════════════
-   PRINT — Chromium print dialog inside the app
-   
-   Loads the HTML in a VISIBLE BrowserWindow (file://),
-   then calls window.print() via executeJavaScript().
-   Chromium shows its native print dialog WITH preview,
-   printer selection, margins — identical to Chrome's Ctrl+P.
-   The preview window stays open until user closes it.
-════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════
+   PRINT
+═══════════════════════════════════════════ */
 const TEMP_PRINT = path.join(os.tmpdir(), 'devis_print.html');
 let printWin = null;
 
 ipcMain.handle('file:print', async (_, { html }) => {
   try {
     fs.writeFileSync(TEMP_PRINT, html, 'utf-8');
-
-    // Close existing print window if open
     if (printWin && !printWin.isDestroyed()) printWin.close();
-
     printWin = new BrowserWindow({
-      width: 1100, height: 850,
-      minWidth: 800, minHeight: 600,
+      width: 1100, height: 850, minWidth: 800, minHeight: 600,
       title: 'Impression — Devis BTP',
       icon: path.join(__dirname, 'assets', 'icon.png'),
       show: true,
-      webPreferences: {
-        nodeIntegration: false,
-        contextIsolation: true,
-        // No preload — this window only needs window.print()
-      },
+      webPreferences: { nodeIntegration: false, contextIsolation: true },
     });
-
-    // Load as file:// so all inline styles work
     await printWin.loadFile(TEMP_PRINT);
-
-    // Small delay to ensure layout is fully rendered before print dialog
     await new Promise(res => setTimeout(res, 300));
-
-    // Trigger Chromium's native print dialog (with preview, printer selection, etc.)
     await printWin.webContents.executeJavaScript('window.print()');
-
     printWin.on('closed', () => {
       printWin = null;
-      try { fs.unlinkSync(TEMP_PRINT); } catch(e) {}
+      try { fs.unlinkSync(TEMP_PRINT); } catch {}
     });
-
     return true;
   } catch (e) {
     dialog.showErrorBox('Erreur impression', e.message);
@@ -273,11 +409,9 @@ ipcMain.handle('file:print', async (_, { html }) => {
   }
 });
 
-/* ════════════════════════════════════════════════
-   PDF — printToPDF on a hidden BrowserWindow
-   Loads the HTML as file:// → all CSS loads correctly
-   → printToPDF captures the fully styled page
-════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════
+   PDF
+═══════════════════════════════════════════ */
 const TEMP_PDF = path.join(os.tmpdir(), 'devis_pdf_render.html');
 
 ipcMain.handle('file:exportPdf', async (_, { html, defaultName }) => {
@@ -286,50 +420,40 @@ ipcMain.handle('file:exportPdf', async (_, { html, defaultName }) => {
     filters: [{ name: 'PDF', extensions: ['pdf'] }],
   });
   if (r.canceled) return null;
-
-  // Write to temp file so it loads as file:// (reliable CSS)
   fs.writeFileSync(TEMP_PDF, html, 'utf-8');
-
   const pdfWin = new BrowserWindow({
     show: false,
     webPreferences: { nodeIntegration: false, contextIsolation: true },
   });
-
   try {
     await new Promise((resolve, reject) => {
       pdfWin.loadFile(TEMP_PDF);
       pdfWin.webContents.once('did-finish-load', resolve);
       pdfWin.webContents.once('did-fail-load', reject);
     });
-
-    // Small delay to ensure all rendering (fonts, layout) is complete
     await new Promise(res => setTimeout(res, 500));
-
-    const pdfData = await pdfWin.webContents.printToPDF({
-      printBackground: true,
-      // Page size & margins come from @page rule in the HTML
-    });
-
+    const pdfData = await pdfWin.webContents.printToPDF({ printBackground: true });
     pdfWin.close();
-    try { fs.unlinkSync(TEMP_PDF); } catch(e) {}
-
+    try { fs.unlinkSync(TEMP_PDF); } catch {}
     fs.writeFileSync(r.filePath, pdfData);
-    shell.openPath(r.filePath); // open PDF in default viewer
+    shell.openPath(r.filePath);
     return r.filePath;
   } catch (e) {
     pdfWin.close();
-    try { fs.unlinkSync(TEMP_PDF); } catch(err) {}
+    try { fs.unlinkSync(TEMP_PDF); } catch {}
     dialog.showErrorBox('Erreur PDF', e.message);
     return null;
   }
 });
 
-/* ═══ ABOUT ═══ */
+/* ═══════════════════════════════════════════
+   ABOUT
+═══════════════════════════════════════════ */
 function showAbout() {
-  dialog.showMessageBox(mainWindow, {
+  dialog.showMessageBox(mainWindow || landingWindow, {
     type: 'info', title: 'Devis BTP',
     message: 'Devis BTP — DQE / BPU\nVersion 1.0.0',
-    detail: 'Application de gestion de devis BTP.\nDinar Algérien (DA)',
+    detail: 'Application de gestion de devis BTP.\nDinar Algérien (DA)\n\ngithub.com/blackscreamer/DEVIS-APP',
     buttons: ['OK'],
   });
 }

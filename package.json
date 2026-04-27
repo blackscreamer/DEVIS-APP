@@ -13,35 +13,26 @@
     "appId": "com.devis.btp",
     "productName": "Devis BTP",
     "directories": { "output": "build/dist" },
-
     "fileAssociations": [
       {
-        "ext":         "json",
+        "ext":         "devis",
         "name":        "Projet Devis BTP",
         "description": "Fichier de projet Devis BTP (DQE/BPU)",
         "icon":        "src/assets/icon.ico",
         "role":        "Editor"
-      },
-      {
-        "ext":         "devis",
-        "name":        "Projet Devis BTP",
-        "description": "Fichier de projet Devis BTP",
-        "icon":        "src/assets/icon.ico",
-        "role":        "Editor"
       }
     ],
-
     "win": {
       "target": [{ "target": "nsis", "arch": ["x64"] }],
       "icon": "src/assets/icon.ico"
     },
     "mac": {
       "target": "dmg",
-      "icon": "src/assets/icon.icns"
+      "icon":   "src/assets/icon.icns"
     },
     "linux": {
       "target": "AppImage",
-      "icon": "src/assets/icon.png"
+      "icon":   "src/assets/icon.png"
     },
     "nsis": {
       "oneClick": false,

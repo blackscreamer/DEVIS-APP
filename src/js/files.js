@@ -88,6 +88,8 @@ function applyLoadedData(d) {
 function triggerAutosave() {
   clearTimeout(saveTimeout);
   saveTimeout = setTimeout(saveLocal, AUTOSAVE_DELAY);
+  // Mark document as dirty — main process uses this for close dialog
+  if (isElectron) window.electronAPI.setDirty(true);
 }
 function saveLocal() {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(getSaveData())); } catch(e) {}
@@ -110,7 +112,9 @@ async function fileSave(saveAs) {
     if (p) {
       currentFilePath = p; updateFileLabel(p);
       setSaveIndicator('saved'); setTimeout(()=>setSaveIndicator(''), 2000);
-      saveLocal(); notif('✓ Sauvegardé');
+      saveLocal();
+      if (isElectron) window.electronAPI.setDirty(false);
+      notif('✓ Sauvegardé');
     }
   } else {
     const a = document.createElement('a');
@@ -503,6 +507,7 @@ if (isElectron) {
       if (!d.rows) throw new Error('Format invalide');
       applyLoadedData(d); currentFilePath=path; updateFileLabel(path);
       render(); snapshot(); saveLocal();
+      if (isElectron) window.electronAPI.setDirty(false);
       notif('✓ '+path.split(/[\\/]/).pop()+' chargé');
     } catch(e) { notif('⚠ '+e.message); }
   });

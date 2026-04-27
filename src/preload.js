@@ -1,20 +1,21 @@
 /**
- * preload.js — Pont sécurisé main ↔ renderer.
+ * preload.js — Pont sécurisé main ↔ renderer (editor).
  */
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
-  /* File operations */
-  saveProject:   (content, defaultName, currentPath) => ipcRenderer.invoke('dialog:save',      { content, defaultName, currentPath }),
-  saveProjectAs: (content, defaultName)              => ipcRenderer.invoke('dialog:saveAs',    { content, defaultName }),
-  saveBackup:    (content, currentPath)              => ipcRenderer.invoke('file:saveBackup',  { content, currentPath }),
-  saveExcel:     (buffer, defaultName)               => ipcRenderer.invoke('dialog:saveExcel', { buffer, defaultName }),
-  /* Print — opens in browser */
-  printInBrowser: (html)                             => ipcRenderer.invoke('file:print',       { html }),
-  /* PDF — printToPDF via hidden window */
-  exportPdf:      (html, defaultName)                => ipcRenderer.invoke('file:exportPdf',   { html, defaultName }),
+  /* ── File operations ── */
+  saveProject:    (content, defaultName, currentPath) => ipcRenderer.invoke('dialog:save',      { content, defaultName, currentPath }),
+  saveProjectAs:  (content, defaultName)              => ipcRenderer.invoke('dialog:saveAs',    { content, defaultName }),
+  saveBackup:     (content, currentPath)              => ipcRenderer.invoke('file:saveBackup',  { content, currentPath }),
+  saveExcel:      (buffer, defaultName)               => ipcRenderer.invoke('dialog:saveExcel', { buffer, defaultName }),
+  printInBrowser: (html)                              => ipcRenderer.invoke('file:print',        { html }),
+  exportPdf:      (html, defaultName)                 => ipcRenderer.invoke('file:exportPdf',   { html, defaultName }),
 
-  /* Menu events → renderer */
+  /* ── Dirty state — tells main if there are unsaved changes ── */
+  setDirty: (dirty) => ipcRenderer.send('dirty:update', dirty),
+
+  /* ── Menu events → renderer ── */
   onMenuNew:          cb => ipcRenderer.on('menu:new',          () => cb()),
   onMenuSave:         cb => ipcRenderer.on('menu:save',         () => cb()),
   onMenuSaveAs:       cb => ipcRenderer.on('menu:saveAs',       () => cb()),
