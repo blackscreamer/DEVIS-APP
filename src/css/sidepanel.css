@@ -1,0 +1,98 @@
+/* sidepanel.css — Fixed right action panel */
+#side-panel {
+  position: fixed;
+  top: 48px;          /* below appbar */
+  right: 0;
+  width: 120px;
+  bottom: 36px;       /* above footer */
+  background: #111b27;
+  border-left: 1px solid #1e3048;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 8px 0 8px;
+  z-index: 100;
+  overflow: hidden;
+}
+
+/* Drag handle */
+.sp-drag {
+  display: flex; align-items: center; justify-content: center;
+  height: 28px; cursor: grab; color: #2a4a6a;
+  font-size: 16px; margin: 0 8px 4px;
+  border: 1px solid #1e3048; border-radius: 6px;
+  background: #161f2e;
+  transition: color .15s, background .15s;
+  user-select: none;
+}
+.sp-drag:hover  { color: #4a80c0; background: #1a2a40; border-color: #2a4a7a; cursor: grab; }
+.sp-drag:active { cursor: grabbing; }
+
+/* Selection info */
+.sp-info {
+  font-size: 9px; text-align: center; padding: 4px 6px;
+  font-family: sans-serif; line-height: 1.3;
+  color: #3a5570; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  border-radius: 4px; margin: 0 6px 2px;
+}
+.sp-info.sp-empty   { color: #2a3a4a; }
+.sp-info.sp-chap    { color: #7aacff; background: rgba(26,86,160,.12); }
+.sp-info.sp-sub     { color: #aaddb0; background: rgba(42,122,74,.12); }
+.sp-info.sp-art     { color: #d0d0d0; }
+.sp-info.sp-subart  { color: #c0c0c0; }
+.sp-info.sp-multi   { color: #f0c060; background: rgba(180,140,0,.1); }
+
+.sp-count {
+  font-size: 9px; text-align: center; color: #f0c060;
+  font-family: sans-serif; font-weight: bold; height: 14px;
+  margin-bottom: 2px;
+}
+
+/* Separator */
+.sp-sep {
+  height: 1px; background: #1e3048;
+  margin: 5px 8px;
+}
+
+/* Group label */
+.sp-group-label {
+  font-size: 8.5px; text-transform: uppercase; letter-spacing: 1px;
+  color: #2a4060; text-align: center; font-family: sans-serif;
+  padding: 2px 0 3px; font-weight: 600;
+}
+
+/* Buttons */
+.sp-btn {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 2px; margin: 2px 6px; padding: 5px 4px;
+  border: 1px solid transparent; border-radius: 6px;
+  background: none; cursor: pointer;
+  font-family: sans-serif; font-size: 9px;
+  color: #4a6a8a; line-height: 1.2;
+  transition: background .12s, color .12s, border-color .12s, transform .1s;
+}
+.sp-btn i    { font-size: 14px; }
+.sp-btn span { font-size: 8.5px; white-space: nowrap; }
+.sp-btn:hover:not(:disabled) { transform: translateY(-1px); }
+.sp-btn:disabled { opacity: .25; cursor: not-allowed; }
+
+/* Add buttons — green tint */
+.sp-add-chap, .sp-add-sub, .sp-add-art, .sp-add-subart, .sp-add-blank {
+  color: #5a9a7a;
+}
+.sp-add-chap:hover:not(:disabled)   { background: #1a3028; border-color: #3a7a5a; color: #8addb0; }
+.sp-add-sub:hover:not(:disabled)    { background: #182a24; border-color: #306050; color: #7acc9a; }
+.sp-add-art:hover:not(:disabled)    { background: #182824; border-color: #2a5048; color: #70c090; }
+.sp-add-subart:hover:not(:disabled) { background: #182022; border-color: #2a4840; color: #68b888; }
+.sp-add-blank:hover:not(:disabled)  { background: #151e20; border-color: #1e3830; color: #508070; }
+
+/* Duplicate — blue */
+.sp-dup { color: #4a7aaa; }
+.sp-dup:hover:not(:disabled) { background: #102038; border-color: #3a6090; color: #7aaad8; box-shadow: 0 0 6px rgba(60,120,200,.2); }
+
+/* Delete — red */
+.sp-del { color: #8a4a4a; }
+.sp-del:hover:not(:disabled) { background: #2a1010; border-color: #8a2020; color: #ff8888; box-shadow: 0 0 6px rgba(200,40,40,.25); }
+
+/* Adjust workspace to not overlap side panel */
+#wrap { margin-right: 120px; }

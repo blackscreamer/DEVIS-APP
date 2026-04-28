@@ -4,27 +4,21 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <meta http-equiv="Content-Security-Policy"
-content="
-default-src 'self';
-style-src 'self' 'unsafe-inline';
-script-src 'self' 'unsafe-inline';
-font-src 'self';
-img-src 'self' data:;
-connect-src 'self' blob:;
-worker-src 'self';
-object-src 'none';
-">
-<title>Devis BTP — DQE / BPU</title>
-
+  content="default-src 'self';
+           style-src 'self' 'unsafe-inline';
+           font-src 'self';
+           script-src 'self' 'unsafe-inline';
+           img-src 'self' data:;" />
 <!-- Bootstrap CSS + Icons (local cache fallback acceptable; internet required first run) -->
-<link rel="stylesheet" href="vendor/bootstrap/bootstrap.min.css"/>
-<link rel="stylesheet" href="vendor/bootstrap-icons/bootstrap-icons.css"/>
+<link href="vendor/bootstrap/bootstrap.min.css" rel="stylesheet">
+<link href="vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
 
 <!-- App styles -->
 <link rel="stylesheet" href="css/base.css"/>
 <link rel="stylesheet" href="css/toolbar.css"/>
 <link rel="stylesheet" href="css/table.css"/>
 <link rel="stylesheet" href="css/float-ctrl.css"/>
+<link rel="stylesheet" href="css/sidepanel.css"/>
 <link rel="stylesheet" href="css/colors-panel.css"/>
 <link rel="stylesheet" href="css/footer.css"/>
 <link rel="stylesheet" href="css/print.css"/>
@@ -140,23 +134,46 @@ object-src 'none';
   </div>
 </nav>
 
-<!-- ═══ FLOATING ROW CONTROLS ═══ -->
-<div id="float-ctrl" class="hidden">
-  <span class="drag-h" id="fc-drag" title="Glisser pour déplacer (⠿)">⠿</span>
-  <div class="fc-sep"></div>
-  <span id="fc-count"></span>
-  <button class="fc-btn add" onclick="addRow('art')" title="Ajouter un article après (Touche +)">
-    <i class="bi bi-plus-lg"></i> Article
+<!-- ═══ FIXED SIDE PANEL ═══ -->
+<div id="side-panel">
+  <!-- Drag handle for row reordering -->
+  <div id="sp-drag" class="sp-drag" title="Glisser pour déplacer la sélection">
+    <i class="bi bi-grip-vertical"></i>
+  </div>
+
+  <!-- Selection info -->
+  <div id="sp-info" class="sp-info sp-empty">Aucune sélection</div>
+  <div id="sp-count" class="sp-count"></div>
+
+  <div class="sp-sep"></div>
+
+  <!-- Add rows -->
+  <div class="sp-group-label">Ajouter</div>
+  <button class="sp-btn sp-add-chap"   data-action="add-chap"   onclick="addRow('chap')"    title="Ajouter un chapitre">
+    <i class="bi bi-bookmark-fill"></i><span>Chapitre</span>
   </button>
-  <button class="fc-btn add" onclick="addRow('subart')" title="Ajouter un sous-article">
-    <i class="bi bi-plus"></i> Sous-art.
+  <button class="sp-btn sp-add-sub"    data-action="add-sub"    onclick="addRow('sub',1)"   title="Ajouter un sous-chapitre">
+    <i class="bi bi-bookmarks-fill"></i><span>Sous-chap.</span>
   </button>
-  <div class="fc-sep"></div>
-  <button class="fc-btn dup" onclick="dupSelected()" title="Dupliquer la sélection">
-    <i class="bi bi-copy"></i> Dupliquer
+  <button class="sp-btn sp-add-art"    data-action="add-art"    onclick="addRow('art')"     title="Ajouter un article (touche +)">
+    <i class="bi bi-file-text"></i><span>Article</span>
   </button>
-  <button class="fc-btn del" onclick="delSelected()" title="Supprimer la sélection (Suppr)">
-    <i class="bi bi-trash3"></i> Supprimer
+  <button class="sp-btn sp-add-subart" data-action="add-subart" onclick="addRow('subart')"  title="Ajouter un sous-article">
+    <i class="bi bi-file-text-fill"></i><span>Sous-art.</span>
+  </button>
+  <button class="sp-btn sp-add-blank"  data-action="add-blank"  onclick="addRow('blank')"   title="Ajouter une ligne vide">
+    <i class="bi bi-dash"></i><span>Ligne vide</span>
+  </button>
+
+  <div class="sp-sep"></div>
+
+  <!-- Row actions -->
+  <div class="sp-group-label">Actions</div>
+  <button class="sp-btn sp-dup" data-action="dup" onclick="dupSelected()"  title="Dupliquer la sélection (Ctrl+D)">
+    <i class="bi bi-copy"></i><span>Dupliquer</span>
+  </button>
+  <button class="sp-btn sp-del" data-action="del" onclick="delSelected()"  title="Supprimer la sélection (Suppr)">
+    <i class="bi bi-trash3"></i><span>Supprimer</span>
   </button>
 </div>
 
@@ -356,6 +373,7 @@ object-src 'none';
 <script src="js/totals.js"></script>
 <script src="js/visibility.js"></script>
 <script src="js/render.js"></script>
+<script src="js/sidepanel.js"></script>
 <script src="js/selection.js"></script>
 <script src="js/rows.js"></script>
 <script src="js/search.js"></script>

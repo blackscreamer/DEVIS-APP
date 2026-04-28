@@ -1,0 +1,3403 @@
+{
+  "v": 9,
+  "rows": [
+    {
+      "type": "chap",
+      "id": "r1",
+      "desig": "Bloc pédagogique",
+      "collapsed": false
+    },
+    {
+      "type": "sub",
+      "id": "r2",
+      "desig": "terrassement (AU métré)",
+      "level": 1,
+      "collapsed": false
+    },
+    {
+      "type": "art",
+      "id": "r3",
+      "desig": "Terrassement en grande masse dans terrain de toute nature exécutés par engins mécaniques  y compris dressement des parois, du fond  de fouilles, jets de pelle sur berge, main d'œuvre et toutes sujétions de bonne exécution",
+      "unite": "M³",
+      "qty": "3655",
+      "pu": "400"
+    },
+    {
+      "type": "art",
+      "id": "r4",
+      "desig": "fouilles en puits ou en tranchées ou en rigole dans terrain   de toute nature  à l'aide d'engin mécanique, y compris , boisage des parois (verticales) au-delà de 1.50m de profondeur ou talutage , jet de pelle (jet de terre à l'extérieur de la fouille),réglage du fond de fouille , la mise en dépôt des déblais dans l'enceinte du chantier, (lieu de stockage) pour être utilisées ultérieurement dans la réalisation des remblais et toutes sujétions nécessaires pour une bonne et parfaite exécution.",
+      "unite": "M³",
+      "qty": "1350",
+      "pu": "600"
+    },
+    {
+      "type": "art",
+      "id": "r5",
+      "desig": "Remblais compacté des vides et autour des fondations provenant du site ou d'un apport de terre noble y compris toutes sujétions de bonne éxecution ",
+      "unite": "M³",
+      "qty": "1600",
+      "pu": "400"
+    },
+    {
+      "type": "art",
+      "id": "r6",
+      "desig": "Evacuation  des terres excédentaires des terrassement  à la décharge publique quelque soit la distance , y compris foisonnement ,chargement ,frais de décharge, déchargement et toutes sujétions  de bonne exécution",
+      "unite": "M³",
+      "qty": "3405",
+      "pu": "400"
+    },
+    {
+      "type": "sub",
+      "id": "r7",
+      "desig": "infrastructure (au métrie)",
+      "level": 1,
+      "collapsed": false
+    },
+    {
+      "type": "art",
+      "id": "r26",
+      "desig": "Béton de propreté de 10 cm dosé à 250 Kg/M³  ciment CPJ ",
+      "unite": "M³",
+      "qty": "289",
+      "pu": "7500"
+    },
+    {
+      "type": "art",
+      "id": "r8",
+      "desig": "Béton armé en fondation dosé à 350 kg/m3 ciment CPJ  comprenant coffrage, ferraillage, joint en polystyrene ép =10 cm, badigeonnage au flintckot en deux couches croisées, et tous les travaux relatifs au coffrage: étaiement , décoffrage, enlèvement bavures , ferraillage: façonnage,coupes,ligatures mise en place béton: fabrication ,mise en place, réglage, et toutes sujétions de bonne exécution pour :",
+      "unite": "M³",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r9",
+      "desig": "Semelles",
+      "unite": "M³",
+      "qty": "364",
+      "pu": "38000"
+    },
+    {
+      "type": "subart",
+      "id": "r10",
+      "desig": "Libage",
+      "unite": "M³",
+      "qty": "130",
+      "pu": "38000"
+    },
+    {
+      "type": "subart",
+      "id": "r11",
+      "desig": "Amorces poteaux",
+      "unite": "M³",
+      "qty": "22.6",
+      "pu": "38000"
+    },
+    {
+      "type": "subart",
+      "id": "r12",
+      "desig": "Voile péripheriques",
+      "unite": "M³",
+      "qty": "56.250",
+      "pu": "38000"
+    },
+    {
+      "type": "subart",
+      "id": "r13",
+      "desig": "Longrines",
+      "unite": "M³",
+      "qty": "77",
+      "pu": "38000"
+    },
+    {
+      "type": "subart",
+      "id": "r14",
+      "desig": "Voile de conterventement",
+      "unite": "M³",
+      "qty": "9.5",
+      "pu": "38000"
+    },
+    {
+      "type": "subart",
+      "id": "r15",
+      "desig": "Plots",
+      "unite": "M³",
+      "qty": "5.65",
+      "pu": "30000"
+    },
+    {
+      "type": "subart",
+      "id": "r16",
+      "desig": "Dalle pleine",
+      "unite": "M³",
+      "qty": "22.65",
+      "pu": "38000"
+    },
+    {
+      "type": "art",
+      "id": "r17",
+      "desig": "Dalle SOLIDAIRE  épaisseur  selon plan genie civile dosée à 350 Kg/M³ ",
+      "unite": "M²",
+      "qty": "875.75",
+      "pu": "4000"
+    },
+    {
+      "type": "art",
+      "id": "r18",
+      "desig": "Herissonage en pierres sèches Ep 20cm",
+      "unite": "M²",
+      "qty": "875.75",
+      "pu": "600"
+    },
+    {
+      "type": "art",
+      "id": "r19",
+      "desig": "Confection  de regards de profondeur variable suivant le profil du projet, parois radiers en béton dosée à 350 Kg/M³ de 0,15 d'ép",
+      "unite": "M³",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r21",
+      "desig": "regard de  0,60x0,60xP.V.m avec tampon en béton (dim interieur)",
+      "unite": "U",
+      "qty": "35",
+      "pu": "12000"
+    },
+    {
+      "type": "subart",
+      "id": "r22",
+      "desig": "regard de  0,80x0,80 xP.V.m avec tampon en béton (dim interieur)",
+      "unite": "U",
+      "qty": "10",
+      "pu": "12000"
+    },
+    {
+      "type": "subart",
+      "id": "r23",
+      "desig": "caniveau de 3,00x0,50 xP.V.m avec tampon en béton (dim interieur)",
+      "unite": "U",
+      "qty": "4",
+      "pu": "22000"
+    },
+    {
+      "type": "art",
+      "id": "r24",
+      "desig": "Fourniture et pose de tuyaux en P,V,C, posé s/lit de sable de 0,10 cm ",
+      "unite": "M³",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r25",
+      "desig": "Ø200",
+      "unite": "ML",
+      "qty": "180",
+      "pu": "1500"
+    },
+    {
+      "type": "sub",
+      "id": "r28",
+      "desig": "Superstructure (au forfait)",
+      "level": 1,
+      "collapsed": false
+    },
+    {
+      "type": "art",
+      "id": "r29",
+      "desig": "Béton armé en superstructure dosé à 350 kg/m3 (ciment CPJ)  comprenant coffrage, ferraillage, joint en polystyrene ép =10 cm,film polyane,drainage périphérique  et tous les travaux relatifs au coffrage: étaiement , décoffrage, enlèvement bavures , ferraillage: façonnage,coupes,ligatures mise en place béton: fabrication ,mise en place, vibration ,réglage, et toutes sujétions de bonne exécution pour :",
+      "unite": "M³",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r30",
+      "desig": "Poteaux",
+      "unite": "M³",
+      "qty": "250.2",
+      "pu": "38000"
+    },
+    {
+      "type": "subart",
+      "id": "r31",
+      "desig": "Poutres et chainages",
+      "unite": "M³",
+      "qty": "356.650",
+      "pu": "38000"
+    },
+    {
+      "type": "subart",
+      "id": "r32",
+      "desig": "Escalier, rampe et gradin",
+      "unite": "M³",
+      "qty": "220.14",
+      "pu": "33000"
+    },
+    {
+      "type": "subart",
+      "id": "r33",
+      "desig": "Acrotère",
+      "unite": "M³",
+      "qty": "60.50",
+      "pu": "33000"
+    },
+    {
+      "type": "subart",
+      "id": "r34",
+      "desig": "Dalle pleine",
+      "unite": "M³",
+      "qty": "80.23",
+      "pu": "38000"
+    },
+    {
+      "type": "subart",
+      "id": "r35",
+      "desig": "Linteaux, Appuis de fenetre et elements de facade",
+      "unite": "M³",
+      "qty": "70",
+      "pu": "30000"
+    },
+    {
+      "type": "subart",
+      "id": "r36",
+      "desig": "Voile et voile de contreventement",
+      "unite": "M³",
+      "qty": "115",
+      "pu": "38000"
+    },
+    {
+      "type": "art",
+      "id": "r37",
+      "desig": "Plancher corps creux 16+5",
+      "unite": "M²",
+      "qty": "3600",
+      "pu": "3000"
+    },
+    {
+      "type": "art",
+      "id": "r38",
+      "desig": "Plancher corps creux 20+5",
+      "unite": "M²",
+      "qty": "225",
+      "pu": "3000"
+    },
+    {
+      "type": "sub",
+      "id": "r39",
+      "desig": "Maconnerie / Enduit (au forfait)",
+      "level": 1,
+      "collapsed": false
+    },
+    {
+      "type": "art",
+      "id": "r40",
+      "desig": "Maçonnerie en brique creuse",
+      "unite": "M²",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r41",
+      "desig": "Maçonnerie de 30 cm",
+      "unite": "M²",
+      "qty": "5239",
+      "pu": "2000"
+    },
+    {
+      "type": "subart",
+      "id": "r42",
+      "desig": "Maçonnerie de 15 cm",
+      "unite": "M²",
+      "qty": "98",
+      "pu": "1200"
+    },
+    {
+      "type": "subart",
+      "id": "r43",
+      "desig": "Maçonnerie de 10 cm",
+      "unite": "M²",
+      "qty": "535",
+      "pu": "1000"
+    },
+    {
+      "type": "art",
+      "id": "r44",
+      "desig": "Réalisation d'une estrade composé de remblais et béton dosé à 250 kg/m3 , y compris main d'œuvre et toutes sujétions de bonne execution",
+      "unite": "U",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r45",
+      "desig": "Estrade de forme L (5,50 /1,8/2,00m) ép = 20 cm",
+      "unite": "U",
+      "qty": "24",
+      "pu": "20000"
+    },
+    {
+      "type": "subart",
+      "id": "r46",
+      "desig": "Estrade de forme L (5,50 /1,8/2,00m) ép = 70 cm",
+      "unite": "U",
+      "qty": "1",
+      "pu": "30000"
+    },
+    {
+      "type": "art",
+      "id": "r47",
+      "desig": "Enduit extérieur au mortier de ciment dosé à 400 kg/M³ sur murs ",
+      "unite": "M²",
+      "qty": "3587",
+      "pu": "850"
+    },
+    {
+      "type": "art",
+      "id": "r48",
+      "desig": "Enduit intérieur au mortier de ciment dosé à 300 kg/M³ ",
+      "unite": "M²",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r49",
+      "desig": "Sur mur",
+      "unite": "M²",
+      "qty": "3400",
+      "pu": "800"
+    },
+    {
+      "type": "subart",
+      "id": "r54",
+      "desig": "Sous plafond",
+      "unite": "M²",
+      "qty": "1830",
+      "pu": "800"
+    },
+    {
+      "type": "art",
+      "id": "r55",
+      "desig": "Enduit intérieur en platre ",
+      "unite": "M²",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r57",
+      "desig": "Sur mur",
+      "unite": "M²",
+      "qty": "1580",
+      "pu": "400"
+    },
+    {
+      "type": "subart",
+      "id": "r59",
+      "desig": "Sous plafond",
+      "unite": "M²",
+      "qty": "1935",
+      "pu": "400"
+    },
+    {
+      "type": "art",
+      "id": "r60",
+      "desig": "Réalisation d'élement decoratif en Maçonnerie ",
+      "unite": "ML",
+      "qty": "250",
+      "pu": "2500"
+    },
+    {
+      "type": "sub",
+      "id": "r61",
+      "desig": "revetements sols et murs (au forfait)",
+      "level": 1,
+      "collapsed": false
+    },
+    {
+      "type": "art",
+      "id": "r62",
+      "desig": "Revêtement SOL  posé à bain de mortier sous forme de sable  ,de bonne qualité et toutes sujétions",
+      "unite": "M²",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r63",
+      "desig": "Fourniture et pose de carreaux  monocouche 1er choix couleur et dimension selon choix du maitre d'ouvrage ou le maitre d’œuvre pour (classe et galerie de circulation, Labo, Atelier, administration) y compris trempage à l’eau ,  lit de sable, mortier de pose dosé à 400kg/m³, barbotine, joints exécutés en ciment blanc, nettoyage, ponçage, coupe à la tronçonneuse main d’œuvre et toutes sujétions de bonne exécution.",
+      "unite": "M²",
+      "qty": "3625",
+      "pu": "1800"
+    },
+    {
+      "type": "subart",
+      "id": "r64",
+      "desig": "Carreaux de marbre pour hall d'entrée",
+      "unite": "M²",
+      "qty": "239",
+      "pu": "12000"
+    },
+    {
+      "type": "subart",
+      "id": "r65",
+      "desig": "granito ep=03 cm 1er choix  pour marche (3cm) et palier , contre marche (2cm),seuil des portes (2cm) et   paillasse(3cm), appui de fenêtre(3cm)",
+      "unite": "M²",
+      "qty": "480",
+      "pu": "3000"
+    },
+    {
+      "type": "art",
+      "id": "r66",
+      "desig": "Fourniture et pose de dalle de sol antidérapant (bloc sanitaire) de 1er choix au choix du maitre d'ouvrage y compris toutes sujétions de bonne exécution",
+      "unite": "M²",
+      "qty": "120",
+      "pu": "2500"
+    },
+    {
+      "type": "art",
+      "id": "r67",
+      "desig": "Fourniture et pose de  de faïence + frise de couleur et dimension selon choix du maitre d'ouvrage ou le maitre d’œuvre quel que soit la hauteur pour sanitaires, posé au mortier de ciment sur fond dressé, les joints seront alignés verticalement en horizontal, y compris nettoyage et tout sujétions de bonne exécution.",
+      "unite": "M²",
+      "qty": "312",
+      "pu": "1800"
+    },
+    {
+      "type": "art",
+      "id": "r68",
+      "desig": "Fourniture et pose de faux plafonds en \"BA13\" en relief y compris tout les accessoires (ossature,cornière,tige,fixation…….) Et toutes sujétions de bonne exécution ",
+      "unite": "M²",
+      "qty": "370",
+      "pu": "3200"
+    },
+    {
+      "type": "art",
+      "id": "r69",
+      "desig": "Fourniture et pose de faux plafonds en PVC y compris tout les accessoires (ossature,cornière,tige,fixation…….) Et toutes sujétions de bonne exécution ",
+      "unite": "M²",
+      "qty": "120",
+      "pu": "3200"
+    },
+    {
+      "type": "art",
+      "id": "r70",
+      "desig": "Fourniture et pose de plinthe en terre cuite vernissée de 1er choix pour mono couche, couleur et dimension selon choix du maitre d'ouvrage ou le maitre d’œuvre y compris main d’œuvre et toutes sujétions de bonne exécution.",
+      "unite": "ML",
+      "qty": "2000",
+      "pu": "400"
+    },
+    {
+      "type": "art",
+      "id": "r71",
+      "desig": "Fourniture et pose de plinthe en terre cuite vernissée de 1er choix pour mono couche, couleur et dimension selon choix du maitre d'ouvrage ou le maitre d’œuvre y compris main d’œuvre et toutes sujétions de bonne exécution.",
+      "unite": "ML",
+      "qty": "300",
+      "pu": "400"
+    },
+    {
+      "type": "art",
+      "id": "r72",
+      "desig": " Fourniture et pose de la pierre reconstituée : pour habillage de façade",
+      "unite": "M²",
+      "qty": "120",
+      "pu": "2000"
+    },
+    {
+      "type": "art",
+      "id": "r73",
+      "desig": "Fourniture et pose Couvre joint entre blocs ( joint de dilatation)  intérieur et exterieur ép=10 mm y compris Traitement de joint  en plomb+corde",
+      "unite": "M²",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r74",
+      "desig": "en aluminium thermo laqué pour murs et sous plafonds",
+      "unite": "ML",
+      "qty": "137",
+      "pu": "3200"
+    },
+    {
+      "type": "subart",
+      "id": "r75",
+      "desig": "en aluminium étanche pour sol",
+      "unite": "ML",
+      "qty": "42",
+      "pu": "3200"
+    },
+    {
+      "type": "sub",
+      "id": "r76",
+      "desig": "étancheité (au forfait)",
+      "level": 1,
+      "collapsed": false
+    },
+    {
+      "type": "art",
+      "id": "r77",
+      "desig": "Forme de pente exécutée en béton, dosé à 250 kg/M³ ",
+      "unite": "M²",
+      "qty": "1822",
+      "pu": "800"
+    },
+    {
+      "type": "art",
+      "id": "r78",
+      "desig": "Ecran par vapeur ",
+      "unite": "M²",
+      "qty": "1822",
+      "pu": "500"
+    },
+    {
+      "type": "art",
+      "id": "r79",
+      "desig": "Isolation thermique en  polystyrènes expansé ep=4cm",
+      "unite": "M²",
+      "qty": "1822",
+      "pu": "750"
+    },
+    {
+      "type": "art",
+      "id": "r80",
+      "desig": "Equerre de renfort ",
+      "unite": "ML",
+      "qty": "500",
+      "pu": "450"
+    },
+    {
+      "type": "art",
+      "id": "r81",
+      "desig": "Complexe Etanchéité multicouche 4x36S",
+      "unite": "M²",
+      "qty": "1822",
+      "pu": "800"
+    },
+    {
+      "type": "art",
+      "id": "r82",
+      "desig": "Protection d'étanchéité en gravillons roulé 15/25",
+      "unite": "M²",
+      "qty": "1822",
+      "pu": "250"
+    },
+    {
+      "type": "art",
+      "id": "r83",
+      "desig": "Fourniture et pose Relevé d'étanchéité ",
+      "unite": "ML",
+      "qty": "500",
+      "pu": "900"
+    },
+    {
+      "type": "art",
+      "id": "r84",
+      "desig": "Entrée d'eau avec crapaudine",
+      "unite": "U",
+      "qty": "16",
+      "pu": "1200"
+    },
+    {
+      "type": "art",
+      "id": "r85",
+      "desig": "EntréFourniture et pose  descente d'eau en P.V.C diam 110 mm P.N 4e d'eau avec crapaudine",
+      "unite": "ML",
+      "qty": "160",
+      "pu": "500"
+    },
+    {
+      "type": "art",
+      "id": "r86",
+      "desig": "Fourniture et pose trappe d'accés terrasse dimension 100x100 cm avec chapeau chinois y compris toutes sujétions de bonne exécution ",
+      "unite": "U",
+      "qty": "3",
+      "pu": "10000"
+    },
+    {
+      "type": "sub",
+      "id": "r87",
+      "desig": "menuiserie (au forfait)",
+      "level": 1,
+      "collapsed": false
+    },
+    {
+      "type": "blank",
+      "id": "r89",
+      "desig": "MENUISERIE METALLIQUE"
+    },
+    {
+      "type": "art",
+      "id": "r90",
+      "desig": "Fourniture et pose et scellement de menuiseries métalliques y compris toutes sujétions de pose  ",
+      "unite": "U",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r91",
+      "desig": "Fourniture et pose Porte Metallique d'entrée d'éleves à 02 vantaux  de 240 X 250 cm y compris toutes sujétions de pose (PM1)",
+      "unite": "U",
+      "qty": "2",
+      "pu": "11000"
+    },
+    {
+      "type": "subart",
+      "id": "r92",
+      "desig": "Fourniture et pose Porte Metallique à 02 vantaux  de 150 X 250 y compris toutes sujétions de pose (PM2)",
+      "unite": "U",
+      "qty": "2",
+      "pu": "80000"
+    },
+    {
+      "type": "subart",
+      "id": "r93",
+      "desig": "Fourniture et pose Porte Metallique  à 01 vantail  de 140 X 220 cm y compris toutes sujétions de pose (PM3)",
+      "unite": "U",
+      "qty": "4",
+      "pu": "750000"
+    },
+    {
+      "type": "art",
+      "id": "r94",
+      "desig": "Main courante en tube rond en acier  diametre 63/72 mm pour galerie et escaliers et rampe",
+      "unite": "ML",
+      "qty": "322",
+      "pu": "2200"
+    },
+    {
+      "type": "art",
+      "id": "r95",
+      "desig": "Fourniture et pose barreaudage en tole perforee pour fenetre  (CMC) 1er choix motif selon choix du maitre d'oeuvre , y compris transport, couche anti rouille, peinture glycérophtalique, main d’œuvre et toutes sujétions de bonne exécution exécutée suivant plans détail (voir schéma), pour :RDC",
+      "unite": "M²",
+      "qty": "86",
+      "pu": "13000"
+    },
+    {
+      "type": "blank",
+      "id": "r96",
+      "desig": "MENUISERIE PVC"
+    },
+    {
+      "type": "art",
+      "id": "r97",
+      "desig": " - Fourniture et pose mur rideau,y compris fenetre incorporées, montant et traverse, MT 150 (VEP), montant    50x170, traverse 50x68, avec double vitrage isolant réfléchissant stop sol    trempé, ép. = 23 mm (6+12+5), composé de partie vision et partie opaque,    la partie vision avec verre extérieur stop sol trempé 6 mm + intercalaire 12 mm    + verre intérieur 5mm simple clair, la partie opaque avec tôle en panneau composite + verre extérieurs stop sol trempé 6mm, sur surface plane en forme de grille fixe sur ossature principale par des platines en aciers et toutes sujétions de bonne exécution, réalisé conformément aux normes en vigueur, aux règles de l'ART et aux plans, avec justification d'un avis technique délivré par le CNERIB",
+      "unite": "M²",
+      "qty": "50",
+      "pu": "23000"
+    },
+    {
+      "type": "art",
+      "id": "r98",
+      "desig": "F/P d’élément complet pour fenêtres ,châssis et baies en profilé PVC ouvrante ou coulissante. vitré en verre double stop sol (4mm) avec gaz Argon, mécanisme d’ouverture et  toutes sujétions de scellement y compris f/p pré cadre en Acier ou en aluminium (tube rectangulaire de 04cm x 03cm) ainsi que le chambranle en PVC incorporé et toutes sujétion de bonne exécution",
+      "unite": "M²",
+      "qty": "630",
+      "pu": "12000"
+    },
+    {
+      "type": "art",
+      "id": "r99",
+      "desig": "F/P Porte en  PVC à un ou deux vantaux ouvrante suivant plan , passe-partout de bonne qualité y compris f/p pré cadre en Acier (tube carré de 04cm x 03cm) ainsi le chambranle de même matière (PVC) couvrant le jambage et son  retour et  toutes sujétion de bonne exécution                 ",
+      "unite": "M²",
+      "qty": "40",
+      "pu": "8000"
+    },
+    {
+      "type": "blank",
+      "id": "r100",
+      "desig": "MENUISERIE EN BOIS"
+    },
+    {
+      "type": "art",
+      "id": "r101",
+      "desig": "F/P de porte pleine en bois rouge 1ér choix, à un ou deux vantaux avec cadre de 14cm , y compris transport, pattes de scellement, couche d’imprégnation, peinture glycérophtalique, paumelles en acier, béquilles, chambranle, serrures, plaque de propreté, main d’œuvre et toutes sujétions de bonne exécution",
+      "unite": "M²",
+      "qty": "260",
+      "pu": "12000"
+    },
+    {
+      "type": "sub",
+      "id": "r102",
+      "desig": "électricité (au forfait)",
+      "level": 1,
+      "collapsed": false
+    },
+    {
+      "type": "art",
+      "id": "r103",
+      "desig": "Fourniture et Pose  Tableaux génerale basse tension  de distribution électrique nommés TGBT-COLLEGE avec un enveloppe métallique en tôle d’acier laminé de 1.5mm d’épaisseur minimum  avec peinture ÉPOXY fermeture à clef conforme aux normes NF C 61 910, EN 60 298 et EN 60 529 ; Composé de :\n- 01 Disjoncteur magnéto thermique  4 pôles 250 A\n- 02 Disjoncteur magnéto thermique  4 pôles 63 A\n- 12 Disjoncteur magnéto thermique  4 pôles 40 A\n- 01 Disjoncteur Differentiel 4 pôles 20A/300mA\n- 01 Disjoncteur Differentiel 4 pôles 25 A/30mA\n- 05 Disjoncteur magnéto thermique 2 pôles 16A\n- 07 Disjoncteur magnéto thermique  2 pôles 10A\n y compris :presse étoupe, borniers de raccordement,borne de terre,borne de neutre,étiquette de repérage des départs\ny compris raccordement en fil et câble tout en respectant les règles de câblage ; Article comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; modéle à soumétre pour approbation maitre d'ouvrage.",
+      "unite": "Ens",
+      "qty": "1",
+      "pu": "1400000"
+    },
+    {
+      "type": "art",
+      "id": "r104",
+      "desig": "Fourniture et Pose  d’une armoire de distribution électrique nommés TD-01-RDC   avec un enveloppe métallique en tôle d’acier laminé de 1.5mm d’épaisseur minimum  avec peinture ÉPOXY fermeture à clef conforme aux normes NF C 61 910, EN 60 298 et EN 60 529 ; Composé de  :\n- 01 Disjoncteur magnéto thermique  4 pôles 40 A\n- 01 Disjoncteur Differentiel 4 pôles 20A/300mA\n- 01 Disjoncteur Differentiel 4 pôles 25 A/30mA\n- 11 Disjoncteur magnéto thermique 2 pôles 16A\n- 07 Disjoncteur magnéto thermique  2 pôles 10A\n y compris :presse étoupe, borniers de raccordement,borne de terre,borne de neutre,étiquette de repérage des départs\ny compris raccordement en fil et câble tout en respectant les règles de câblage ; Article comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; modéle à soumétre pour approbation maitre d'ouvrage.",
+      "unite": "Ens",
+      "qty": "1",
+      "pu": "260000"
+    },
+    {
+      "type": "art",
+      "id": "r105",
+      "desig": "Fourniture et Pose  d’une armoire de distribution électrique nommés TD-02-RDC avec un enveloppe métallique en tôle d’acier laminé de 1.5mm d’épaisseur minimum  avec peinture ÉPOXY fermeture à clef conforme aux normes NF C 61 910, EN 60 298 et EN 60 529 ; Composé de  :\n- 01 Disjoncteur magnéto thermique  4 pôles 40 A\n- 01 Disjoncteur Differentiel 4 pôles 20A/300mA\n- 01 Disjoncteur Differentiel 4 pôles 25 A/30mA\n- 07 Disjoncteur magnéto thermique 2 pôles 16A\n- 09 Disjoncteur magnéto thermique  2 pôles 10A\n y compris :presse étoupe, borniers de raccordement,borne de terre,borne de neutre,étiquette de repérage des départs\ny compris raccordement en fil et câble tout en respectant les règles de câblage ; Article comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; modéle à soumétre pour approbation maitre d'ouvrage.",
+      "unite": "Ens",
+      "qty": "1",
+      "pu": "240000"
+    },
+    {
+      "type": "art",
+      "id": "r106",
+      "desig": "Fourniture et Pose  d’une armoire de distribution électrique nommés TD-03-RDC avec un enveloppe métallique en tôle d’acier laminé de 1.5mm d’épaisseur minimum  avec peinture ÉPOXY fermeture à clef conforme aux normes NF C 61 910, EN 60 298 et EN 60 529 ; Composé de  :\n- 01 Disjoncteur magnéto thermique  4 pôles 40 A\n- 01 Disjoncteur Differentiel 4 pôles 20A/300mA\n- 01 Disjoncteur Differentiel 4 pôles 25 A/30mA\n- 08 Disjoncteur magnéto thermique 2 pôles 16A\n- 09 Disjoncteur magnéto thermique  2 pôles 10A\n y compris :presse étoupe, borniers de raccordement,borne de terre,borne de neutre,étiquette de repérage des départs\ny compris raccordement en fil et câble tout en respectant les règles de câblage ; Article comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; modéle à soumétre pour approbation maitre d'ouvrage.",
+      "unite": "Ens",
+      "qty": "1",
+      "pu": "240000"
+    },
+    {
+      "type": "art",
+      "id": "r107",
+      "desig": "Fourniture et Pose  d’une armoire de distribution électrique nommés TD-01-1E   avec un enveloppe métallique en tôle d’acier laminé de 1.5mm d’épaisseur minimum  avec peinture ÉPOXY fermeture à clef conforme aux normes NF C 61 910, EN 60 298 et EN 60 529 ; Composé de  :\n- 01 Disjoncteur magnéto thermique  4 pôles 40 A\n- 01 Disjoncteur Differentiel 4 pôles 20A/300mA\n- 01 Disjoncteur Differentiel 4 pôles 25 A/30mA\n- 09 Disjoncteur magnéto thermique 2 pôles 16A\n- 15 Disjoncteur magnéto thermique  2 pôles 10A\n y compris :presse étoupe, borniers de raccordement,borne de terre,borne de neutre,étiquette de repérage des départs\ny compris raccordement en fil et câble tout en respectant les règles de câblage ; Article comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; modéle à soumétre pour approbation maitre d'ouvrage.",
+      "unite": "Ens",
+      "qty": "1",
+      "pu": "260000"
+    },
+    {
+      "type": "art",
+      "id": "r108",
+      "desig": "Fourniture et Pose  d’une armoire de distribution électrique nommés TD-02-1E   avec un enveloppe métallique en tôle d’acier laminé de 1.5mm d’épaisseur minimum  avec peinture ÉPOXY fermeture à clef conforme aux normes NF C 61 910, EN 60 298 et EN 60 529 ; Composé de  :\n- 01 Disjoncteur magnéto thermique  4 pôles 40 A\n- 01 Disjoncteur Differentiel 4 pôles 20A/300mA\n- 01 Disjoncteur Differentiel 4 pôles 25 A/30mA\n- 05 Disjoncteur magnéto thermique 2 pôles 16A\n- 11 Disjoncteur magnéto thermique  2 pôles 10A\n y compris :presse étoupe, borniers de raccordement,borne de terre,borne de neutre,étiquette de repérage des départs\ny compris raccordement en fil et câble tout en respectant les règles de câblage ; Article comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; modéle à soumétre pour approbation maitre d'ouvrage.",
+      "unite": "Ens",
+      "qty": "1",
+      "pu": "260000"
+    },
+    {
+      "type": "art",
+      "id": "r109",
+      "desig": "Fourniture et Pose  d’une armoire de distribution électrique nommés TD -03-1E   avec un enveloppe métallique en tôle d’acier laminé de 1.5mm d’épaisseur minimum  avec peinture ÉPOXY fermeture à clef conforme aux normes NF C 61 910, EN 60 298 et EN 60 529 ; Composé de  :\n- 01 Disjoncteur magnéto thermique  4 pôles 40 A\n- 01 Disjoncteur Differentiel 4 pôles 20A/300mA\n- 01 Disjoncteur Differentiel 4 pôles 25 A/30mA\n- 07 Disjoncteur magnéto thermique 2 pôles 16A\n- 11 Disjoncteur magnéto thermique  2 pôles 10A\n y compris :presse étoupe, borniers de raccordement,borne de terre,borne de neutre,étiquette de repérage des départs\ny compris raccordement en fil et câble tout en respectant les règles de câblage ; Article comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; modéle à soumétre pour approbation maitre d'ouvrage.",
+      "unite": "Ens",
+      "qty": "1",
+      "pu": "260000"
+    },
+    {
+      "type": "art",
+      "id": "r110",
+      "desig": "Fourniture et Pose  d’une armoire de distribution électrique nommés TD-01-2E avec un enveloppe métallique en tôle d’acier laminé de 1.5mm d’épaisseur minimum  avec peinture ÉPOXY fermeture à clef conforme aux normes NF C 61 910, EN 60 298 et EN 60 529 ; Composé de  :\n- 01 Disjoncteur magnéto thermique  4 pôles 40 A\n- 01 Disjoncteur Differentiel 4 pôles 20A/300mA\n- 01 Disjoncteur Differentiel 4 pôles 25 A/30mA\n- 08 Disjoncteur magnéto thermique 2 pôles 16A\n- 15 Disjoncteur magnéto thermique  2 pôles 10A\n y compris :presse étoupe, borniers de raccordement,borne de terre,borne de neutre,étiquette de repérage des départs\ny compris raccordement en fil et câble tout en respectant les règles de câblage ; Article comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; modéle à soumétre pour approbation maitre d'ouvrage.",
+      "unite": "Ens",
+      "qty": "1",
+      "pu": "280000"
+    },
+    {
+      "type": "art",
+      "id": "r111",
+      "desig": "Fourniture et Pose  d’une armoire de distribution électrique nommés  TD-02-2E avec un enveloppe métallique en tôle d’acier laminé de 1.5mm d’épaisseur minimum  avec peinture ÉPOXY fermeture à clef conforme aux normes NF C 61 910, EN 60 298 et EN 60 529 ; Composé de  :\n- 01 Disjoncteur magnéto thermique  4 pôles 40 A\n- 01 Disjoncteur Differentiel 4 pôles 20A/300mA\n- 01 Disjoncteur Differentiel 4 pôles 25 A/30mA\n- 05 Disjoncteur magnéto thermique 2 pôles 16A\n- 10 Disjoncteur magnéto thermique  2 pôles 10A\n y compris :presse étoupe, borniers de raccordement,borne de terre,borne de neutre,étiquette de repérage des départs\ny compris raccordement en fil et câble tout en respectant les règles de câblage ; Article comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; modéle à soumétre pour approbation maitre d'ouvrage.",
+      "unite": "Ens",
+      "qty": "1",
+      "pu": "250000"
+    },
+    {
+      "type": "art",
+      "id": "r112",
+      "desig": "Fourniture et Pose  d’une armoire de distribution électrique nommés  TD-03-2E avec un enveloppe métallique en tôle d’acier laminé de 1.5mm d’épaisseur minimum  avec peinture ÉPOXY fermeture à clef conforme aux normes NF C 61 910, EN 60 298 et EN 60 529 ; Composé de  :\n- 01 Disjoncteur magnéto thermique  4 pôles 40 A\n- 01 Disjoncteur Differentiel 4 pôles 20A/300mA\n- 01 Disjoncteur Differentiel 4 pôles 25 A/30mA\n- 08 Disjoncteur magnéto thermique 2 pôles 16A\n- 10 Disjoncteur magnéto thermique  2 pôles 10A\n y compris :presse étoupe, borniers de raccordement,borne de terre,borne de neutre,étiquette de repérage des départs\ny compris raccordement en fil et câble tout en respectant les règles de câblage ; Article comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; modéle à soumétre pour approbation maitre d'ouvrage.",
+      "unite": "Ens",
+      "qty": "1",
+      "pu": "250000"
+    },
+    {
+      "type": "art",
+      "id": "r113",
+      "desig": "Fourniture et Pose  d’une armoire de distribution électrique nommés TD-LABO avec un enveloppe métallique en tôle d’acier laminé de 1.5mm d’épaisseur minimum  avec peinture ÉPOXY fermeture à clef conforme aux normes NF C 61 910, EN 60 298 et EN 60 529 ; Composé de  :\n- 01 Disjoncteur magnéto thermique  4 pôles 40 A\n- 01 Disjoncteur Differentiel 4 pôles 20A/300mA\n- 01 Disjoncteur Differentiel 4 pôles 25 A/30mA\n- 10 Disjoncteur magnéto thermique 2 pôles 16A\n y compris :presse étoupe, borniers de raccordement,borne de terre,borne de neutre,étiquette de repérage des départs\ny compris raccordement en fil et câble tout en respectant les règles de câblage ; Article comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; modéle à soumétre pour approbation maitre d'ouvrage.",
+      "unite": "Ens",
+      "qty": "4",
+      "pu": "130000"
+    },
+    {
+      "type": "art",
+      "id": "r114",
+      "desig": "Fourniture et Pose  d’une armoire de distribution électrique nommés TD-SALLE INF avec un enveloppe métallique en tôle d’acier laminé de 1.5mm d’épaisseur minimum  avec peinture ÉPOXY fermeture à clef conforme aux normes NF C 61 910, EN 60 298 et EN 60 529 ; Composé de  :\n- 01 Disjoncteur magnéto thermique  4 pôles 40 A\n- 01 Disjoncteur Differentiel 4 pôles 20A/300mA\n- 01 Disjoncteur Differentiel 4 pôles 25 A/30mA\n- 10 Disjoncteur magnéto thermique 2 pôles 16A\n y compris :presse étoupe, borniers de raccordement,borne de terre,borne de neutre,étiquette de repérage des départs\ny compris raccordement en fil et câble tout en respectant les règles de câblage ; Article comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; modéle à soumétre pour approbation maitre d'ouvrage.",
+      "unite": "Ens",
+      "qty": "2",
+      "pu": "130000"
+    },
+    {
+      "type": "art",
+      "id": "r115",
+      "desig": "F/P  d’une armoire de distribution électrique nommés TD-SANITAIRE  comprenant une enveloppe métallique en tôle d’acier laminé de 1.5mm d’épaisseur :\n- 01 Disjoncteur différentiel  2 pôles 32A/650mA\n- 05 disjoncteurs magnétothermiques  2 pôles 10A\n- 04 télérepteurs de 16A avec 04 boutons poussoir monté sur enveloppe à voyons lumineux\n y compris :presse étoupe, borniers de raccordement, ,borne de terre, borne de neutre,étiquette de repérage des départs y compris raccordement en fil et câble souple tout en respectant les règles de câblage ",
+      "unite": "Ens",
+      "qty": "1",
+      "pu": "110000"
+    },
+    {
+      "type": "art",
+      "id": "r116",
+      "desig": "Fourniture et Pose; Raccordement et mise en service Luminaire apparent LED120 cm corps aciers peint , avec diffuseur opale pour deux TUBE LED 18W, flux sortant 2000lm/TUBE de puissance 0.9,courant d'entré 193 mA.Basse lumens 3600 Lm .rendement 90lm/w IP 65 Classe II. Article comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; modéle à soumétre pour approbation maitre d'ouvrage",
+      "unite": "U",
+      "qty": "310",
+      "pu": "4500"
+    },
+    {
+      "type": "art",
+      "id": "r117",
+      "desig": "F/P Applique murale   pour TABLEAU.basse lumens  1200 Lm. rendement 92lm/w.lampe LED 32W, Le tout compris raccordement ainsi que  sujétions à ordre de marché",
+      "unite": "U",
+      "qty": "30",
+      "pu": "4800"
+    },
+    {
+      "type": "art",
+      "id": "r118",
+      "desig": "Fourniture et Pose; Raccordement et mise en service  Hublot rond étanche LED corps en aluminium couleur au choix (blanc, noir, grise), avec diffuseur en polycarbonate opale pour lampe LED 12W Article comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; modéle à soumétre pour approbation maitre d'ouvrage",
+      "unite": "U",
+      "qty": "42",
+      "pu": "1600"
+    },
+    {
+      "type": "art",
+      "id": "r119",
+      "desig": "F/P de luminaire  étanche pour locaux humides où empoussiérés Tubular 120 cm 40 W - 120°  ; 4580 Lm (Blanc Neutre )  Nombre de LED : 117 230 VAC / 230 mA / 50-60 Hz  IP 65 Classe II Le tout compris raccordement ainsi que  sujétions à ordre de marché",
+      "unite": "U",
+      "qty": "10",
+      "pu": "4800"
+    },
+    {
+      "type": "art",
+      "id": "r120",
+      "desig": "F/P  d’interrupteur monophasé encastrée  fixation à griffe dans boîtier en plastique rond diamètre 60 mm bascule modèle silencieux, plaque de recouvrement ; y compris raccordement ainsi que toutes sujétions à ordre de marché ",
+      "unite": "U",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r121",
+      "desig": "Interrupteur simple allumage  10A-250V",
+      "unite": "U",
+      "qty": "28",
+      "pu": "550"
+    },
+    {
+      "type": "subart",
+      "id": "r122",
+      "desig": "Interrupteur simple allumage étanche   10A-250V",
+      "unite": "U",
+      "qty": "16",
+      "pu": "550"
+    },
+    {
+      "type": "subart",
+      "id": "r123",
+      "desig": "Interrupteur double allumage   10A-250V",
+      "unite": "U",
+      "qty": "44",
+      "pu": "550"
+    },
+    {
+      "type": "subart",
+      "id": "r124",
+      "desig": "Interrupteur double va et vient   10A-250V",
+      "unite": "U",
+      "qty": "16",
+      "pu": "550"
+    },
+    {
+      "type": "subart",
+      "id": "r125",
+      "desig": "Bouton poussoir    10A-250V",
+      "unite": "U",
+      "qty": "30",
+      "pu": "550"
+    },
+    {
+      "type": "art",
+      "id": "r126",
+      "desig": "F/P de spot totalement  encastre   diamètre 75  . pour lampe halogène TBT 50W ",
+      "unite": "U",
+      "qty": "230",
+      "pu": "1800"
+    },
+    {
+      "type": "art",
+      "id": "r127",
+      "desig": "F/P de prise de courant encastrée IP 55 IK 07 livrés avec un emboute à gradins et un enbout plat a entrées  de cable y compris raccordement ainsi que toutes sujétions à ordre de marché ",
+      "unite": "U",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r128",
+      "desig": "prise de courant simple (2P+T /10A/16A-250V)",
+      "unite": "U",
+      "qty": "16",
+      "pu": "550"
+    },
+    {
+      "type": "subart",
+      "id": "r129",
+      "desig": "prise de courant double   ((2P+T)(2P+T) /25A-250V)",
+      "unite": "U",
+      "qty": "67",
+      "pu": "750"
+    },
+    {
+      "type": "subart",
+      "id": "r130",
+      "desig": "prise de courant simple (2P+T /10A/16A-250V).avec combine de protection ",
+      "unite": "U",
+      "qty": "12",
+      "pu": "1200"
+    },
+    {
+      "type": "art",
+      "id": "r131",
+      "desig": "F/P Cloche électrique 220V Le tout compris raccordement ainsi que  sujétions à ordre de marché",
+      "unite": "U",
+      "qty": "01",
+      "pu": "8000"
+    },
+    {
+      "type": "art",
+      "id": "r132",
+      "desig": "F/P de boite de dérivation encastré suivant exigence ; carré en plastique de section 100 x 100  avec couvercles démontable et apparent ; fixé par vis le tout compris raccordement  de fil avec domino, scellement au boîtier et toutes sujétions à ordre de marché.",
+      "unite": "U",
+      "qty": "80",
+      "pu": "500"
+    },
+    {
+      "type": "art",
+      "id": "r133",
+      "desig": "F/P de boite de dérivation encastré suivant exigence ; carré en plastique de section 100 x 100  avec couvercles démontable et apparent ; fixé par vis le tout compris raccordement  de fil avec domino, scellement au boîtier et toutes sujétions à ordre de marché.",
+      "unite": "ML",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r134",
+      "desig": "2x1,5 mm²",
+      "unite": "ML",
+      "qty": "760",
+      "pu": "160"
+    },
+    {
+      "type": "subart",
+      "id": "r135",
+      "desig": "3x1,5 mm²",
+      "unite": "ML",
+      "qty": "3500",
+      "pu": "240"
+    },
+    {
+      "type": "subart",
+      "id": "r136",
+      "desig": "3x2,5 mm²",
+      "unite": "ML",
+      "qty": "2000",
+      "pu": "360"
+    },
+    {
+      "type": "subart",
+      "id": "r137",
+      "desig": "3x4 mm²",
+      "unite": "ML",
+      "qty": "3800",
+      "pu": "420"
+    },
+    {
+      "type": "subart",
+      "id": "r138",
+      "desig": "4x4 mm²",
+      "unite": "ML",
+      "qty": "1000",
+      "pu": "420"
+    },
+    {
+      "type": "art",
+      "id": "r139",
+      "desig": "F/P de câble d'alimentation électrique de type U1000 R2V (régide)·y compris raccordement et respect des rayons de courbure mini des câbles ainsi que toutes sujétions à ordre de marché.",
+      "unite": "ML",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r140",
+      "desig": "4x10 mm²",
+      "unite": "ML",
+      "qty": "120",
+      "pu": "850"
+    },
+    {
+      "type": "subart",
+      "id": "r141",
+      "desig": "4x16 mm²",
+      "unite": "ML",
+      "qty": "120",
+      "pu": "1200"
+    },
+    {
+      "type": "art",
+      "id": "r142",
+      "desig": "F/P de câble de mise à la terre en cuivre nu 28 mm² se section, enterré accessoires;a 1m de profondeur par rapport au niveau zéro en forment une ceinture de bloc sans interruption ainsi que toutes sujétions à ordre de marché.",
+      "unite": "ML",
+      "qty": "420",
+      "pu": "700"
+    },
+    {
+      "type": "art",
+      "id": "r143",
+      "desig": "F/P de piquets de terre en cuivre de 2 m de longueur enterré à 0,8 m de profondeur le tout compris accessoires de raccordements ainsi que toute sujétion de bonne exécution.",
+      "unite": "U",
+      "qty": "19",
+      "pu": "2500"
+    },
+    {
+      "type": "art",
+      "id": "r144",
+      "desig": "F/P Barrette de coupure de terre en cuivre nu y compris accessoires de connexion ainsi que toute sujétions à ordre de marché Y compris accessoires de raccordement et de fixation suivant le cheminement (voir détails d'exécution)",
+      "unite": "U",
+      "qty": "12",
+      "pu": "2500"
+    },
+    {
+      "type": "art",
+      "id": "r145",
+      "desig": "F/P de Fourreau en PVC diam 100 pour passage de Câble d'alimentation du bloc A, Y compris toutes sujétions à ordre de bonne exécution,",
+      "unite": "ML",
+      "qty": "40",
+      "pu": "600"
+    },
+    {
+      "type": "sub",
+      "id": "r146",
+      "desig": "Plomberie sanitaire ( au forfait )",
+      "level": 1,
+      "collapsed": false
+    },
+    {
+      "type": "art",
+      "id": "r147",
+      "desig": "Fourniture et pose de W.C à l'anglaise en porcelaine émaillé de couleur blanche avec réservoir de chasse  ainsi que son mécanisme et tube en P.V.C et queue de carpe, robinet d’arrêt diamètre 10/12, porte papier en inox et toutes sujétions de fournitures, , d’accessoires, de pose, de scellement, de raccordement, de branchement et de parfaite mise en marche.; Article comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; (modéle à soumétre pour approbation maitre d'ouvrage.)",
+      "unite": "U",
+      "qty": "4",
+      "pu": "40000"
+    },
+    {
+      "type": "art",
+      "id": "r149",
+      "desig": "Fourniture et pose de W.C à la turque en porcelaine émaillé  avec réservoir de chasse ainsi que son mécanisme et tube en P.V.C et queue de carpe, robinet d’arrêt diamètre 10/12, pipe diamètre 110 ,et toutes sujétions de fournitures, de socle e, béton ou maçonnerie, d’accessoires, de pose, se scellement, de raccordement, de branchement et de parfaite mise en marche.; Article comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; (modéle à soumétre pour approbation maitre d'ouvrage.)",
+      "unite": "U",
+      "qty": "26",
+      "pu": "8000"
+    },
+    {
+      "type": "art",
+      "id": "r150",
+      "desig": "Fourniture et pose de lavabo grès cérame émaillé  de 1er choix, équipé de robinetterie mélangeuse chromée, siphon, ponte, grande qualité, tablette, porte savon, porte serviette fixe à deux branches, glace de 0,60 x 0,40 m sur encadrement en bois et toutes sujétions de fournitures, d’accessoires, de pose, de scellement, de raccordement, de branchement et de parfaite mise en marche. L’ensemble sera préalablement soumis à l’agrément du maître de l’ouvrage ; Article comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; (modéle à soumétre pour approbation maitre d'ouvrage.)",
+      "unite": "U",
+      "qty": "4",
+      "pu": "16000"
+    },
+    {
+      "type": "art",
+      "id": "r151",
+      "desig": "Confection de lavabo collectif en grès cérame émaillé  composé de 5 uité avec table en marchre de qulaité ainsi que 05 melongeurs, constitué de jambages en briques creuses 8 trous, dallette en béton dosé à 350 Kg/m3 de CPJ 45, épaisseur 10 cm, armé en deux nappes de treillis soudés, avec les faces apparentes en revêtement de faience , y compris toutes sujétions d'enduits au mortier de ciment dosé à 350 kg et de parfaite finition.; Article comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; (modéle à soumétre pour approbation maitre d'ouvrage.)",
+      "unite": "U",
+      "qty": "2",
+      "pu": "30000"
+    },
+    {
+      "type": "art",
+      "id": "r152",
+      "desig": "Fourniture et pose, fixation et raccordement de tuyauterie apparente en polypropylène Rondom (P.P.R), alimentaire, PN20, stabilisé par une couche de fibre de verre, soudure par thermo fusion, y compris lyres de dilatation, points fixes, supports coulissants, raccords, pièces spéciales de liaison, accessoires, coudes, tés, réductions, brides et toutes sujétions. ; Article comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; (modéle à soumétre pour approbation maitre d'ouvrage.)",
+      "unite": "U",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r153",
+      "desig": "Ø25mm",
+      "unite": "ML",
+      "qty": "68",
+      "pu": "2000"
+    },
+    {
+      "type": "subart",
+      "id": "r154",
+      "desig": "Ø40mm",
+      "unite": "ML",
+      "qty": "54",
+      "pu": "4500"
+    },
+    {
+      "type": "subart",
+      "id": "r155",
+      "desig": "Ø50mm",
+      "unite": "ML",
+      "qty": "15",
+      "pu": "5500"
+    },
+    {
+      "type": "art",
+      "id": "r156",
+      "desig": "Fourniture et pose de vanne d'arret A 1/4 de tour y compris pièces de raccordement, supports et toutes sujétions de fourniture et de mise en œuvre, de raccordement, de branchement et de parfaite réalisation suivant les règles de l’art ; Article comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; (modéle à soumétre pour approbation maitre d'ouvrage.)",
+      "unite": "ML",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r157",
+      "desig": "Ø25mm",
+      "unite": "U",
+      "qty": "16",
+      "pu": "2500"
+    },
+    {
+      "type": "subart",
+      "id": "r158",
+      "desig": "Ø40mm",
+      "unite": "U",
+      "qty": "32",
+      "pu": "4500"
+    },
+    {
+      "type": "subart",
+      "id": "r159",
+      "desig": "Ø50mm",
+      "unite": "U",
+      "qty": "2",
+      "pu": "9000"
+    },
+    {
+      "type": "art",
+      "id": "r160",
+      "desig": "Fourniture et pose de robinet de puisage, y compris pièces de raccordement, applique de fixation et toutes sujétions de fourniture et de mise en œuvre, de raccordement, de branchement, et de parfaite réalisation suivant les règles de l’art ; Article comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; (modéle à soumétre pour approbation maitre d'ouvrage.)",
+      "unite": "U",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r161",
+      "desig": "DN 15mm",
+      "unite": "U",
+      "qty": "18",
+      "pu": "1200"
+    },
+    {
+      "type": "art",
+      "id": "r162",
+      "desig": "Fourniture et pose de robinet , y compris pièces de raccordement, applique de fixation ; et toutes sujétions de fourniture et de mise en œuvre, de raccordement, de branchement, et de parfaite réalisation suivant les règles de l’art; Article comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; (modéle à soumétre pour approbation maitre d'ouvrage.)",
+      "unite": "U",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r163",
+      "desig": "DN 15mm",
+      "unite": "U",
+      "qty": "06",
+      "pu": "1200"
+    },
+    {
+      "type": "art",
+      "id": "r164",
+      "desig": "Fourniture et pose de siphon de sol en INOX avec grille et cadre carré , y compris raccordements, et toutes sujétions de fournitures, de mise en œuvre et de parfaite finition suivant les règles de l’art ; Article comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; (modéle à soumétre pour approbation maitre d'ouvrage.)",
+      "unite": "U",
+      "qty": "10",
+      "pu": "3500"
+    },
+    {
+      "type": "art",
+      "id": "r165",
+      "desig": "Fourniture et pose de tube en P.V.C, conforme aux normes 54.017,  normes de 2,6 mm d’épaisseur moyenne, pour évacuations, chutes et descentes, y compris pièces de raccordement ( coudes, tés, culottes simples ou doubles, ventilations, étc...), supports, colliers de fixation et toutes sujétions de fourniture et de mise en œuvre , de raccordement, de branchement et de parfaite réalisation suivant les règles de l’art ; Article comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; (modéle à soumétre pour approbation maitre d'ouvrage.)",
+      "unite": "U",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r166",
+      "desig": "Ø40mm",
+      "unite": "ML",
+      "qty": "46",
+      "pu": "600"
+    },
+    {
+      "type": "subart",
+      "id": "r168",
+      "desig": "Ø50mm",
+      "unite": "ML",
+      "qty": "62",
+      "pu": "1000"
+    },
+    {
+      "type": "subart",
+      "id": "r169",
+      "desig": "Ø63mm",
+      "unite": "ML",
+      "qty": "40",
+      "pu": "2500"
+    },
+    {
+      "type": "subart",
+      "id": "r170",
+      "desig": "Ø75mm",
+      "unite": "ML",
+      "qty": "20",
+      "pu": "3000"
+    },
+    {
+      "type": "blank",
+      "id": "r172",
+      "desig": "RESEAU GAZ"
+    },
+    {
+      "type": "art",
+      "id": "r173",
+      "desig": "Fourniture et pose de tuyau en cuivre conforme à la norme NFA 49.140 ou 49.110 et homoulogue par SONALGAZ, pour alimentation y compris pièces de raccordement ( coudes, tés, raccords, étc...), supports, colliers de fixation, filasse et toutes sujétions de fourniture et de mise en œuvre, de raccordement, de branchement et de parfaite réalisation suivant les règles de l’art; Article comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; (modéle à soumétre pour approbation maitre d'ouvrage.)",
+      "unite": "ML",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r174",
+      "desig": "Ø 12/14mm",
+      "unite": "ML",
+      "qty": "56",
+      "pu": "4000"
+    },
+    {
+      "type": "subart",
+      "id": "r175",
+      "desig": "Ø 14/16mm",
+      "unite": "ML",
+      "qty": "32",
+      "pu": "4500"
+    },
+    {
+      "type": "subart",
+      "id": "r176",
+      "desig": "Ø 16/18mm",
+      "unite": "ML",
+      "qty": "34",
+      "pu": "6000"
+    },
+    {
+      "type": "subart",
+      "id": "r177",
+      "desig": "Ø 20/22mm",
+      "unite": "ML",
+      "qty": "20",
+      "pu": "8000"
+    },
+    {
+      "type": "art",
+      "id": "r178",
+      "desig": "Fourniture et pose de vanne d'arret pour gaz homoulogue par SONALGAZ y compris pièces de raccordement, supports et toutes sujétions de fourniture et de mise en œuvre, de raccordement, de branchement et de parfaite réalisation suivant les règles de l’art ; Article comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; (modéle à soumétre pour approbation maitre d'ouvrage.)                                                ",
+      "unite": "ML",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r179",
+      "desig": "Ø 12/14mm",
+      "unite": "U",
+      "qty": "03",
+      "pu": "2500"
+    },
+    {
+      "type": "subart",
+      "id": "r180",
+      "desig": "Ø 14/16mm",
+      "unite": "U",
+      "qty": "6",
+      "pu": "3500"
+    },
+    {
+      "type": "subart",
+      "id": "r181",
+      "desig": "Ø 16/18mm",
+      "unite": "U",
+      "qty": "42",
+      "pu": "4500"
+    },
+    {
+      "type": "subart",
+      "id": "r182",
+      "desig": "Ø 20/22mm",
+      "unite": "U",
+      "qty": "36",
+      "pu": "6000"
+    },
+    {
+      "type": "blank",
+      "id": "r183",
+      "desig": "RESEAU INCENDIE"
+    },
+    {
+      "type": "art",
+      "id": "r185",
+      "desig": " F/P de Poteau d'incendie diam 90/110 y compris toutes sujétions de raccordement de bonne exécution à ordre de marche",
+      "unite": "U",
+      "qty": "1",
+      "pu": "160000"
+    },
+    {
+      "type": "art",
+      "id": "r186",
+      "desig": "Fourniture et pose robinet d’incendie armé ( RIA ) DN33 équipé :\n - Un dévidoir orientable à alimentation axial\n - Un robinet d’arrêt pour fermeture alimentation  étanche\n - Une clé tricoises\n - Un tuyau de 30 mètres équipé à l’extrémité d’une lance en bronze à gorge\n - Un robinet diffuseur homologué\nArticle comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; (modéle à soumétre pour approbation maitre d'ouvrage.)",
+      "unite": "U",
+      "qty": "14",
+      "pu": "95000"
+    },
+    {
+      "type": "art",
+      "id": "r187",
+      "desig": "Fourniture et pose de tuyau acier galvanisé pour incendie  y compris pièces de raccordement ( coudes, tés, raccords, étc...), supports, colliers de fixation, filasse, et toutes sujétions de fourniture et de mise en œuvre, de raccordement, de branchement, de peinture en deux couches aux couleurs conventionnelles et de parfaite réalisation suivant les règles de l’art ; Article comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; (modéle à soumétre pour approbation maitre d'ouvrage.)",
+      "unite": "U",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r188",
+      "desig": "DN 40mm",
+      "unite": "ML",
+      "qty": "42",
+      "pu": "3500"
+    },
+    {
+      "type": "subart",
+      "id": "r189",
+      "desig": "DN 50mm",
+      "unite": "ML",
+      "qty": "36",
+      "pu": "4500"
+    },
+    {
+      "type": "art",
+      "id": "r190",
+      "desig": "Fourniture et pose de vanne d'arret a1/4 de tour y compris toutes sujétions de parfaite réalisation suivant les règles de l’art ; Article comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; (modéle à soumétre pour approbation maitre d'ouvrage.)",
+      "unite": "ML",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r191",
+      "desig": "DN 40mm",
+      "unite": "U",
+      "qty": "14",
+      "pu": "6500"
+    },
+    {
+      "type": "subart",
+      "id": "r192",
+      "desig": "DN 50mm",
+      "unite": "U",
+      "qty": "3",
+      "pu": "8000"
+    },
+    {
+      "type": "art",
+      "id": "r193",
+      "desig": "Fourniture et pose siphon de sol en fonte de : 25 x 25 cm  y compris toutes sujétions de parfaite réalisation suivant les règles de l’art ",
+      "unite": "U",
+      "qty": "5",
+      "pu": "1000"
+    },
+    {
+      "type": "art",
+      "id": "r194",
+      "desig": "F/P de tube en  P.E.H.D 16 bars y compris le raccordement (branchement au  réseau primaire)au regard et à la rencontre de chaque chute ou changement de direction le tout compris terrassement (déblais-remblais) lit de sable , grillage avertisseur Bleu  , té  ,coude, bride , conne , et toutes sujétions  de bonne exécution ",
+      "unite": "U",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r195",
+      "desig": "DN 63mm",
+      "unite": "ML",
+      "qty": "115",
+      "pu": "4500"
+    },
+    {
+      "type": "subart",
+      "id": "r196",
+      "desig": "DN 90mm",
+      "unite": "ML",
+      "qty": "15",
+      "pu": "6500"
+    },
+    {
+      "type": "sub",
+      "id": "r197",
+      "desig": "CHAUFFAGE CENTRAL ( AU FORFAIT )",
+      "level": 1,
+      "collapsed": false
+    },
+    {
+      "type": "art",
+      "id": "r198",
+      "desig": "Fourniture et Pose Radiateurs en alluminium, y compris robinet , té  de réglage ; bouchon plein , purgeur , accessoire de raccordement sur tuyauteries , et toutes sujétions de bonne exécution  ; Article comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; modéle à soumétre pour approbation maitre d'ouvrage.",
+      "unite": "ML",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r199",
+      "desig": "P= 2500 Kcal/h -R 20",
+      "unite": "U",
+      "qty": "64",
+      "pu": "60000"
+    },
+    {
+      "type": "subart",
+      "id": "r200",
+      "desig": "P= 2250 Kcal/h -R 18",
+      "unite": "U",
+      "qty": "18",
+      "pu": "54000"
+    },
+    {
+      "type": "subart",
+      "id": "r201",
+      "desig": "P= 2000 Kcal/h -R 16",
+      "unite": "U",
+      "qty": "15",
+      "pu": "48000"
+    },
+    {
+      "type": "subart",
+      "id": "r202",
+      "desig": "P= 1500 Kcal/h -R 12",
+      "unite": "U",
+      "qty": "10",
+      "pu": "36000"
+    },
+    {
+      "type": "art",
+      "id": "r203",
+      "desig": "Fourniture et Pose , fixation et raccordement de tuyauterie apparente en polypropylène Rondom (P.P.R), PN20, non alimentaire, stabilisé par une couche de fibre de verre, soudure par thermo fusion, y compris lyres de dilatation, points fixes, supports coulissants, raccords, pièces spéciales de liaison, accessoires, coudes, tés, réductions, brides et toutes sujétions  ; Article comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; modéle à soumétre pour approbation maitre d'ouvrage.",
+      "unite": "U",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r204",
+      "desig": "Ø 20 mm",
+      "unite": "ML",
+      "qty": "330",
+      "pu": "400"
+    },
+    {
+      "type": "subart",
+      "id": "r205",
+      "desig": "Ø 25 mm",
+      "unite": "ML",
+      "qty": "250",
+      "pu": "800"
+    },
+    {
+      "type": "subart",
+      "id": "r206",
+      "desig": "Ø 32 mm",
+      "unite": "ML",
+      "qty": "80",
+      "pu": "1500"
+    },
+    {
+      "type": "subart",
+      "id": "r207",
+      "desig": "Ø 40 mm",
+      "unite": "ML",
+      "qty": "20",
+      "pu": "2500"
+    },
+    {
+      "type": "subart",
+      "id": "r208",
+      "desig": "Ø 50 mm",
+      "unite": "ML",
+      "qty": "24",
+      "pu": "3500"
+    },
+    {
+      "type": "subart",
+      "id": "r209",
+      "desig": "Ø 63 mm",
+      "unite": "ML",
+      "qty": "50",
+      "pu": "4500"
+    },
+    {
+      "type": "subart",
+      "id": "r210",
+      "desig": "Ø 75 mm",
+      "unite": "ML",
+      "qty": "60",
+      "pu": "5500"
+    },
+    {
+      "type": "subart",
+      "id": "r264",
+      "desig": "Ø 80 mm",
+      "unite": "ML",
+      "qty": "35",
+      "pu": "3500"
+    },
+    {
+      "type": "subart",
+      "id": "r265",
+      "desig": "Ø 90 mm",
+      "unite": "ML",
+      "qty": "10",
+      "pu": "7000"
+    },
+    {
+      "type": "art",
+      "id": "r215",
+      "desig": "Fourniture et Pose vanne disolement pour eau chaude y compris accessoire de raccordement sur tuyauteries ; Article comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; modéle à soumétre pour approbation maitre d'ouvrage.",
+      "unite": "U",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r216",
+      "desig": "Ø 25 mm",
+      "unite": "U",
+      "qty": "04",
+      "pu": "3500"
+    },
+    {
+      "type": "subart",
+      "id": "r217",
+      "desig": "Ø 32 mm",
+      "unite": "U",
+      "qty": "05",
+      "pu": "4500"
+    },
+    {
+      "type": "subart",
+      "id": "r218",
+      "desig": "Ø 40 mm",
+      "unite": "U",
+      "qty": "3",
+      "pu": "5500"
+    },
+    {
+      "type": "subart",
+      "id": "r219",
+      "desig": "Ø 75 mm",
+      "unite": "U",
+      "qty": "2",
+      "pu": "7000"
+    },
+    {
+      "type": "subart",
+      "id": "r220",
+      "desig": "Ø 80 mm",
+      "unite": "U",
+      "qty": "2",
+      "pu": "8000"
+    },
+    {
+      "type": "art",
+      "id": "r222",
+      "desig": "Fourniture et Pose manometre, y compris accessoire de raccordementet fixation, et toutes sujétions de bonne exécution  ; Article comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; modéle à soumétre pour approbation maitre d'ouvrage.    pression 0-6bar",
+      "unite": "U",
+      "qty": "6",
+      "pu": "3500"
+    },
+    {
+      "type": "art",
+      "id": "r223",
+      "desig": "Fourniture et Pose thermomètre, y compris accessoire de raccordementet fixation, et toutes sujétions de bonne exécution  ; Article comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; modéle à soumétre pour approbation maitre d'ouvrage. pression 0-100 °C",
+      "unite": "U",
+      "qty": "6",
+      "pu": "3500"
+    },
+    {
+      "type": "art",
+      "id": "r224",
+      "desig": "Fourniture et Pose purgeur automatique, y compris accessoire de raccordementet fixation, et toutes sujétions de bonne exécution  ; Article comprendra  toutes les pièces spéciales nécessaires et toutes les sujétions de fournitures , de pose et de bonne execution (transport ; Manutention ; percements, scellement, raccordement, rebouchage , etc...)  ; modéle à soumétre pour approbation maitre d'ouvrage.",
+      "unite": "U",
+      "qty": "6",
+      "pu": "4500"
+    },
+    {
+      "type": "art",
+      "id": "r225",
+      "desig": "Fourniture et pose  Chaudière en acier Pch = 250 000.00 kcal/h (2/3 de puissance globale pour chaque deux ) y compris mise en place raccordement, mise en service ,socle en béton légèrement armé et TS (type homologué)",
+      "unite": "U",
+      "qty": "2",
+      "pu": "850000"
+    },
+    {
+      "type": "art",
+      "id": "r226",
+      "desig": "Fourniture et pose Brûleurs  GAZ P = 287 500,00 Kcal/h y compris raccordement et toutes sujestion de bonne execution ",
+      "unite": "U",
+      "qty": "2",
+      "pu": "360000"
+    },
+    {
+      "type": "art",
+      "id": "r227",
+      "desig": "Fourniture et pose  Vase d'expansion C= 180 L  y compris raccordement et toutes sujétions de bonne execution ",
+      "unite": "U",
+      "qty": "1",
+      "pu": "95000"
+    },
+    {
+      "type": "art",
+      "id": "r228",
+      "desig": "Fourniture et pose Adoucisseur eau avec bac à sel   V= 100 kg y compris raccordement et toutes sujestion de bonne execution ",
+      "unite": "U",
+      "qty": "1",
+      "pu": "95000"
+    },
+    {
+      "type": "art",
+      "id": "r229",
+      "desig": "Fourniture et pose Pompe de circulation d'eau chaude   Q= 6.25  M3 / h Hm=3.04  mce y compris raccordement et toutes sujestion de bonne execution",
+      "unite": "U",
+      "qty": "4",
+      "pu": "250000"
+    },
+    {
+      "type": "art",
+      "id": "r230",
+      "desig": "Fourniture et pose Pompe de recyclage d'eau chaude   Q= 26367,18 kg/ h  Hm=1,00 mce y compris raccordement et toutes sujestion de bonne execution ",
+      "unite": "U",
+      "qty": "2",
+      "pu": "55000"
+    },
+    {
+      "type": "art",
+      "id": "r231",
+      "desig": "Fourniture et pose  Distributeur en acier noir Ø 80 y compris raccordement et toutes sujestion de bonne execution    L = 1,7 M",
+      "unite": "U",
+      "qty": "2",
+      "pu": "65000"
+    },
+    {
+      "type": "art",
+      "id": "r232",
+      "desig": "Fourniture et pose Collecteur en acier noir  Ø110 L= 0,8m  y compris raccordement et toutes sujestion de bonne execution ",
+      "unite": "U",
+      "qty": "2",
+      "pu": "55000"
+    },
+    {
+      "type": "art",
+      "id": "r233",
+      "desig": "Fourniture et pose Grille de ventilation haute 15  x 15 cm y compris raccordement et toutes sujestion de bonne execution ",
+      "unite": "U",
+      "qty": "1",
+      "pu": "2000"
+    },
+    {
+      "type": "art",
+      "id": "r234",
+      "desig": "Fourniture et pose Grille de ventilation basse 20 x 20 cm  y compris raccordement et toutes sujestion de bonne execution ",
+      "unite": "U",
+      "qty": "1",
+      "pu": "2000"
+    },
+    {
+      "type": "art",
+      "id": "r235",
+      "desig": "Fourniture et pose conduit de fumée en tôle galvanisée 10/10 de  Diam 200 reliant la chaudière, au cheminée peinture, chapeau chinois remise d’étanchéité scellement et toutes sujétions ",
+      "unite": "ML",
+      "qty": "10",
+      "pu": "12000"
+    },
+    {
+      "type": "art",
+      "id": "r236",
+      "desig": "Fourniture et pose  Carneau d'évacuation de fumée Ø 200 y compris raccordement et toutes sujestion de bonne execution ",
+      "unite": "ML",
+      "qty": "10",
+      "pu": "12000"
+    },
+    {
+      "type": "art",
+      "id": "r237",
+      "desig": "Fourniture et pose Thermostat tout ou rien   y compris raccordement et toutes sujestion de bonne execution ",
+      "unite": "U",
+      "qty": "2",
+      "pu": "3500"
+    },
+    {
+      "type": "art",
+      "id": "r238",
+      "desig": "Fourniture et pose Thermostat de sécurité y compris raccordement et toutes sujestion de bonne execution ",
+      "unite": "U",
+      "qty": "2",
+      "pu": "3500"
+    },
+    {
+      "type": "art",
+      "id": "r239",
+      "desig": "Fourniture et pose Bloc soupape manomètre y compris raccordement et toutes sujestion de bonne execution ",
+      "unite": "U",
+      "qty": "2",
+      "pu": "5500"
+    },
+    {
+      "type": "art",
+      "id": "r240",
+      "desig": "Fourniture et pose Soupape de sécurité y compris raccordement et toutes sujestion de bonne execution ",
+      "unite": "U",
+      "qty": "2",
+      "pu": "5500"
+    },
+    {
+      "type": "art",
+      "id": "r241",
+      "desig": "Fourniture et pose Purgeur d'air à volant (chaudière) y compris raccordement et toutes sujestion de bonne execution ",
+      "unite": "U",
+      "qty": "2",
+      "pu": "6000"
+    },
+    {
+      "type": "art",
+      "id": "r242",
+      "desig": "Fourniture et pose Armoire électrique équiper y compris raccordement et toutes sujestion de bonne execution \n- 02 Disjoncteur tétra polaire de 63 A\n- 06 D.R.T. 220 V avec voyons lumineux + commutateur marche arrêt\n- 04 D.R.T. 220 V 7A avec voyons lumineux + commutateur marche arrêt\n- 06 D.R.T. 220V 5A avec voyons lumineux + commutateur marche arrêt\n- Piquet avec barrette de terre",
+      "unite": "Ens",
+      "qty": "1",
+      "pu": "250000"
+    },
+    {
+      "type": "art",
+      "id": "r243",
+      "desig": "Fourniture et pose Socle en béton armé 5 x 1,00x 0,15 m y compris raccordement et toutes sujestion de bonne execution ",
+      "unite": "U",
+      "qty": "2",
+      "pu": "35000"
+    },
+    {
+      "type": "art",
+      "id": "r244",
+      "desig": "Fourniture et pose Tuyauterie en cuivre Ø 20/22 pour gaz y compris raccordement et toutes sujestion de bonne execution ",
+      "unite": "ML",
+      "qty": "30",
+      "pu": "5500"
+    },
+    {
+      "type": "art",
+      "id": "r245",
+      "desig": "Fourniture et pose Vanne d'arrêt pour GAZ Ø 20/22  y compris raccordement et toutes sujestion de bonne execution ",
+      "unite": "U",
+      "qty": "3",
+      "pu": "5500"
+    },
+    {
+      "type": "art",
+      "id": "r246",
+      "desig": "Fourniture et pose Vanne d'arrêt  pour EAU y compris raccordement et toutes sujestion de bonne execution ",
+      "unite": "U",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r247",
+      "desig": "Ø 20/27",
+      "unite": "U",
+      "qty": "4",
+      "pu": "1500"
+    },
+    {
+      "type": "subart",
+      "id": "r248",
+      "desig": "Ø 33/42",
+      "unite": "U",
+      "qty": "4",
+      "pu": "4500"
+    },
+    {
+      "type": "subart",
+      "id": "r249",
+      "desig": "Ø 40/49",
+      "unite": "U",
+      "qty": "4",
+      "pu": "5500"
+    },
+    {
+      "type": "subart",
+      "id": "r250",
+      "desig": "Ø 50/60",
+      "unite": "U",
+      "qty": "6",
+      "pu": "6500"
+    },
+    {
+      "type": "art",
+      "id": "r251",
+      "desig": "Fourniture et pose CLAPET ANTI-RETOURE y compris raccordement et toutes sujestion de bonne execution \n",
+      "unite": "U",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r252",
+      "desig": "DN 65",
+      "unite": "U",
+      "qty": "4",
+      "pu": "2000"
+    },
+    {
+      "type": "subart",
+      "id": "r253",
+      "desig": "DN 25",
+      "unite": "U",
+      "qty": "2",
+      "pu": "1500"
+    },
+    {
+      "type": "subart",
+      "id": "r254",
+      "desig": "DN 20",
+      "unite": "U",
+      "qty": "2",
+      "pu": "1200"
+    },
+    {
+      "type": "art",
+      "id": "r255",
+      "desig": "Fourniture et pose Tuyauterie en acier Distributeur de gaz ∅80/90  y compris raccordement et toutes sujestion de bonne execution ",
+      "unite": "ML",
+      "qty": "5",
+      "pu": "6500"
+    },
+    {
+      "type": "art",
+      "id": "r256",
+      "desig": "Fourniture et pose Tuyauterie en acier galvanisé (eau froide) Ø 33/42 y compris raccordement et toutes sujestion de bonne execution ",
+      "unite": "ML",
+      "qty": "25",
+      "pu": "3500"
+    },
+    {
+      "type": "art",
+      "id": "r257",
+      "desig": "Fourniture et pose  Filtre à Tamis DN 32 (eau froide ) y compris raccordement et toutes sujestion de bonne execution ",
+      "unite": "U",
+      "qty": "1",
+      "pu": "2500"
+    },
+    {
+      "type": "art",
+      "id": "r258",
+      "desig": "Fourniture et pose  Filtre à cartouche DN 32 (eau froide ) y compris raccordement et toutes sujestion de bonne execution ",
+      "unite": "U",
+      "qty": "2",
+      "pu": "3500"
+    },
+    {
+      "type": "art",
+      "id": "r259",
+      "desig": "Fourniture et pose de collecteur pour chaudière en tube noir compris raccordement par vannes et toutes sujétions de :",
+      "unite": "U",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r260",
+      "desig": "Départ et retour DN Diamètre   102/114",
+      "unite": "U",
+      "qty": "2",
+      "pu": "55000"
+    },
+    {
+      "type": "subart",
+      "id": "r261",
+      "desig": "Départ et retour DN Diamètre   102/114",
+      "unite": "U",
+      "qty": "1",
+      "pu": "3000"
+    },
+    {
+      "type": "subart",
+      "id": "r262",
+      "desig": "Départ et retour DN Diamètre   80/90",
+      "unite": "U",
+      "qty": "2",
+      "pu": "5000"
+    },
+    {
+      "type": "art",
+      "id": "r263",
+      "desig": " F/P d’une Nourrice à Gaz en Acier noir tarif 10 y compris supports Robinet d’arrêt Général de diam 200 et raccordement au brûleurs ainsi que leurs accessoires et robinet",
+      "unite": "U",
+      "qty": "1",
+      "pu": "70000"
+    },
+    {
+      "type": "sub",
+      "id": "r267",
+      "desig": "PEINTURE ( au forfait )",
+      "level": 1,
+      "collapsed": false
+    },
+    {
+      "type": "art",
+      "id": "r268",
+      "desig": "Fourniture et mise en œuvre de peinture satinée à l'intérieur de qualité appliquée en deux couches y compris couche d'impregnation, enduit pélluculaire et couche de couleur et toutes  sujétions de bonne exécution\n",
+      "unite": "U",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r269",
+      "desig": "sur mur",
+      "unite": "M²",
+      "qty": "4430",
+      "pu": "500"
+    },
+    {
+      "type": "art",
+      "id": "r270",
+      "desig": "Fourniture et mise en œuvre de peinture vinylique à l' intérieur de qualité appliquée en deux couches y compris couche d'impregnation, enduit pélliculaire de réglage et toutes sujétions de bonne exécution.",
+      "unite": "M²",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r277",
+      "desig": "sur mur",
+      "unite": "M²",
+      "qty": "1220",
+      "pu": "250"
+    },
+    {
+      "type": "subart",
+      "id": "r278",
+      "desig": "sous plafond",
+      "unite": "M²",
+      "qty": "3365",
+      "pu": "250"
+    },
+    {
+      "type": "art",
+      "id": "r273",
+      "desig": " Fourniture et mise en œuvre de peinture grifé sur murs extérieurs de qualité appliquée en trois couches  y compris couche d'impregnation et finition en  couche de couleurs selon besoins du maitre d'ouvrage et toutes sujétions de bonne exécution",
+      "unite": "M²",
+      "qty": "2500",
+      "pu": "1200"
+    },
+    {
+      "type": "sub",
+      "id": "r279",
+      "desig": "divers ( au forfait )",
+      "level": 1,
+      "collapsed": false
+    },
+    {
+      "type": "art",
+      "id": "r280",
+      "desig": "Réalisation d'un mat pour drapeau y compris socle en béton, revêtement en marbre, poteau pour drapeau h=6,00 m TYPE thermolaqué, surface de gazon  naturel suivant détail d'exécution ainsi que toutes sujétions de bonne exécution ",
+      "unite": "Ens",
+      "qty": "1",
+      "pu": "25000"
+    },
+    {
+      "type": "art",
+      "id": "r281",
+      "desig": "Fourniture et pose d’un panneau nominatif en Forex, Dim : 6.00 x 1.50 m ",
+      "unite": "U",
+      "qty": "1",
+      "pu": "100000"
+    },
+    {
+      "type": "blank",
+      "id": "r283",
+      "desig": "PAILLASSES DE LABORATOIRE"
+    },
+    {
+      "type": "art",
+      "id": "r282",
+      "desig": "Fourniture et pose de table scientifique (paillasse Humide de laboratoire ) de qualité ,carcasse métallique  , peinture anticorrosion de couleur bleu martelé , surface en verre trempé de 10 mm d’épaisseur ,émailler en blanc , y compris robinetterie en inox , tuyauterie (évacuation en PVC de 40mm , gaz et eau en cuivre 14 mm , électricité encastré  au milieu de la paillasse , deux prises sécurisées sur les cotés et deux au milieu portant une prise de terre , ainsi que le bac scientifique en céramique extra blanc au milieu de la paillasse , la fixation de la table sur sol s’effectue par des chevais métalliques , le tout compris branchement soudure fixation et toutes sujétions de bonne exécution.  ",
+      "unite": "U",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r284",
+      "desig": "Table scientifique élève  avec bac (30 x 30 x 14 cm ) de haute qualité type accordé par le service utilisatuer ",
+      "unite": "U",
+      "qty": "24",
+      "pu": "90000"
+    },
+    {
+      "type": "subart",
+      "id": "r285",
+      "desig": "Table scientifique professeur  avec bac (60 x 30 x 14 cm ) couverte de l’arrière et de deux coté de même matière de la paillasse de haute qualité type accordé par le service utilisateur ",
+      "unite": "U",
+      "qty": "2",
+      "pu": "100000"
+    },
+    {
+      "type": "subart",
+      "id": "r286",
+      "desig": "Table scientifique préparation avec bac (60 x 30 x 14 cm ) couverte de deux coté et l’avant équipé par quatre portes de même matière de la paillasse de haute qualité type accordé par le service utilisateur ",
+      "unite": "U",
+      "qty": "2",
+      "pu": "110000"
+    },
+    {
+      "type": "subart",
+      "id": "r287",
+      "desig": "Chaises (tabouret) de bonne qualité de forme ronde selon modèle accordé et approuvé par le service utilisatuer (les composants idem aux tables)  ",
+      "unite": "U",
+      "qty": "84",
+      "pu": "6000"
+    },
+    {
+      "type": "sub",
+      "id": "r289",
+      "desig": "ANNExes ( AU FORFAIT )",
+      "level": 1,
+      "collapsed": false
+    },
+    {
+      "type": "sub",
+      "id": "r300",
+      "desig": "BACHE A EAU 30 m3 ET CHAUFFERIE , ATELIER ,  LOCAL EQUIPEMENT ENERGIE RENOUVLABLE ",
+      "level": 2,
+      "collapsed": false
+    },
+    {
+      "type": "art",
+      "id": "r290",
+      "desig": "Terrassement (Déblai) en excavation ,Y compris transport des terres excédents à la décharge publique",
+      "unite": "M³",
+      "qty": "250",
+      "pu": "600"
+    },
+    {
+      "type": "art",
+      "id": "r301",
+      "desig": "Gros béton pour radier et longrine de 10 cm dosé à 250 Kg/M³  (ciment CPJ)  et toutes sujétions de bonne exécution",
+      "unite": "M³",
+      "qty": "4",
+      "pu": "9000"
+    },
+    {
+      "type": "art",
+      "id": "r302",
+      "desig": "Gros béton pour radier et longrine de 10 cm dosé à 250 Kg/M³  (ciment CPJ)  et toutes sujétions de bonne exécution",
+      "unite": "M³",
+      "qty": "30",
+      "pu": "32000"
+    },
+    {
+      "type": "art",
+      "id": "r311",
+      "desig": "Plate- Forme en béton armé et  Hérisson en pierre sèche avec film polyane",
+      "unite": "M²",
+      "qty": "38",
+      "pu": "3000"
+    },
+    {
+      "type": "art",
+      "id": "r426",
+      "desig": "Poteaux , Poutres , Chaînages, Appuis , linteaux, dalle pleine , acrotère",
+      "unite": "M³",
+      "qty": "35",
+      "pu": "32000"
+    },
+    {
+      "type": "art",
+      "id": "r427",
+      "desig": "Plancher en corps creux constitué de nervures préfabriquée ou coulées sur place  16+5 (hourdis +dalle de compression) ",
+      "unite": "M²",
+      "qty": "90",
+      "pu": "2300"
+    },
+    {
+      "type": "art",
+      "id": "r428",
+      "desig": "Maçonnerie en brique creuse 20 cm (brique plate) y compris jointage finition et toutes sujétions de bonne exécution",
+      "unite": "M²",
+      "qty": "240",
+      "pu": "1500"
+    },
+    {
+      "type": "art",
+      "id": "r429",
+      "desig": "revêtements sur murs extérieurs en tyrolienne  ",
+      "unite": "M²",
+      "qty": "230",
+      "pu": "800"
+    },
+    {
+      "type": "art",
+      "id": "r435",
+      "desig": "Enduit en ciment sur murs intérieur et plafond  y compris Peinture vinylique ",
+      "unite": "M²",
+      "qty": "400",
+      "pu": "900"
+    },
+    {
+      "type": "art",
+      "id": "r436",
+      "desig": "Revêtement Vertical et Horizontal posé à bain de mortier sous forme de sable  ,de bonne qualité et toutes sujétions ",
+      "unite": "M²",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r437",
+      "desig": "Monocouche 33x33 (1er chois)",
+      "unite": "M²",
+      "qty": "77",
+      "pu": "1800"
+    },
+    {
+      "type": "subart",
+      "id": "r438",
+      "desig": "Plinthes  droites en céramique dimension 07/30 ",
+      "unite": "M²",
+      "qty": "60",
+      "pu": "450"
+    },
+    {
+      "type": "art",
+      "id": "r439",
+      "desig": "Fourniture et pose étanchéité en pax aluminium y compris forme de pente ",
+      "unite": "M²",
+      "qty": "80",
+      "pu": "900"
+    },
+    {
+      "type": "art",
+      "id": "r440",
+      "desig": "Fourniture et pose d'une peinture étanche de qualité (sur les fasses intérieurs du radier et des voiles ) y compris finition et de bonne mise en œuvre et toutes sujétions de bonne exécution ",
+      "unite": "M²",
+      "qty": "145",
+      "pu": "1200"
+    },
+    {
+      "type": "art",
+      "id": "r441",
+      "desig": "F/P Porte  Métallique  renforcé suivant plan type plasma (double) Le tout compris, raidisseur fixé sur mur,  quincaillerie, peinture laqué , soudure, fixation et toutes sujétions       ",
+      "unite": "M²",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r442",
+      "desig": "Pm  =1,50 x 2,50",
+      "unite": "U",
+      "qty": "1",
+      "pu": "45000"
+    },
+    {
+      "type": "subart",
+      "id": "r443",
+      "desig": "Pm  =1,10 x 2,50",
+      "unite": "U",
+      "qty": "03",
+      "pu": "35000"
+    },
+    {
+      "type": "art",
+      "id": "r444",
+      "desig": "F/P d’élément Trappe en profilé PVC  vitré en verre double (4mm) , mécanisme d’ouverture et  toutes sujétions de scellement y compris f/p précadre en Acier (tube rectongulaire de 04cm x 03cm) ainsi que toutes sujétion de bonne exécution",
+      "unite": "U",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r445",
+      "desig": "F1=1,00 x 1,00 m  OUVRANT suivant plan",
+      "unite": "U",
+      "qty": "1",
+      "pu": "15000"
+    },
+    {
+      "type": "art",
+      "id": "r446",
+      "desig": "F/P de grille de ventilation Supérieur et inférieur , suivant plan Le tout compris, cadre en corniere ,quincaillerie, peinture laqué , soudure, fixation et toutes sujétions          ",
+      "unite": "M²",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r447",
+      "desig": "Im  =0,50 x 0,50",
+      "unite": "U",
+      "qty": "3",
+      "pu": "6000"
+    },
+    {
+      "type": "art",
+      "id": "r449",
+      "desig": "Exécutée de l'étanchéité composé de l'exécution de forme de pente en béton dosé 250 Kg/m3 de ciment CPJ 45, de 0.10 m d’épaisseur en moyenne, F/P Ecran pare-vapeur, F/P d'un isolant thermique en plaque de polystyrène expansé 4 cm, F/P Ecran d'indépendance en papier KRAFT , F/P Multi-couches: Une couche d'imprégnation E.A.F (0.500 Kg/m2) , F/P Protection d'étanchéité en gravillon roulé 7/15 de 5 cm d'épaisseur",
+      "unite": "M²",
+      "qty": "48",
+      "pu": "600"
+    },
+    {
+      "type": "art",
+      "id": "r450",
+      "desig": "Fourniture et pose hublot plafonnie avec interrupteur simple allumage , câble 2x1,5 mm + gaine",
+      "unite": "U",
+      "qty": "2",
+      "pu": "2400"
+    },
+    {
+      "type": "sub",
+      "id": "r452",
+      "desig": "Fourniture et pose équipement pour une bâche a eau",
+      "level": 2,
+      "collapsed": false
+    },
+    {
+      "type": "art",
+      "id": "r453",
+      "desig": "F/P de tube en acier galvanisé type soudé ou sans soudure de la série moyenne et conforme à la norme NFA 49-110 ou 49-140 avec coupe, té, coude, raccord nécessaire, y compris toute sujétion de mise en œuvre et de bonne exécution suivant les règles de l'ar Diamètre 33/42",
+      "unite": "ML",
+      "qty": "4",
+      "pu": "4500"
+    },
+    {
+      "type": "art",
+      "id": "r454",
+      "desig": "F/P de robinet d'arrêt à boisseau sphérique taraudé avec façon de joint, y compris toute sujétion de mise en œuvre et de bonne exécution suivant les règles de l'art",
+      "unite": "U",
+      "qty": "2",
+      "pu": "8000"
+    },
+    {
+      "type": "art",
+      "id": "r455",
+      "desig": "F/P de clapet antiretour à battant taraudé, y compris toute sujétion de mise en œuvre et de bonne exécution suivant les règles de l'art",
+      "unite": "U",
+      "qty": "2",
+      "pu": "12000"
+    },
+    {
+      "type": "art",
+      "id": "r456",
+      "desig": "F/P de clapet crépine taraudé pour filtrer l'eau aspirée, y compris toute sujétion de mise en œuvre et de bonne exécution suivant les règles de l'art",
+      "unite": "U",
+      "qty": "2",
+      "pu": "16000"
+    },
+    {
+      "type": "art",
+      "id": "r457",
+      "desig": "F/P d'un ballon à vessie cap 1000L avec les vannes d'arrêt, y compris toute sujétion de mise en œuvre et de bonne exécution suivant les règles de l'art",
+      "unite": "U",
+      "qty": "1",
+      "pu": "250000"
+    },
+    {
+      "type": "art",
+      "id": "r458",
+      "desig": "F/P de pressostat de contrôle de pression pour la mise en marche et l'arrêt des pompes  P = (2-12) Bars, y compris toute sujétion de mise en œuvre et de bonne exécution suivant les règles de l'art",
+      "unite": "U",
+      "qty": "2",
+      "pu": "15000"
+    },
+    {
+      "type": "art",
+      "id": "r459",
+      "desig": "F/P de manomètre à cadran avec raccords nécessaires, y compris toute sujétion de mise en œuvre et de bonne exécution suivant les règles de l'art",
+      "unite": "U",
+      "qty": "2",
+      "pu": "6000"
+    },
+    {
+      "type": "art",
+      "id": "r460",
+      "desig": "F/P de filtre à tamis présenté à l'entrée des pompes sur tuyau d'aspiration, y compris toute sujétion de mise en œuvre et de bonne exécution suivant les règles de l'art",
+      "unite": "U",
+      "qty": "2",
+      "pu": "3500"
+    },
+    {
+      "type": "art",
+      "id": "r461",
+      "desig": "F/P de pompe principale d'un débit de 22m3/h et 4,5 bars de pression  (pompes pour AEP HMT= R+6), y compris toute sujétion de mise en œuvre et de bonne exécution suivant les règles de l'art",
+      "unite": "U",
+      "qty": "2",
+      "pu": "550000"
+    },
+    {
+      "type": "art",
+      "id": "r462",
+      "desig": "Fourniture et pose d'une pompe pour réseaux incendie Ø80 ,débit de 20L/S HP=12,5CV,24A et 7,5Bars de pression y compris toutes pièces de raccordement et toutes sujétion de mise œuvre et de bonne exécution suivant les règles de L'ART (fiche technique demandé)  ",
+      "unite": "U",
+      "qty": "1",
+      "pu": "550000"
+    },
+    {
+      "type": "art",
+      "id": "r463",
+      "desig": "F/P d'un interrupteur flotteur y compris le raccordement électrique, y compris toute sujétion de mise en œuvre et de bonne exécution suivant les règles de l'art",
+      "unite": "U",
+      "qty": "2",
+      "pu": "25000"
+    },
+    {
+      "type": "art",
+      "id": "r464",
+      "desig": "Fourniture et pose hublot plafonnie avec interrupteur simple allumage , prise étanche , câble 2x1,5 mm + gaine",
+      "unite": "U",
+      "qty": "4",
+      "pu": "2400"
+    },
+    {
+      "type": "art",
+      "id": "r465",
+      "desig": "Fourniture et pose d’armoire électrique chaufferie et bache à eau (disj. Diff. 06 D.R.T) avec un sectionneur générale placé prés de la porte étanche extérieurs du locale protégé par coffret vitré, compris lampe témoin raccordement général et Ts/m",
+      "unite": "U",
+      "qty": "1",
+      "pu": "250000"
+    },
+    {
+      "type": "sub",
+      "id": "r466",
+      "desig": "LOCAL POSTE TRANSFORMATEUR ",
+      "level": 1,
+      "collapsed": false
+    },
+    {
+      "type": "art",
+      "id": "r467",
+      "desig": "Realisation d'un local  poste transformateur dimenssion  suivant plan approuvé par la Sonelgaz, lot genie civil   en tout corps d’état, y compris , terrassement   , béton  de propreté beton de rattrapage de niveau dose a 250 kg/m3 et béton armé pour semelle , amorces poteaux , longrines , dalle, poteaux , poutres et et acrotére dose a 350kg/m3 plancher , les travaux de maçonnerie  double cloison de 30 cm et d’enduit en ciment , la Peinture intérieur et extérieur, la porte et fenêtre métallique type sonelgaz , l’étanchéité,electrcite inetrieur mise a la terre revetement sol et toutes sujétion de bonne et parfaite exécution. Livré réceptionné par SONELGAZ",
+      "unite": "Ens",
+      "qty": "1",
+      "pu": "1200000"
+    },
+    {
+      "type": "chap",
+      "id": "r468",
+      "desig": "voirie et reseaux divers ( au metrie )",
+      "collapsed": false
+    },
+    {
+      "type": "sub",
+      "id": "r469",
+      "desig": "Assainissement",
+      "level": 1,
+      "collapsed": false
+    },
+    {
+      "type": "art",
+      "id": "r470",
+      "desig": "Fouilles en puits et en tranchee dans un terrain de toute nature  ",
+      "unite": "M³",
+      "qty": "258",
+      "pu": "400"
+    },
+    {
+      "type": "art",
+      "id": "r471",
+      "desig": "Founiture et pose  d'une couche de sable compactée ep=20cm",
+      "unite": "M³",
+      "qty": "15",
+      "pu": "800"
+    },
+    {
+      "type": "art",
+      "id": "r472",
+      "desig": "Remblais compacté des vides provenant de l'apport de la terre noble y compris toutes sujétion de bonne éxecution",
+      "unite": "M³",
+      "qty": "120",
+      "pu": "600"
+    },
+    {
+      "type": "art",
+      "id": "r473",
+      "desig": "Evacuation des terres excédentaires à la décharge publique y compris chargement des terres, transport, foisonnement, déchargement, répandage, piochage s'il y a lieu, réglage sur la décharge, main d'oeuvre et toutes sujétions de bonne exécution.",
+      "unite": "M³",
+      "qty": "40",
+      "pu": "400"
+    },
+    {
+      "type": "art",
+      "id": "r474",
+      "desig": "Founiture et pose  de Conduit en PVC PN 6 bars ",
+      "unite": "ML",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r480",
+      "desig": "Ø 315mm",
+      "unite": "ML",
+      "qty": "85",
+      "pu": "6500"
+    },
+    {
+      "type": "subart",
+      "id": "r481",
+      "desig": "Ø 200mm",
+      "unite": "ML",
+      "qty": "165",
+      "pu": "3500"
+    },
+    {
+      "type": "art",
+      "id": "r475",
+      "desig": "Founiture et pose  Regard  en B.A. y compris tampon en fonte",
+      "unite": "U",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r482",
+      "desig": "1.40x1.40 m x H var",
+      "unite": "U",
+      "qty": "3",
+      "pu": "80000"
+    },
+    {
+      "type": "art",
+      "id": "r476",
+      "desig": "Founiture et pose  Regard  en B.A. y compris tampon en béton",
+      "unite": "U",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r484",
+      "desig": "1.00x1.00 m x H var",
+      "unite": "U",
+      "qty": "3",
+      "pu": "45000"
+    },
+    {
+      "type": "subart",
+      "id": "r485",
+      "desig": "0.8x0.8 m x H var",
+      "unite": "U",
+      "qty": "1",
+      "pu": "35000"
+    },
+    {
+      "type": "subart",
+      "id": "r486",
+      "desig": "0.6x0.6 m x H var",
+      "unite": "U",
+      "qty": "12",
+      "pu": "20000"
+    },
+    {
+      "type": "art",
+      "id": "r477",
+      "desig": "Founiture et pose  de Regards avaloir siphoïde avec grille en fonte dim = 1,30x0,75x1,44 m ",
+      "unite": "U",
+      "qty": "8",
+      "pu": "40000"
+    },
+    {
+      "type": "art",
+      "id": "r478",
+      "desig": "Réalisation de caniveau en béton armé de dim 0,4x,04m avec grille en fonte  ",
+      "unite": "ML",
+      "qty": "10",
+      "pu": "25000"
+    },
+    {
+      "type": "art",
+      "id": "r479",
+      "desig": "Raccordement du nouveau reseaux aux regards existants y compris piquage et jointage",
+      "unite": "Ens",
+      "qty": "1",
+      "pu": "80000"
+    },
+    {
+      "type": "sub",
+      "id": "r487",
+      "desig": "adduction d'eau potable (aep)",
+      "level": 1,
+      "collapsed": false
+    },
+    {
+      "type": "art",
+      "id": "r488",
+      "desig": "Fouilles en puits et en tranchee dans un terrain de toute nature  ",
+      "unite": "M³",
+      "qty": "98",
+      "pu": "400"
+    },
+    {
+      "type": "art",
+      "id": "r489",
+      "desig": "Founiture et pose  d'une couche de sable compacté d'épaisseur 20cm",
+      "unite": "M³",
+      "qty": "7",
+      "pu": "800"
+    },
+    {
+      "type": "art",
+      "id": "r490",
+      "desig": "Remblais compacté des vides y compris toutes sujétion de bonne éxecution",
+      "unite": "M³",
+      "qty": "126.5",
+      "pu": "600"
+    },
+    {
+      "type": "art",
+      "id": "r491",
+      "desig": "Evacuation des terres excédentaires à la décharge publique ",
+      "unite": "M³",
+      "qty": "86.3",
+      "pu": "400"
+    },
+    {
+      "type": "art",
+      "id": "r492",
+      "desig": "Founiture et pose  Conduites en PEHD/PN16 bars, y compris grillage avertisseur \"bleu\"., TE ,couide , cone de reduction , COLLORETTE A BRIDE , JOINTGIBAULT ,manchon et toutes sujétions de bonne exécution; ",
+      "unite": "ML",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r493",
+      "desig": "Ø 110mm",
+      "unite": "ML",
+      "qty": "5",
+      "pu": "7500"
+    },
+    {
+      "type": "subart",
+      "id": "r495",
+      "desig": "Ø 90mm",
+      "unite": "ML",
+      "qty": "4",
+      "pu": "7500"
+    },
+    {
+      "type": "subart",
+      "id": "r496",
+      "desig": "Ø 75mm",
+      "unite": "ML",
+      "qty": "10",
+      "pu": "7000"
+    },
+    {
+      "type": "subart",
+      "id": "r497",
+      "desig": "Ø 63mm",
+      "unite": "ML",
+      "qty": "50",
+      "pu": "6500"
+    },
+    {
+      "type": "subart",
+      "id": "r498",
+      "desig": "Ø 60mm",
+      "unite": "ML",
+      "qty": "10",
+      "pu": "6000"
+    },
+    {
+      "type": "subart",
+      "id": "r499",
+      "desig": "Ø 50mm",
+      "unite": "ML",
+      "qty": "95",
+      "pu": "5500"
+    },
+    {
+      "type": "subart",
+      "id": "r500",
+      "desig": "Ø 32mm",
+      "unite": "ML",
+      "qty": "12",
+      "pu": "5000"
+    },
+    {
+      "type": "art",
+      "id": "r501",
+      "desig": "Founiture et pose de ROBINET VANNE SOUS BOUCHE A CLE y compris  toutes sujétions de bonne exécution",
+      "unite": "U",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r502",
+      "desig": "Ø 100mm",
+      "unite": "U",
+      "qty": "1",
+      "pu": "120000"
+    },
+    {
+      "type": "subart",
+      "id": "r503",
+      "desig": "Ø 80mm",
+      "unite": "U",
+      "qty": "1",
+      "pu": "80000"
+    },
+    {
+      "type": "subart",
+      "id": "r504",
+      "desig": "Ø 60mm",
+      "unite": "U",
+      "qty": "1",
+      "pu": "60000"
+    },
+    {
+      "type": "subart",
+      "id": "r505",
+      "desig": "Ø 40mm",
+      "unite": "U",
+      "qty": "1",
+      "pu": "30000"
+    },
+    {
+      "type": "art",
+      "id": "r506",
+      "desig": "Regards de sectionnement en B.A. y compris tampon en fonte y compris  toutes sujétions de bonne exécution",
+      "unite": "U",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r507",
+      "desig": "1,20 x 1,20 x 1,20 m\n",
+      "unite": "U",
+      "qty": "1",
+      "pu": "80000"
+    },
+    {
+      "type": "art",
+      "id": "r508",
+      "desig": "Raccordement du nouvea reseau au réseau  existant y compris piquage et toutes sujétions de bonne exécution",
+      "unite": "U",
+      "qty": "1",
+      "pu": "80000"
+    },
+    {
+      "type": "sub",
+      "id": "r510",
+      "desig": "eclairage exterieur",
+      "level": 1,
+      "collapsed": false
+    },
+    {
+      "type": "art",
+      "id": "r511",
+      "desig": "Fouilles en puits et en tranchee dans un terrain  de toute nature",
+      "unite": "M³",
+      "qty": "87",
+      "pu": "400"
+    },
+    {
+      "type": "art",
+      "id": "r512",
+      "desig": "Founiture et pose d'une Couche de sable epaisseur.0,20m",
+      "unite": "M³",
+      "qty": "13",
+      "pu": "800"
+    },
+    {
+      "type": "art",
+      "id": "r513",
+      "desig": "Remblais compacté des vides y compris toutes sujétion de bonne éxecution",
+      "unite": "M³",
+      "qty": "40.160",
+      "pu": "600"
+    },
+    {
+      "type": "art",
+      "id": "r514",
+      "desig": "Evacuation des terres excédentaires à la décharge publique y compris chargement des terres, transport, foisonnement, déchargement, répandage, piochage s'il y a lieu, réglage sur la décharge, main d'oeuvre et toutes sujétions de bonne exécution",
+      "unite": "M³",
+      "qty": "20.08",
+      "pu": "400"
+    },
+    {
+      "type": "art",
+      "id": "r515",
+      "desig": "Fourniture et pose  de fourreau en buse PVCdiam: 150mm",
+      "unite": "ML",
+      "qty": "5",
+      "pu": "3000"
+    },
+    {
+      "type": "art",
+      "id": "r516",
+      "desig": "Fourniture et pose  et raccordement de câbles U 1000 RO2 V y compris grillage avertisseur \"rouge\":",
+      "unite": "ML",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r517",
+      "desig": "3 x 2,5 mm² + T(1x17 mm² (Cu nue))",
+      "unite": "ML",
+      "qty": "50",
+      "pu": "360"
+    },
+    {
+      "type": "subart",
+      "id": "r518",
+      "desig": "5 x 2,5 mm² + T(1x17 mm² (Cu nue))",
+      "unite": "ML",
+      "qty": "40",
+      "pu": "760"
+    },
+    {
+      "type": "subart",
+      "id": "r519",
+      "desig": " 4 x 6 mm² + T(1x17 mm² (Cu nue))",
+      "unite": "ML",
+      "qty": "180",
+      "pu": "700"
+    },
+    {
+      "type": "subart",
+      "id": "r520",
+      "desig": "4 x 10 mm² + T(1x17 mm² (Cu nue))",
+      "unite": "ML",
+      "qty": "120",
+      "pu": "1200"
+    },
+    {
+      "type": "subart",
+      "id": "r521",
+      "desig": "4 x 16 mm² + T(1x17 mm² (Cu nue))",
+      "unite": "ML",
+      "qty": "30",
+      "pu": "1700"
+    },
+    {
+      "type": "art",
+      "id": "r522",
+      "desig": "F/P de luminaire LED de 150 W posé sur crosses en acier avec console   y compris fixation sur le mir et le raccordement et toute sujétion à ordre de marché",
+      "unite": "U",
+      "qty": "13",
+      "pu": "22000"
+    },
+    {
+      "type": "art",
+      "id": "r523",
+      "desig": "F/P boite de dérivation en plastique avec couvercle démontable et apparent fixé par vis le tout compris raccordement des files avec dominos, scellement au boitier  ainsi que toutes sujétions à ordre de marché.150x150 mm",
+      "unite": "U",
+      "qty": "13",
+      "pu": "600"
+    },
+    {
+      "type": "art",
+      "id": "r524",
+      "desig": "Fourniture et pose de candelabre modèlechoisi par le maitre d'ouvrage  en acier galvanisé Hauteur4,00m y compris socle en béton",
+      "unite": "U",
+      "qty": "6",
+      "pu": "80000"
+    },
+    {
+      "type": "art",
+      "id": "r525",
+      "desig": "Fourniture et pose de Piquet de terre\n",
+      "unite": "U",
+      "qty": "6",
+      "pu": "2500"
+    },
+    {
+      "type": "art",
+      "id": "r526",
+      "desig": "F/P de panneaux photovoltaïque pour un éclairage public  y compris batterie temps de recharge 10-11 heurs et temps d'éclairage 7 nuits ainsi que toutes sujétions d’accessoire pour la mise en marche finales",
+      "unite": "Ens",
+      "qty": "1",
+      "pu": "100000"
+    },
+    {
+      "type": "sub",
+      "id": "r527",
+      "desig": "Alimentation gaz",
+      "level": 1,
+      "collapsed": false
+    },
+    {
+      "type": "art",
+      "id": "r528",
+      "desig": "Fouilles en puits et en tranchee dans un terrain de toute nature",
+      "unite": "M³",
+      "qty": "22",
+      "pu": "400"
+    },
+    {
+      "type": "art",
+      "id": "r529",
+      "desig": "Founiture et pose  d'une couche de sable compacté d'épaisseur 20cm",
+      "unite": "M³",
+      "qty": "5",
+      "pu": "800"
+    },
+    {
+      "type": "art",
+      "id": "r530",
+      "desig": "Remblais compacté des vides provenant de l'apport de la terre noble y compris toutes sujétion de bonne éxecution",
+      "unite": "M³",
+      "qty": "21",
+      "pu": "600"
+    },
+    {
+      "type": "art",
+      "id": "r531",
+      "desig": "Evacuation des terres excédentaires à la décharge publique ",
+      "unite": "M³",
+      "qty": "5",
+      "pu": "400"
+    },
+    {
+      "type": "art",
+      "id": "r532",
+      "desig": "Founiture et pose  de tuyauterie en PEHD homologué par sonalgaz  y comprise les pièces de raccordement ,Grillage avertisseur couleur\" jaune\" et toutes sujections de bonnes exécution",
+      "unite": "ML",
+      "qty": "",
+      "pu": ""
+    },
+    {
+      "type": "subart",
+      "id": "r533",
+      "desig": "Ø 63",
+      "unite": "ML",
+      "qty": "56",
+      "pu": "1200"
+    },
+    {
+      "type": "subart",
+      "id": "r534",
+      "desig": "Ø 40",
+      "unite": "ML",
+      "qty": "25",
+      "pu": "600"
+    },
+    {
+      "type": "art",
+      "id": "r535",
+      "desig": "Founiture et pose  poste de détente gaz 100 M3 /h 300/21 mbars y compris niche et tout les accessoires necessaires au branchement et a la reception par les services de l a sonelgaz",
+      "unite": "U",
+      "qty": "1",
+      "pu": "2500000"
+    },
+    {
+      "type": "art",
+      "id": "r536",
+      "desig": "Réalisation d'une chambre de vanne pour gaz en béton armé selon les exigences de la sonelgaz (40x40x40) avec tampon en fonte y compris vanne d'arrêt (gaz) diamètre 40 y compris branchement au poste de détente ainsi que les travaux de terassement , béton et béton armé , finition et toutes sujétions de bonne exécution",
+      "unite": "Ens",
+      "qty": "1",
+      "pu": "80000"
+    },
+    {
+      "type": "sub",
+      "id": "r537",
+      "desig": "amenagement exterieur",
+      "level": 1,
+      "collapsed": false
+    },
+    {
+      "type": "art",
+      "id": "r538",
+      "desig": "Terrassement en grande masse dans un terrain de toute nature ",
+      "unite": "M³",
+      "qty": "2200",
+      "pu": "400"
+    },
+    {
+      "type": "art",
+      "id": "r539",
+      "desig": "Remblais compacté des vides provenant de l'apport de la terre noble y compris toutes sujétion de bonne éxecution",
+      "unite": "M³",
+      "qty": "50",
+      "pu": "600"
+    },
+    {
+      "type": "art",
+      "id": "r540",
+      "desig": "Evacuation des terres excédentaires à la décharge publique y compris chargement des terres, transport, foisonnement, déchargement, répandage, piochage s'il y a lieu, réglage sur la décharge, main d'oeuvre et toutes sujétions de bonne exécution.",
+      "unite": "M³",
+      "qty": "2150",
+      "pu": "400"
+    },
+    {
+      "type": "art",
+      "id": "r541",
+      "desig": "fourniture et pose d'une Couche de base  en TVC 0/25   sur une épaisseur de 25 cm y compris étalage ,réglage , arrosage et compactage  à l 'aide  d' un engins  pneumatique et cylindre ainsi que  toutes sujétion de bonne  exécution conformément aux indications du maitre d' œuvre ",
+      "unite": "M³",
+      "qty": "94.5",
+      "pu": "1000"
+    },
+    {
+      "type": "art",
+      "id": "r542",
+      "desig": "fourniture et pose d'une Couche de base  en grave concassé 0/40   sur une épaisseur de 20 cm y compris étalage ,réglage , arrosage et compactage  à l 'aide  d' un engins  pneumatique et cylindre ainsi que  toutes sujétion de bonne  exécution conformément aux indications du maitre d' œuvre .",
+      "unite": "M³",
+      "qty": "151.2",
+      "pu": "1400"
+    },
+    {
+      "type": "art",
+      "id": "r543",
+      "desig": "Fourniture et mise en œuvre d'une Couche de roulement  en béton bitumineux 0/14  de  7 cm d'épaisseur  y compris couche d'impregnation  de 1,5 kg/m2 en cut-back 0/1 et toutes sujétions de bonne exécution",
+      "unite": "M²",
+      "qty": "378",
+      "pu": "1500"
+    },
+    {
+      "type": "art",
+      "id": "r544",
+      "desig": "Fourniture et pose de bordures  type T2(150×250) sur une assise en béton dosé à 150 KM/ M3 débordant de 10CM de part et d'autre part de la bordure ,  y compris  toutes sujetions de bonne exécution",
+      "unite": "ML",
+      "qty": "140",
+      "pu": "1800"
+    },
+    {
+      "type": "art",
+      "id": "r545",
+      "desig": "Revêtement Vertical et Horizontal en Marbre posé à bain de mortier sous forme de sable, couleur au choix pour la marche 0,03 d'ép  et 0,02 d'ép pour la contre marche y compris relevé formant plinthes  (pour les marches de la cour) ",
+      "unite": "M²",
+      "qty": "40",
+      "pu": "10000"
+    },
+    {
+      "type": "art",
+      "id": "r546",
+      "desig": "Revêtement de la cour et  voies de circulation piétonnière en béton imprimé  les travaux comprenant\n- Terrassement en masse et nivèlement de toute la surface y compris transport des terres a la décharge publique\n-Une Couche de fondation en TVC épaisseur de 0,15 à 0,30 m y compris   déblais , nivellement , compactage et arrosage\n- Fourniture et pose d'une chape en béton armé dosé à 350kg/m3 sur une épaisseur entre 7 et 10 cm.\n- Application d'un durcisseur de surface pigmenté dans la masse (couleur au choix de l'architecte).\n- Saupoudrage d'un produit démoulant.\n- Impression de la chape (motif au choix de l'architecte).\n- Nettoyage a grand jet d'eau de la surface.\n- Vernissage de protection (spécial extérieur).",
+      "unite": "M²",
+      "qty": "1200",
+      "pu": "3000"
+    },
+    {
+      "type": "sub",
+      "id": "r547",
+      "desig": "mur de cloture, escalier et mur de soutenement",
+      "level": 1,
+      "collapsed": false
+    },
+    {
+      "type": "art",
+      "id": "r548",
+      "desig": "Realisation de mur de soutenement en béton armé dosé à 350 kg/M3 les travaux comprenant, terrassement, remblai, et transport des terres excédentaires de toutes natures à la décharge public, gros béton, béton armé pour semelles et voiles ;  y compris les barbacanes de diamètre 100 en pvc chaque 1m2, joints en polystyrène ainsi que la finition horizontale et verticale ainsi que toutes sujétions de coffrage, rond béton, enduit peinture jusqu'à la finition totale  de l’ouvrage de bonne exécution a ordre de marché",
+      "unite": "M³",
+      "qty": "287",
+      "pu": "35000"
+    },
+    {
+      "type": "art",
+      "id": "r549",
+      "desig": "construction de clôture  en dur sur une hauteur de 3,00 m y compris terrassement, remblai, et transport des terres excédentaires à la décharge public, gros béton, béton armé pour semelles, amorces poteaux, longrines, dosé à 350kg/m3 , poteaux chaque trois(04) mètres et corniches en béton dosé a 350kg/m3 CPJ45. joints en polystyrène coffrage ferraillage, y compris moçonnerie, corniche, enduit en ciments, peiture vinylique exécutée en trois (03) couches sur maçonnerie et peinture glycérophtalique exécuté en trois couche sur ouvrages métallique ainsi que toutes sujestion de bonne exécution (suivant plan)",
+      "unite": "ML",
+      "qty": "169",
+      "pu": "23000"
+    },
+    {
+      "type": "art",
+      "id": "r550",
+      "desig": "F/P Porte  Métallique  renforcé suivant plan  Le tout compris, raidisseur fixé sur mur,  quincaillerie, peinture laqué , soudure, fixation et toutes sujétions  ouvrage de: 4,00 x 3,00 m ",
+      "unite": "U",
+      "qty": "2",
+      "pu": "110000"
+    },
+    {
+      "type": "art",
+      "id": "r551",
+      "desig": "F/P Porte  Métallique renforcé suivant plan  Le tout compris, raidisseur fixé sur mur,  quincaillerie, peinture laqué , soudure, fixation et toutes sujétions   ouvrage: de 1,00x 2,20 m",
+      "unite": "U",
+      "qty": "1",
+      "pu": "20000"
+    },
+    {
+      "type": "art",
+      "id": "r552",
+      "desig": "F/P Porte  garde corps metalique en tole plazma avec main courante de 1.00 m de hauteur suivant plan type plasma (double) Le tout compris, raidisseur fixé ,  quincaillerie, peinture laqué , soudure, fixation et toutes sujétions  ",
+      "unite": "ML",
+      "qty": "50",
+      "pu": "9000"
+    },
+    {
+      "type": "art",
+      "id": "r553",
+      "desig": "Confection des escaliers ,muret et rampe (PMR) en béton armé pour changement de niveau les travaux comprenant, ouverture des fouilles en tranché, gros béton, marche et contre marche en béton armé, muret et voile de protection en béton armé;  y compris les barbacanes de diamètre 100 en pvc chaque 1m2 ainsi que la finition horizontale et verticale ainsi que toutes sujétions de coffrage, rond béton, enduit peinture jusqu'à la finition totale  de l’ouvrage de bonne exécution a ordre de marché",
+      "unite": "M³",
+      "qty": "77",
+      "pu": "20000"
+    },
+    {
+      "type": "art",
+      "id": "r554",
+      "desig": "Confection d’un Drainage le long des fondation, les travaux comprenant : terrassement (déblai, remblai) fourniture et pose d’une conduit en pvc 4 bars perforé posé sur un lit de sable fin avec une pente de 1,5% y compris le remblai en gravier 40 ; gravier 25 , TVC sur sure une hauteur , ainsi que la couverture du talus en géotextile tissé GEOLON 150kn très résistant pour renforcement ; le tout compris travaux de branchement au regard et le transport des déchets a la décharge publique , nettoyage du site et toutes sujétions de bonne exécution",
+      "unite": "ML",
+      "qty": "183",
+      "pu": "12000"
+    },
+    {
+      "type": "art",
+      "id": "r555",
+      "desig": "F/P de pierres ATALUS 50 kg en beton comprenant : terrassement (déblai, remblai) fourniture et pose  TVC sur toutes la hauteur;une assise en gros béton dosé à 250kg/m3 , ainsi que la couverture du talus en géotextile tissé GEOLON 150kn très résistant pour renforcement ; le tout compris travaux le transport des déchets a la décharge publique , nettoyage du site et toutes sujétions de bonne exécution",
+      "unite": "ML",
+      "qty": "200",
+      "pu": "5000"
+    },
+    {
+      "type": "sub",
+      "id": "r556",
+      "desig": "terrain de sport",
+      "level": 1,
+      "collapsed": false
+    },
+    {
+      "type": "blank",
+      "id": "r557",
+      "desig": "Réalisation d'un terrain de sport de type MATICO  Détail d'exécution comprenant"
+    },
+    {
+      "type": "art",
+      "id": "r558",
+      "desig": "fourniture et pose de couche en béton d'une épaisseur de 08 cm constituée d'un mélange de gravier 3/8 et de ciment dosé à 300 kg/ml3 de CPA 325 y compris fourniture et pose de joint souple en caoutchouc ép=08 cm ainsi que la peinture caoutchouc chlore ou similaire spécial terrain de sport perméable et anti -Dérapant",
+      "unite": "M²",
+      "qty": "610",
+      "pu": "3000"
+    },
+    {
+      "type": "art",
+      "id": "r559",
+      "desig": "fourniture et pose d'une couche de 15 cm en gravier 15/25 comprenant étalage , réglage des pentes ,cailloux et toutes sujétions de réglage de pente",
+      "unite": "M²",
+      "qty": "610",
+      "pu": "1200"
+    },
+    {
+      "type": "art",
+      "id": "r560",
+      "desig": "fourniture et pose de canalisation en PVC diam 110 mm , perforée pour le drainage des eaux",
+      "unite": "ML",
+      "qty": "180",
+      "pu": "1000"
+    },
+    {
+      "type": "art",
+      "id": "r561",
+      "desig": "fourniture et pose d'une bordure en béton dosé à 250 kg/m3 coulé sur place ceinturant le terrain largeur 15 cm et h=25 cm",
+      "unite": "ML",
+      "qty": "140",
+      "pu": "1000"
+    },
+    {
+      "type": "art",
+      "id": "r562",
+      "desig": "fourniture et pose grillage émaillé  spéciale terrains de sport en acier galvanisé plastifié  de 2,50 m de hauteur y compris raidisseurs en acier de h =2,50 m ainsi que la fixation aux poteaux et bordurettes y compris de porte de même matière de 1,00 x 2,00m ainsi que la fourniture et pose de filé surélevé  d’une hauteur normalisé le tous compris fixation toutes sujétions de bonne exécution.",
+      "unite": "ML",
+      "qty": "140",
+      "pu": "8000"
+    },
+    {
+      "type": "art",
+      "id": "r563",
+      "desig": "fourniture et pose 02 But métallique de hand-ball normalisé (3,00x2,00m) y compris filets, socle de fixation au sol , peinture",
+      "unite": "Ens",
+      "qty": "1",
+      "pu": "100000"
+    },
+    {
+      "type": "art",
+      "id": "r564",
+      "desig": "fourniture et pose filet de volley-ball support de 2.55 m de hauteur . socle de fixation filets , peinture et toutes sujétion de bonne exécution",
+      "unite": "Ens",
+      "qty": "1",
+      "pu": "20000"
+    },
+    {
+      "type": "art",
+      "id": "r565",
+      "desig": "fourniture et pose de 02 pangier -Basket-ball normalisé. s y compris filets, socle de fixation au sol , peinture",
+      "unite": "Ens",
+      "qty": "1",
+      "pu": "20000"
+    },
+    {
+      "type": "art",
+      "id": "r566",
+      "desig": "F/P couche gazon artificielle génération récente y compris fixation , sable , grain de caoutchouc , traçage spécial foot- et toute sujétion de mise en oeuvre et de bonne exécution suivant les règles de l'art.",
+      "unite": "M²",
+      "qty": "610",
+      "pu": "1800"
+    },
+    {
+      "type": "sub",
+      "id": "r567",
+      "desig": "espace vert",
+      "level": 1,
+      "collapsed": false
+    },
+    {
+      "type": "art",
+      "id": "r568",
+      "desig": "Apport de la terre végétale avec plantation",
+      "unite": "M³",
+      "qty": "220",
+      "pu": "200"
+    },
+    {
+      "type": "art",
+      "id": "r569",
+      "desig": "Realisation de bordure pour espace vert prefabriquée en béton legerement arme en TS  dosé à 350 kg/M3",
+      "unite": "ML",
+      "qty": "140",
+      "pu": "1000"
+    },
+    {
+      "type": "art",
+      "id": "r570",
+      "desig": "Traitement des espaces verts en gazon avec plantation des fleurs appropriées au site et au climat de la région , y compris préparation de terrain d'assiette , décharge, arrosage, et ainsi que toutes sujétions de bonne exécution",
+      "unite": "M²",
+      "qty": "180",
+      "pu": "1100"
+    },
+    {
+      "type": "sub",
+      "id": "r571",
+      "desig": "poste transformateur",
+      "level": 1,
+      "collapsed": false
+    },
+    {
+      "type": "art",
+      "id": "r572",
+      "desig": "fourniture, pose, mise en œuvre et installation, essai d'un poste  transformateur ,  de puissance 160 KVA  avec des équipements complets, exécuté selon réglementation et normes SONELGAZ composés de : cellules d'arrivée, cellules de départ, cellules de comptage, disjoncteur général, cellules de protection, cellules de transformateur, cellules générale basse tension accessoires de sécurité ,fusibles HPC , et toutes les accessoires nécessaires bonne exécution .suivant plan et  détaille sonalgaz  (Équipement répondant aux normes en vigueur jusqu'a la réception par sone gaz et la mise en service et disposant d'un certificat d'essai de plate-forme)",
+      "unite": "Ens",
+      "qty": "1",
+      "pu": "3000000"
+    },
+    {
+      "type": "art",
+      "id": "r573",
+      "desig": "· F/P Armoire d'alimentation générale Basse Tension AGBT  , Type Prisma P épaisseur 3mm. revêtement intérieur et extérieur par peinture époxy  polyester IP54 selon la norme CEI529.\n- Porte ouverture à 90°\n- Joint d’étanchéité  en polyuréthane moulu. \n- Châssis modulaire  avec plastron individuel par rang\nComposition : \n- Enveloppes métalliques démontables            - Tôle d'acier, traitée anticorrosion\n  Revêtement anticorrosion, poudre époxy polyester, polymérisée à chaud, couleur beige Prisma,\n- 01 sectionneur à commande rotative Marche arrêt  630A\n- 02 disjoncteur Vigi-Compact  de tête NS250H 250A  \n- 01 disjoncteurs Compact NC100LH–63 A, déclencheur TM-D 04 pôles\n- 05 disjoncteurs Compact NC100LH–50 A, déclencheur TM-D 04 pôles\n- 01 disjoncteurs Compact NC100LH –40 A, déclencheur TM-D 04 pôles\n- 02 disjoncteurs Compact  NC100LH –32A , déclencheur TM-D  ,  04 pôles \n-  3 Afficheurs ampère-métriques  - 01 Afficheur volumétrique avec commutateur.\nPresses étoupes , Bornes de raccordement ,Borne de terre ,Etiquettes de repérage une surface frontale et un volume permettant une éventuelle extension de 30 % sera systématiquement prévue\nL'appareillage est du type Merlin Gerin et Télémécanique y compris accessoires permettant le verrouillage raccordement et toutes sujétions à ordre de marche tous les équipements doivent être Accompagné obligatoirement de leurs fiches techniques. ",
+      "unite": "Ens",
+      "qty": "1",
+      "pu": "1000000"
+    },
+    {
+      "type": "art",
+      "id": "r574",
+      "desig": "F/P de tableau d’éclairage extérieur nommé TEE comprenant :-         \nEnveloppe métallique en tôle d’acier laminé de 1.5mm d’épaisseur minimum .\n- 01 Disjoncteur différentiel 4 pôles 32A\n- 01 Sectionneur porte fusible à commande manuel   4 pôles 32A\n- 01 Interrupteur de position(Auto/Manuel)\n- 01 Disjoncteur Magnétothermique 2 pôles 16A\n- 03 Disjoncteur Magnétothermique 4 pôles 16A.\n- 03 Contacteurs 4 Pôles 16A\n- 06 Bouton poussoirs à voyant lumineux le tout monté sur l’enveloppe.\n01 Cellule photoélectrique y compris tout les  accessoires de raccordement (Contacteur, fusible………)\n   presse étoupe.   -  Bornes de raccordement      -borne de terre \n borne de neutre      -étiquette de repérage \ny compris raccordement en fil et câble souple tout en respectant les règles de câblage ainsi que toute sujétion à ordre de marche,tous les équipements devrons être de très bonne qualité.",
+      "unite": "Ens",
+      "qty": "1",
+      "pu": "240000"
+    },
+    {
+      "type": "sub",
+      "id": "r575",
+      "desig": "reseau telesurveillance",
+      "level": 1,
+      "collapsed": false
+    },
+    {
+      "type": "art",
+      "id": "r576",
+      "desig": "F/P CAMERA FIXE JOUR/NUIT (ICR) EXTERIEUR type IP 5MP | IP PoE | Antivandalisme , y compris  toutes sujétions de bonne exécution et de  mise en œuvre.",
+      "unite": "U",
+      "qty": "8",
+      "pu": "6000"
+    },
+    {
+      "type": "art",
+      "id": "r577",
+      "desig": "F/P BOITE DÉRIVATION 100*100*35, y compris  toutes sujétions de bonne exécution et de  mise en œuvre.",
+      "unite": "U",
+      "qty": "8",
+      "pu": "4000"
+    },
+    {
+      "type": "art",
+      "id": "r578",
+      "desig": "F/P ARMOIRE DE BRASSAGE 12U y compris  toutes sujétions de bonne exécution et de  mise en œuvre.",
+      "unite": "U",
+      "qty": "1",
+      "pu": "9500"
+    },
+    {
+      "type": "art",
+      "id": "r579",
+      "desig": "F/P Switch COMBO 08 ports POE Intelégent y compris  toutes sujétions de bonne exécution et de  mise en œuvre.",
+      "unite": "U",
+      "qty": "1",
+      "pu": "8500"
+    },
+    {
+      "type": "art",
+      "id": "r580",
+      "desig": "F/P Panneau Guide Cordon y compris  toutes sujétions de bonne exécution et de  mise en œuvre.",
+      "unite": "U",
+      "qty": "1",
+      "pu": "35000"
+    },
+    {
+      "type": "art",
+      "id": "r581",
+      "desig": "F/P NVR de Gestion et d'Enregistreur Numérique IP 16 a 02 sortie HDMI y compris  toutes sujétions de bonne exécution et de  mise en œuvre. ",
+      "unite": "U",
+      "qty": "1",
+      "pu": "22000"
+    },
+    {
+      "type": "art",
+      "id": "r582",
+      "desig": "F/P Tiroir Coulissanty compris  toutes sujétions de bonne exécution et de  mise en œuvre.",
+      "unite": "U",
+      "qty": "2",
+      "pu": "12000"
+    },
+    {
+      "type": "art",
+      "id": "r583",
+      "desig": "F/P DISQUE DUR  SURVEILLANCE HDD(3.5\",8TB,64MB,SATy compris  toutes sujétions de bonne exécution et de  mise en œuvre. ",
+      "unite": "U",
+      "qty": "1",
+      "pu": "15000"
+    },
+    {
+      "type": "art",
+      "id": "r584",
+      "desig": "F/P CABLE HDMI 30M y compris  toutes sujétions de bonne exécution et de  mise en œuvre.",
+      "unite": "U",
+      "qty": "1",
+      "pu": "8000"
+    },
+    {
+      "type": "art",
+      "id": "r585",
+      "desig": "F/P LED 43 FHDTV y compris  toutes sujétions de bonne exécution et de  mise en œuvre.",
+      "unite": "U",
+      "qty": "1",
+      "pu": "45000"
+    },
+    {
+      "type": "art",
+      "id": "r586",
+      "desig": "F/P Câble Ethernet FTP de catégorie 6 avec tous accesoires y compris  toutes sujétions de bonne exécution et de  mise en œuvre.",
+      "unite": "ML",
+      "qty": "290",
+      "pu": "300"
+    },
+    {
+      "type": "art",
+      "id": "r587",
+      "desig": "F/P Onduleur 1 kVA, y compris  toutes sujétions de bonne exécution et de  mise en œuvre. avec tous accesoires y compris  toutes sujétions de bonne exécution et de  mise en œuvre.",
+      "unite": "U",
+      "qty": "1",
+      "pu": "95000"
+    },
+    {
+      "type": "art",
+      "id": "r588",
+      "desig": "F/P Tube IRO diamètre 20 pour passage apparent avec tous accesoires y compris  toutes sujétions de bonne exécution et de  mise en œuvre.",
+      "unite": "ML",
+      "qty": "40",
+      "pu": "700"
+    },
+    {
+      "type": "art",
+      "id": "r589",
+      "desig": "F/P Commutateur secours 220v  30ma",
+      "unite": "U",
+      "qty": "1",
+      "pu": "4500"
+    }
+  ],
+  "mode": "DQE",
+  "nid": 590,
+  "C": {
+    "chapBg": "#ea5d5d",
+    "chapFg": "#000000",
+    "sub1Bg": "#ffff00",
+    "sub1Fg": "#000000",
+    "sub2Bg": "#bdd7ee",
+    "sub2Fg": "#000000",
+    "sub3Bg": "#ffae00",
+    "sub3Fg": "#000000",
+    "artBg": "#ffffff",
+    "artFg": "#000000",
+    "saBg": "#f5f5f5",
+    "saFg": "#000000",
+    "tsBg": "#bdd7ee",
+    "tsFg": "#000000",
+    "tcBg": "#92d050",
+    "tcFg": "#000000",
+    "gtBg": "#ffff00",
+    "gtFg": "#000000"
+  },
+  "showPrices": true,
+  "pageLayout": {
+    "size": "A4",
+    "orient": "portrait",
+    "mt": 5,
+    "mb": 5,
+    "ml": 5,
+    "mr": 5,
+    "header": "",
+    "footer": "",
+    "showPageNum": false,
+    "showDate": false
+  },
+  "colWidths": {
+    "DQE": {
+      "num": 60,
+      "desig": 0,
+      "unit": 50,
+      "qty": 80,
+      "pu": 100,
+      "tot": 130
+    },
+    "BPU": {
+      "num": 70,
+      "desig": 0,
+      "pu": 142
+    }
+  },
+  "headerLines": [
+    {
+      "text": "PROJET : RÉALISATION D’UN COLLÈGE TYPE 06 ",
+      "style": "t1"
+    },
+    {
+      "text": "DU SITE ZOUAGHI (1172 LOGEMENTS + 385 VILLAS)",
+      "style": "t2"
+    },
+    {
+      "text": "COMMUNE DE CONSTANTINE WILAYA DE CONSTANTINE",
+      "style": "t2"
+    }
+  ],
+  "tva": "19"
+}

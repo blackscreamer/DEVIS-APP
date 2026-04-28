@@ -1,6 +1,9 @@
 /**
- * selection.js — Gestion de la sélection de lignes (simple, Ctrl, Shift)
- * et positionnement du panneau flottant.
+ * selection.js — Gestion de la sélection (simple, Ctrl, Shift).
+ *
+ * PERF: selectRow ne fait JAMAIS render().
+ * Elle manipule uniquement les classes CSS sur les <tr> existants
+ * et met à jour le panneau latéral fixe.
  */
 
 function selectRow(id, trEl, e) {
@@ -8,76 +11,71 @@ function selectRow(id, trEl, e) {
   if (e) e.stopPropagation();
 
   if (e && (e.ctrlKey || e.metaKey)) {
-    if (selIds.has(id)) selIds.delete(id); else selIds.add(id);
+    /* ── Multi-sélection Ctrl/Cmd ── */
+    if (selIds.has(id)) selIds.delete(id);
+    else                selIds.add(id);
     selId = id;
   } else if (e && e.shiftKey && selId) {
+    /* ── Sélection plage Shift ── */
     const fromIdx = rows.findIndex(r => r.id === selId);
     const toIdx   = rows.findIndex(r => r.id === id);
-    const lo = Math.min(fromIdx, toIdx), hi = Math.max(fromIdx, toIdx);
+    const lo = Math.min(fromIdx, toIdx);
+    const hi = Math.max(fromIdx, toIdx);
     for (let i = lo; i <= hi; i++) selIds.add(rows[i].id);
+    // selId stays as anchor
   } else {
-    selIds.clear(); selIds.add(id); selId = id;
+    /* ── Sélection simple ── */
+    selIds.clear();
+    selIds.add(id);
+    selId = id;
   }
 
-  render();
+  // CSS only — no render()
+  applySelectionClasses();
+  updateSidePanel();
 }
 
-function markSelectionUI() {
-  document.querySelectorAll('tr.sel-row,tr.sel-multi').forEach(t => t.classList.remove('sel-row','sel-multi'));
-  let lastTr = null;
+/** Applique les classes sel-row / sel-multi sur les <tr> existants */
+function applySelectionClasses() {
+  // Clear all
+  document.querySelectorAll('tr.sel-row, tr.sel-multi')
+    .forEach(t => t.classList.remove('sel-row', 'sel-multi'));
+
+  if (!selIds.size) return;
+
   selIds.forEach(sid => {
     const tr = document.getElementById('ro-' + sid);
-    if (tr) {
-      tr.classList.add(selIds.size===1 || sid===selId ? 'sel-row' : 'sel-multi');
-      lastTr = tr;
-    }
+    if (!tr) return;
+    tr.classList.add(selIds.size === 1 ? 'sel-row' : 'sel-multi');
   });
-  if (lastTr) positionFloatCtrl(document.getElementById('ro-' + selId) || lastTr);
+
+  // Active row gets sel-row regardless of multi
+  if (selId) {
+    const activeTr = document.getElementById('ro-' + selId);
+    if (activeTr) { activeTr.classList.remove('sel-multi'); activeTr.classList.add('sel-row'); }
+  }
 }
 
-function selectRowSoft(id, trEl) {
-  selIds.clear();
-  selIds.add(id);
-  selId = id;
-  markSelectionUI();
+/** Soft select — used after add/dup, no re-render needed */
+function selectRowSoft(id) {
+  selIds.clear(); selIds.add(id); selId = id;
+  applySelectionClasses();
+  updateSidePanel();
 }
 
-function positionFloatCtrl(trEl) {
-  const fc = document.getElementById('float-ctrl');
-  if (!trEl) { fc.classList.add('hidden'); return; }
-  fc.classList.remove('hidden');
-  const rect = trEl.getBoundingClientRect();
-  const top  = rect.top + rect.height / 2 - 16;
-  let left   = rect.right + 6;
-  if (left + 210 > window.innerWidth) left = rect.right - 215;
-  fc.style.top  = Math.max(44, top) + 'px';
-  fc.style.left = Math.max(4, left) + 'px';
-
-  const cnt = document.getElementById('fc-count');
-  if (cnt) { cnt.style.display = selIds.size > 1 ? '' : 'none'; cnt.textContent = selIds.size > 1 ? selIds.size + ' sél.' : ''; }
-
-  const dh = document.getElementById('fc-drag');
-  dh.ondragstart = null;
-  dh.draggable   = true;
-  dh.ondragstart = (ev) => {
-    ev.dataTransfer.effectAllowed = 'move';
-    dragIds = selIds.has(selId) && selIds.size > 1 ? [...selIds] : [selId];
-    dragIds = rows.filter(r => dragIds.includes(r.id)).map(r => r.id);
-    setTimeout(() => {
-      dragIds.forEach(did => { const t = document.getElementById('ro-' + did); if (t) t.classList.add('dragging'); });
-    }, 0);
-  };
-}
-
-function clearSelection(shouldRender = true) {
+function clearSelection() {
   selId = null; selIds.clear();
-  document.querySelectorAll('tr.sel-row,tr.sel-multi').forEach(t => t.classList.remove('sel-row','sel-multi'));
-  document.getElementById('float-ctrl').classList.add('hidden');
-  if (shouldRender) render();
+  document.querySelectorAll('tr.sel-row, tr.sel-multi')
+    .forEach(t => t.classList.remove('sel-row', 'sel-multi'));
+  updateSidePanel();
+  // NO render() here
 }
 
+/* ── Click outside table → clear selection ── */
 document.addEventListener('click', e => {
-  if (!e.target.closest('#tbl') && !e.target.closest('#float-ctrl') &&
-      !e.target.closest('#appbar') && !e.target.closest('#colorpop'))
+  if (!e.target.closest('#tbl')       &&
+      !e.target.closest('#side-panel') &&
+      !e.target.closest('#appbar')     &&
+      !e.target.closest('.offcanvas'))
     clearSelection();
 }, { passive: true });

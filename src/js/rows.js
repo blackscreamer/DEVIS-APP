@@ -1,8 +1,9 @@
 /**
  * rows.js — Ajout, suppression, duplication, mise à jour des lignes.
+ * render() is called only when data structure changes.
+ * updateSidePanel() replaces all positionFloatCtrl() calls.
  */
 
-/* ── Indice d'insertion (après la ligne sélectionnée) ── */
 function insertIdx(afterId) {
   const anchorId = afterId === undefined ? selId : afterId;
   if (anchorId === null) return rows.length;
@@ -10,7 +11,6 @@ function insertIdx(afterId) {
   return idx < 0 ? rows.length : idx + 1;
 }
 
-/* ── Hérite de l'unité de la ligne précédente ── */
 function lastUniteBefore(idx) {
   for (let i = idx - 1; i >= 0; i--) {
     const r = rows[i];
@@ -19,7 +19,7 @@ function lastUniteBefore(idx) {
   return 'M²';
 }
 
-/* ── Ajouter une ligne ── */
+/* ── Add ── */
 function addRow(type, level, afterId) {
   snapshot();
   const id  = uid();
@@ -32,10 +32,15 @@ function addRow(type, level, afterId) {
   if (type === 'blank')  obj = { type, id, desig: '' };
   rows.splice(idx, 0, obj);
   selId = id; selIds.clear(); selIds.add(id);
-  render();
+  render(); // structural change → render needed
   setTimeout(() => {
     const tr = document.getElementById('ro-' + id);
-    if (tr) { tr.classList.add('sel-row'); positionFloatCtrl(tr); const inp = tr.querySelector('input.di,textarea.di'); if (inp) { inp.focus(); inp.select(); } }
+    if (tr) {
+      tr.classList.add('sel-row');
+      const inp = tr.querySelector('input.di, textarea.di');
+      if (inp) { inp.focus(); inp.select(); }
+    }
+    updateSidePanel();
   }, 35);
   triggerAutosave();
 }
@@ -45,7 +50,6 @@ function addRowHere(type, level) {
   addRow(type, level, selId);
 }
 
-/* Raccourci clavier + → ajouter article */
 document.addEventListener('keydown', e => {
   if (e.key === '+' && !e.ctrlKey && !e.metaKey &&
       e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
@@ -53,12 +57,11 @@ document.addEventListener('keydown', e => {
   }
 });
 
-/* ── Supprimer sélection ── */
+/* ── Delete ── */
 function delSelected() {
   if (!selId && !selIds.size) return;
   snapshot();
   const toDelete = selIds.size > 0 ? new Set(selIds) : new Set([selId]);
-  // Pour chaque id sélectionné, supprimer son bloc (art + ses subarts)
   const toDeleteExpanded = new Set();
   toDelete.forEach(id => {
     const idx = rows.findIndex(r => r.id === id);
@@ -66,12 +69,13 @@ function delSelected() {
   });
   rows = rows.filter(r => !toDeleteExpanded.has(r.id));
   selId = null; selIds.clear();
-  document.getElementById('float-ctrl').classList.add('hidden');
-  render(); triggerAutosave();
+  render(); // structural change
+  updateSidePanel();
+  triggerAutosave();
   notif('✕ ' + toDeleteExpanded.size + ' ligne' + (toDeleteExpanded.size > 1 ? 's' : '') + ' supprimée' + (toDeleteExpanded.size > 1 ? 's' : ''));
 }
 
-/* ── Dupliquer sélection ── */
+/* ── Duplicate ── */
 function dupSelected() {
   if (!selId && !selIds.size) return;
   snapshot();
@@ -80,7 +84,6 @@ function dupSelected() {
   if (!ordered.length) return;
   const lastIdx = Math.max(...ordered.map(r => rows.indexOf(r)));
   const newIds  = new Set();
-  // Clone chaque ligne avec son bloc
   const clones  = [];
   ordered.forEach(r => {
     const idx = rows.findIndex(x => x.id === r.id);
@@ -92,19 +95,27 @@ function dupSelected() {
   });
   rows.splice(lastIdx + 1, 0, ...clones);
   selIds = newIds; selId = [...newIds][0];
-  render();
+  render(); // structural change
   setTimeout(() => {
-    const tr = document.getElementById('ro-' + selId);
-    if (tr) { tr.classList.add('sel-row'); positionFloatCtrl(tr); }
+    applySelectionClasses();
+    updateSidePanel();
   }, 35);
   triggerAutosave();
   notif('✓ ' + clones.length + ' dupliqué' + (clones.length > 1 ? 's' : ''));
 }
 
-/* ── Mettre à jour un champ ── */
+/* ── Update field (no render, uses recalc) ── */
+const UPD_DEBOUNCE = {};
 function upd(id, field, val) {
   const r = rows.find(r => r.id === id);
-  if (r) { r[field] = val; recalc(); triggerAutosave(); }
+  if (!r) return;
+  r[field] = val;
+  // Debounce recalc + autosave to avoid per-keystroke cost
+  clearTimeout(UPD_DEBOUNCE[id]);
+  UPD_DEBOUNCE[id] = setTimeout(() => {
+    recalc();
+    triggerAutosave();
+  }, 150);
 }
 
 /* ── Collapse ── */
@@ -118,7 +129,7 @@ function collapseAll(v) {
   render(); triggerAutosave();
 }
 
-/* ── Extrait le bloc d'une ligne (pour drag, dup, del) ── */
+/* ── Extract block ── */
 function extractBlock(idx) {
   const r = rows[idx];
   if (r.type === 'chap') {
@@ -145,5 +156,4 @@ function extractBlock(idx) {
   return [r];
 }
 
-/* ── TVA change ── */
 function handleTvaChange() { recalc(); triggerAutosave(); }

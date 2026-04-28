@@ -281,14 +281,11 @@ function render() {
   document.querySelectorAll('textarea.di').forEach(t => { t.style.height = 'auto'; t.style.height = t.scrollHeight + 'px'; });
 
   /* Rétablir la sélection visuelle */
-  if (selIds.size) {
-    if (typeof markSelectionUI === 'function') markSelectionUI();
-  } else {
-    clearSelection(false);
-  }
+  applySelectionClasses();
 
   recalc();
-  if (typeof syncSearchUI === 'function') syncSearchUI();
+  if (typeof syncSearchUI    === 'function') syncSearchUI();
+  if (typeof updateSidePanel === 'function') updateSidePanel();
 }
 
 /* Keyboard nav Tab entre cellules numériques */

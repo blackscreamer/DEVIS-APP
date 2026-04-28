@@ -33,5 +33,8 @@ function redo() {
 document.addEventListener('keydown', e => {
   if (e.ctrlKey && e.key === 'z') { e.preventDefault(); undo(); }
   if (e.ctrlKey && e.key === 'y') { e.preventDefault(); redo(); }
-  if (e.ctrlKey && e.key === 'p') { e.preventDefault(); if(typeof doPreview==='function') doPreview(); }
+  if (e.ctrlKey && e.key === 'd') { e.preventDefault(); if(typeof dupSelected==='function') dupSelected(); }
+  if (e.key === 'Delete' && !e.target.matches('input,textarea,select')) {
+    if(typeof delSelected==='function' && (typeof selId!=='undefined' && selId)) delSelected();
+  }
 });
