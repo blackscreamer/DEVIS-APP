@@ -38,9 +38,6 @@ let saveTimeout = null;
 /** Drag IDs (multi-row drag) */
 let dragIds = [];
 
-/** When true, render() skips the add-here-row (set by side-panel clicks) */
-let suppressAddHereRow = false;
-
 /** Header lines — unlimited array of {text, style:'t1'|'t2'} */
 let headerLines = [
   { text: '', style: 't1' },  // first line: big bold underlined

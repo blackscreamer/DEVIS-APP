@@ -30,21 +30,6 @@ function render() {
     <td class="tot-val price-cell" style="background:${C.tcBg};color:${C.tcFg}" id="ct-${chap.id}"></td>
   </tr>`;
 
-  const addHereRow = () => `<tr class="add-here-row">
-    <td colspan="${isBPU ? 3 : 6}">
-      <div class="add-here-box">
-        <span class="add-here-label">+ Ajouter ici</span>
-        <button class="add-here-btn action" type="button" onclick="dupSelected();event.stopPropagation()">Dupliquer</button>
-        <button class="add-here-btn action danger" type="button" onclick="delSelected();event.stopPropagation()">Supprimer</button>
-        <button class="add-here-btn" type="button" onclick="addRowHere('chap');event.stopPropagation()">Chapitre</button>
-        <button class="add-here-btn" type="button" onclick="addRowHere('sub',1);event.stopPropagation()">Sous-chapitre</button>
-        <button class="add-here-btn" type="button" onclick="addRowHere('art');event.stopPropagation()">Article</button>
-        <button class="add-here-btn" type="button" onclick="addRowHere('subart');event.stopPropagation()">Sous-article</button>
-        <button class="add-here-btn" type="button" onclick="addRowHere('blank');event.stopPropagation()">Ligne vide</button>
-      </div>
-    </td>
-  </tr>`;
-
   /* ── Itération des lignes ── */
   rows.forEach((r, i) => {
     const vis    = !hidden.has(i);
@@ -70,7 +55,6 @@ function render() {
             oninput="upd('${r.id}','desig',this.value)"/>
         </td>
       </tr>`;
-      if (selIds.size === 1 && selId === r.id && vis && !suppressAddHereRow) html += addHereRow();
     }
 
     /* ─ SOUS-CHAPITRE ─ */
@@ -83,7 +67,7 @@ function render() {
       const fg = lv===1 ? C.sub1Fg : lv===2 ? C.sub2Fg : C.sub3Fg;
       const pl = (lv-1)*20 + 8;
       const cs = isBPU ? '1' : '4';
-      html += `<tr class="rs${selCls}${matchCls}" id="ro-${r.id}" ${h} onclick="selectRow('${r.id}',this,event)">
+      html += `<tr class="rs${selCls}${matchCls}" id="ro-${r.id}" data-lv="${lv}" ${h} onclick="selectRow('${r.id}',this,event)">
         <td class="nc" style="background:${bg};color:${fg};cursor:pointer;font-weight:bold" onclick="toggleCollapse('${r.id}',event)">${r.collapsed ? '▸' : '▾'} ${esc(n)}</td>
         <td colspan="${isBPU ? 2 : 5}" style="background:${bg}">
           <input class="di" value="${esc(r.desig)}" placeholder="Nom du sous-chapitre…"
@@ -91,7 +75,6 @@ function render() {
             oninput="upd('${r.id}','desig',this.value)"/>
         </td>
       </tr>`;
-      if (selIds.size === 1 && selId === r.id && vis && !suppressAddHereRow) html += addHereRow();
     }
 
     /* ─ ARTICLE ─ */
@@ -118,8 +101,7 @@ function render() {
                   oninput="niInput(this,'${r.id}','bpu_pu')"/>
               </td>`}
         </tr>`;
-        if (selIds.size === 1 && selId === r.id && vis && !suppressAddHereRow) html += addHereRow();
-      } else {
+        } else {
         const t = hasKids ? 0 : artTotal(r);
         html += `<tr class="ra${selCls}${matchCls}" id="ro-${r.id}" ${h} onclick="selectRow('${r.id}',this,event)">
           <td class="nc" style="background:${C.artBg};color:${C.artFg}">${esc(n)}</td>
@@ -148,8 +130,7 @@ function render() {
               </td>`}
           <td class="tc${t?' v':''} price-cell" style="background:${C.artBg};color:${C.artFg}" id="at-${r.id}">${t ? daNoUnit(t) : ''}</td>
         </tr>`;
-        if (selIds.size === 1 && selId === r.id && vis && !suppressAddHereRow) html += addHereRow();
-      }
+        }
     }
 
     /* ─ SOUS-ARTICLE ─ */
@@ -176,8 +157,7 @@ function render() {
               oninput="niInput(this,'${r.id}','bpu_pu')"/>
           </td>
         </tr>`;
-        if (selIds.size === 1 && selId === r.id && vis && !suppressAddHereRow) html += addHereRow();
-      } else {
+        } else {
         const t = artTotal(r);
         html += `<tr class="rsa${selCls}${matchCls}" id="ro-${r.id}" ${h} onclick="selectRow('${r.id}',this,event)">
           <td class="nc" style="background:${C.saBg};color:${C.saFg};"></td>
@@ -207,8 +187,7 @@ function render() {
           </td>
           <td class="tc${t?' v':''} price-cell" style="background:${C.saBg};color:${C.saFg}" id="at-${r.id}">${t ? daNoUnit(t) : ''}</td>
         </tr>`;
-        if (selIds.size === 1 && selId === r.id && vis && !suppressAddHereRow) html += addHereRow();
-      }
+        }
     }
 
     /* ─ LIGNE VIDE / DESCRIPTION ─ */
@@ -223,7 +202,6 @@ function render() {
             style="font-style:italic;color:#333" oninput="upd('${r.id}','desig',this.value)"/>
         </td>
       </tr>`;
-      if (selIds.size === 1 && selId === r.id && vis && !suppressAddHereRow) html += addHereRow();
     }
   });
 
@@ -255,30 +233,11 @@ function render() {
 
   document.getElementById('body').innerHTML = html;
 
-  /* Réattacher les drag/drop listeners */
-  document.querySelectorAll('#body tr[id^="ro-"]').forEach(tr => {
-    tr.addEventListener('dragover',  e => { e.preventDefault(); dov2(e, tr); });
-    tr.addEventListener('dragleave', e => dlv2(tr));
-    tr.addEventListener('drop',      e => dp2(e, tr));
-  });
-
-  document.querySelectorAll('#body tr[id^="ro-"] input, #body tr[id^="ro-"] textarea, #body tr[id^="ro-"] select').forEach(el => {
-    el.addEventListener('focus', () => {
-      const tr = el.closest('tr[id^="ro-"]');
-      if (!tr) return;
-      const id = tr.id.replace('ro-', '');
-      if (!selIds.has(id) || selIds.size !== 1) selectRowSoft(id, tr);
-    });
-    el.addEventListener('mousedown', () => {
-      const tr = el.closest('tr[id^="ro-"]');
-      if (!tr) return;
-      const id = tr.id.replace('ro-', '');
-      if (!selIds.has(id) || selIds.size !== 1) selectRowSoft(id, tr);
-    });
-  });
-
-  /* Rétablir les hauteurs des textareas */
-  document.querySelectorAll('textarea.di').forEach(t => { t.style.height = 'auto'; t.style.height = t.scrollHeight + 'px'; });
+  /* Rétablir les hauteurs des textareas — batch read/write to avoid N layout reflows */
+  const tas = document.querySelectorAll('textarea.di');
+  tas.forEach(t => { t.style.height = 'auto'; });           // batch write
+  const taHeights = Array.from(tas).map(t => t.scrollHeight); // single reflow
+  tas.forEach((t, i) => { t.style.height = taHeights[i] + 'px'; }); // batch write
 
   /* Rétablir la sélection visuelle */
   applySelectionClasses();
@@ -286,7 +245,6 @@ function render() {
   recalc();
   if (typeof syncSearchUI    === 'function') syncSearchUI();
   if (typeof updateSidePanel === 'function') updateSidePanel();
-  suppressAddHereRow = false;
 }
 
 /* Keyboard nav Tab entre cellules numériques */

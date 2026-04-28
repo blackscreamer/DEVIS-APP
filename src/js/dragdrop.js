@@ -51,3 +51,20 @@ function dp2(e, tr) {
 function dov(e) { e.preventDefault(); }
 function dlv()  {}
 function dp(e)  { e.preventDefault(); }
+
+/* ── Delegated drag/drop on rows (replaces per-row listeners in render) ── */
+(function () {
+  const tbody = document.getElementById('body');
+  tbody.addEventListener('dragover', e => {
+    const tr = e.target.closest('tr[id^="ro-"]');
+    if (tr) dov2(e, tr);
+  });
+  tbody.addEventListener('dragleave', e => {
+    const tr = e.target.closest('tr[id^="ro-"]');
+    if (tr && !tr.contains(e.relatedTarget)) dlv2(tr);
+  });
+  tbody.addEventListener('drop', e => {
+    const tr = e.target.closest('tr[id^="ro-"]');
+    if (tr) dp2(e, tr);
+  });
+}());

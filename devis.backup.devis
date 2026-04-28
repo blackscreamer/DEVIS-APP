@@ -24,14 +24,6 @@
     },
     {
       "type": "art",
-      "id": "r590",
-      "desig": "Terrassement en grande masse dans terrain de toute nature exécutés par engins mécaniques  y compris dressement des parois, du fond  de fouilles, jets de pelle sur berge, main d'œuvre et toutes sujétions de bonne exécution",
-      "unite": "M³",
-      "qty": "3655",
-      "pu": "400"
-    },
-    {
-      "type": "art",
       "id": "r4",
       "desig": "fouilles en puits ou en tranchées ou en rigole dans terrain   de toute nature  à l'aide d'engin mécanique, y compris , boisage des parois (verticales) au-delà de 1.50m de profondeur ou talutage , jet de pelle (jet de terre à l'extérieur de la fouille),réglage du fond de fouille , la mise en dépôt des déblais dans l'enceinte du chantier, (lieu de stockage) pour être utilisées ultérieurement dans la réalisation des remblais et toutes sujétions nécessaires pour une bonne et parfaite exécution.",
       "unite": "M³",
@@ -44,6 +36,14 @@
       "desig": "Remblais compacté des vides et autour des fondations provenant du site ou d'un apport de terre noble y compris toutes sujétions de bonne éxecution ",
       "unite": "M³",
       "qty": "1600",
+      "pu": "400"
+    },
+    {
+      "type": "art",
+      "id": "r6",
+      "desig": "Evacuation  des terres excédentaires des terrassement  à la décharge publique quelque soit la distance , y compris foisonnement ,chargement ,frais de décharge, déchargement et toutes sujétions  de bonne exécution",
+      "unite": "M³",
+      "qty": "3405",
       "pu": "400"
     },
     {
@@ -3336,9 +3336,9 @@
     }
   ],
   "mode": "DQE",
-  "nid": 599,
+  "nid": 590,
   "C": {
-    "chapBg": "#b12525",
+    "chapBg": "#ea5d5d",
     "chapFg": "#000000",
     "sub1Bg": "#ffff00",
     "sub1Fg": "#000000",

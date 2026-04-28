@@ -76,24 +76,6 @@ tr.search-hit-active td {
   outline-offset: -2px;
 }
 
-tr.add-here-row td {
-  padding: 8px 10px; background: #f5f8fb; border: 1px dashed #c8d2dc;
-}
-.add-here-box {
-  display: flex; align-items: center; flex-wrap: wrap; gap: 6px;
-  font-family: var(--F);
-}
-.add-here-label {
-  font-size: 9.5pt; font-weight: bold; color: #4f6478; margin-right: 6px;
-}
-.add-here-btn {
-  border: 1px solid #c8d2dc; background: #fff; color: #2d4052;
-  border-radius: 999px; padding: 4px 10px; font-size: 9.5pt; font-weight: bold;
-}
-.add-here-btn:hover { background: #eaf0f6; border-color: #9fb3c8; }
-.add-here-btn.action { background: #eef3f7; }
-.add-here-btn.danger { color: #8a3527; border-color: #e0b8b1; background: #fff8f7; }
-.add-here-btn.danger:hover { background: #f9e5e1; border-color: #c98a80; }
 
 /* Drag & drop indicators */
 .dragging    { opacity: .3; outline: 2px dashed #1a56a0; }

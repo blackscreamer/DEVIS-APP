@@ -45,10 +45,6 @@ function addRow(type, level, afterId) {
   triggerAutosave();
 }
 
-function addRowHere(type, level) {
-  if (!selId) return addRow(type, level);
-  addRow(type, level, selId);
-}
 
 document.addEventListener('keydown', e => {
   if (e.key === '+' && !e.ctrlKey && !e.metaKey &&
@@ -103,6 +99,37 @@ function dupSelected() {
   triggerAutosave();
   notif('✓ ' + clones.length + ' dupliqué' + (clones.length > 1 ? 's' : ''));
 }
+
+/* ── Move up / down ── */
+function moveSelected(dir) {
+  if (!selId) return;
+  const idx = rows.findIndex(r => r.id === selId);
+  if (idx < 0) return;
+  const block = extractBlock(idx);
+  const blockLen = block.length;
+
+  if (dir === 'up') {
+    if (idx === 0) return;
+    snapshot();
+    rows.splice(idx, blockLen);
+    rows.splice(idx - 1, 0, ...block);
+  } else {
+    if (idx + blockLen >= rows.length) return;
+    snapshot();
+    rows.splice(idx, blockLen);
+    rows.splice(idx + 1, 0, ...block);
+  }
+
+  render();
+  triggerAutosave();
+}
+
+document.addEventListener('keydown', e => {
+  if (!e.altKey || e.ctrlKey || e.metaKey) return;
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.key === 'ArrowUp')   { e.preventDefault(); moveSelected('up');   }
+  if (e.key === 'ArrowDown') { e.preventDefault(); moveSelected('down'); }
+});
 
 /* ── Update field (no render, uses recalc) ── */
 const UPD_DEBOUNCE = {};

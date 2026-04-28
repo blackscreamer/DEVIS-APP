@@ -8,11 +8,6 @@
  * Supporte la multi-sélection (Ctrl+clic, Shift+clic).
  */
 
-/* Suppress add-here-row when any button in the side panel is clicked */
-document.getElementById('side-panel').addEventListener('mousedown', () => {
-  suppressAddHereRow = true;
-}, { capture: true });
-
 /**
  * Met à jour le panneau latéral selon la sélection courante.
  * Appelé par selectRow(), clearSelection(), et après render().
@@ -54,29 +49,20 @@ function updateSidePanel() {
   countEl.textContent = n > 1 ? n + ' sél.' : '';
 
   // Enable/disable buttons based on context
+  const selIdx   = selId ? rows.findIndex(x => x.id === selId) : -1;
+  const blockLen = (selIdx >= 0 && typeof extractBlock === 'function')
+    ? extractBlock(selIdx).length : 1;
+
   panel.querySelectorAll('button[data-action]').forEach(b => {
     b.disabled = false;
     const action = b.dataset.action;
     // "add subart" only makes sense after an article
     if (action === 'add-subart' && r && r.type !== 'art' && r.type !== 'subart') {
-      b.disabled = (n === 1); // disable only for single selection on non-art
+      b.disabled = (n === 1);
     }
+    // move-up disabled when already first; move-down when block reaches end
+    if (action === 'move-up'   && selIdx <= 0)                           b.disabled = true;
+    if (action === 'move-down' && selIdx + blockLen >= rows.length)      b.disabled = true;
   });
 
-  // Wire drag handle for multi-row drag
-  const dh = document.getElementById('sp-drag');
-  if (dh) {
-    dh.draggable = true;
-    dh.ondragstart = (ev) => {
-      ev.dataTransfer.effectAllowed = 'move';
-      dragIds = selIds.has(selId) && selIds.size > 1 ? [...selIds] : [selId];
-      dragIds = rows.filter(r => dragIds.includes(r.id)).map(r => r.id);
-      setTimeout(() => {
-        dragIds.forEach(did => {
-          const t = document.getElementById('ro-' + did);
-          if (t) t.classList.add('dragging');
-        });
-      }, 0);
-    };
-  }
 }

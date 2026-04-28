@@ -1,6 +1,6 @@
 /* print.css — Print & PDF export styles */
 @media print {
-  #appbar, #foot, #nf, #float-ctrl, .offcanvas, .offcanvas-backdrop { display: none !important; }
+  #appbar, #foot, #nf, #float-ctrl, #side-panel, .offcanvas, .offcanvas-backdrop { display: none !important; }
   body, #wrap { height: auto; overflow: visible; background: #fff; }
   #doc  { box-shadow: none; border: none; padding: 0; max-width: 100%; }
   tr.sel-row td, tr.sel-multi td { outline: none; }

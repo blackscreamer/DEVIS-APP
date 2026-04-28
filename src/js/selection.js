@@ -79,3 +79,16 @@ document.addEventListener('click', e => {
       !e.target.closest('.offcanvas'))
     clearSelection();
 }, { passive: true });
+
+/* ── Delegated focus/mousedown on inputs inside rows (replaces per-element listeners in render) ── */
+(function () {
+  const tbody = document.getElementById('body');
+  function softSelectFromEl(el) {
+    const tr = el.closest('tr[id^="ro-"]');
+    if (!tr) return;
+    const id = tr.id.replace('ro-', '');
+    if (!selIds.has(id) || selIds.size !== 1) selectRowSoft(id);
+  }
+  tbody.addEventListener('focusin',   e => { if (e.target.matches('input,textarea,select')) softSelectFromEl(e.target); });
+  tbody.addEventListener('mousedown',  e => { if (e.target.matches('input,textarea,select')) softSelectFromEl(e.target); }, { passive: true });
+}());
