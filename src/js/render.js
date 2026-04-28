@@ -70,7 +70,7 @@ function render() {
             oninput="upd('${r.id}','desig',this.value)"/>
         </td>
       </tr>`;
-      if (selIds.size === 1 && selId === r.id && vis) html += addHereRow();
+      if (selIds.size === 1 && selId === r.id && vis && !suppressAddHereRow) html += addHereRow();
     }
 
     /* ─ SOUS-CHAPITRE ─ */
@@ -91,7 +91,7 @@ function render() {
             oninput="upd('${r.id}','desig',this.value)"/>
         </td>
       </tr>`;
-      if (selIds.size === 1 && selId === r.id && vis) html += addHereRow();
+      if (selIds.size === 1 && selId === r.id && vis && !suppressAddHereRow) html += addHereRow();
     }
 
     /* ─ ARTICLE ─ */
@@ -118,7 +118,7 @@ function render() {
                   oninput="niInput(this,'${r.id}','bpu_pu')"/>
               </td>`}
         </tr>`;
-        if (selIds.size === 1 && selId === r.id && vis) html += addHereRow();
+        if (selIds.size === 1 && selId === r.id && vis && !suppressAddHereRow) html += addHereRow();
       } else {
         const t = hasKids ? 0 : artTotal(r);
         html += `<tr class="ra${selCls}${matchCls}" id="ro-${r.id}" ${h} onclick="selectRow('${r.id}',this,event)">
@@ -148,7 +148,7 @@ function render() {
               </td>`}
           <td class="tc${t?' v':''} price-cell" style="background:${C.artBg};color:${C.artFg}" id="at-${r.id}">${t ? daNoUnit(t) : ''}</td>
         </tr>`;
-        if (selIds.size === 1 && selId === r.id && vis) html += addHereRow();
+        if (selIds.size === 1 && selId === r.id && vis && !suppressAddHereRow) html += addHereRow();
       }
     }
 
@@ -176,7 +176,7 @@ function render() {
               oninput="niInput(this,'${r.id}','bpu_pu')"/>
           </td>
         </tr>`;
-        if (selIds.size === 1 && selId === r.id && vis) html += addHereRow();
+        if (selIds.size === 1 && selId === r.id && vis && !suppressAddHereRow) html += addHereRow();
       } else {
         const t = artTotal(r);
         html += `<tr class="rsa${selCls}${matchCls}" id="ro-${r.id}" ${h} onclick="selectRow('${r.id}',this,event)">
@@ -207,7 +207,7 @@ function render() {
           </td>
           <td class="tc${t?' v':''} price-cell" style="background:${C.saBg};color:${C.saFg}" id="at-${r.id}">${t ? daNoUnit(t) : ''}</td>
         </tr>`;
-        if (selIds.size === 1 && selId === r.id && vis) html += addHereRow();
+        if (selIds.size === 1 && selId === r.id && vis && !suppressAddHereRow) html += addHereRow();
       }
     }
 
@@ -223,7 +223,7 @@ function render() {
             style="font-style:italic;color:#333" oninput="upd('${r.id}','desig',this.value)"/>
         </td>
       </tr>`;
-      if (selIds.size === 1 && selId === r.id && vis) html += addHereRow();
+      if (selIds.size === 1 && selId === r.id && vis && !suppressAddHereRow) html += addHereRow();
     }
   });
 
@@ -286,6 +286,7 @@ function render() {
   recalc();
   if (typeof syncSearchUI    === 'function') syncSearchUI();
   if (typeof updateSidePanel === 'function') updateSidePanel();
+  suppressAddHereRow = false;
 }
 
 /* Keyboard nav Tab entre cellules numériques */

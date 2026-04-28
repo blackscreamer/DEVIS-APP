@@ -8,6 +8,11 @@
  * Supporte la multi-sélection (Ctrl+clic, Shift+clic).
  */
 
+/* Suppress add-here-row when any button in the side panel is clicked */
+document.getElementById('side-panel').addEventListener('mousedown', () => {
+  suppressAddHereRow = true;
+}, { capture: true });
+
 /**
  * Met à jour le panneau latéral selon la sélection courante.
  * Appelé par selectRow(), clearSelection(), et après render().
