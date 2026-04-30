@@ -101,6 +101,29 @@ function loadLocal() {
 }
 
 /* ── Save ── */
+/** Reset complet vers un projet vierge — ne charge PAS le localStorage */
+function newProject(startMode) {
+  rows            = [];
+  nid             = 1;
+  currentFilePath = null;
+  showPrices      = true;
+  headerLines     = [{ text: '', style: 't1' }, { text: '', style: 't2' }];
+  Object.assign(pageLayout, {
+    size:'A4', orient:'portrait', mt:15, mb:15, ml:15, mr:15,
+    header:'', footer:'', showPageNum:true, showDate:false,
+  });
+  updateFileLabel('');
+  setMode(startMode || 'DQE');
+  applyPricesUI();
+  renderHeaderLines();
+  render();
+  snapshot();
+  // Vider le localStorage pour que le prochain démarrage ne restaure pas l'ancien projet
+  try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+  if (isElectron) window.electronAPI.setDirty(false);
+  notif('✓ Nouveau projet ' + (startMode || 'DQE'));
+}
+
 async function fileSave(saveAs) {
   const data    = getSaveData();
   const json    = JSON.stringify(data, null, 2);
@@ -486,9 +509,14 @@ if (isElectron) {
   startBackupTimer();
 
   window.electronAPI.onMenuNew(() => {
-    if (confirm('Nouveau projet ? Données non sauvegardées seront perdues.')) {
-      rows=[]; nid=1; currentFilePath=null; updateFileLabel(''); render(); snapshot(); saveLocal();
+    if (rows.length === 0 || confirm('Nouveau projet ? Les données non sauvegardées seront perdues.')) {
+      newProject(mode);
     }
+  });
+
+  // Coming from landing page "Nouveau DQE/BPU" — always start blank, no confirm
+  window.electronAPI.onProjectNew(startMode => {
+    newProject(startMode);
   });
   window.electronAPI.onMenuSave(()        => fileSave(false));
   window.electronAPI.onMenuSaveAs(()      => fileSave(true));

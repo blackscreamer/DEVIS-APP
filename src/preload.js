@@ -17,6 +17,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
   /* ── Menu events → renderer ── */
   onMenuNew:          cb => ipcRenderer.on('menu:new',          () => cb()),
+  onProjectNew:       cb => ipcRenderer.on('project:new',       (_, m) => cb(m)),
   onMenuSave:         cb => ipcRenderer.on('menu:save',         () => cb()),
   onMenuSaveAs:       cb => ipcRenderer.on('menu:saveAs',       () => cb()),
   onMenuExportExcel:  cb => ipcRenderer.on('menu:exportExcel',  () => cb()),

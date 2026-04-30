@@ -115,7 +115,13 @@ function createLanding() {
 function openFromLanding(filePath) {
   createEditor();
   mainWindow.webContents.once('did-finish-load', () => {
-    setTimeout(() => sendFileToEditor(filePath), 600);
+    setTimeout(async () => {
+      // Flag: came from landing with a file — init.js skips loadLocal()
+      await mainWindow.webContents.executeJavaScript(
+        `sessionStorage.setItem('devis_origin','file')`
+      );
+      sendFileToEditor(filePath);
+    }, 100);
   });
   if (landingWindow && !landingWindow.isDestroyed()) landingWindow.close();
 }
@@ -201,9 +207,14 @@ app.on('activate', () => {
 ═══════════════════════════════════════════ */
 ipcMain.handle('landing:new', async (_, mode) => {
   createEditor();
-  // Tell editor which mode to start in
   mainWindow.webContents.once('did-finish-load', () => {
-    setTimeout(() => mainWindow.webContents.send('menu:mode', mode || 'DQE'), 400);
+    setTimeout(async () => {
+      // Flag: came from landing as new project — init.js skips loadLocal()
+      await mainWindow.webContents.executeJavaScript(
+        `sessionStorage.setItem('devis_origin','new')`
+      );
+      mainWindow.webContents.send('project:new', mode || 'DQE');
+    }, 100);
   });
   if (landingWindow && !landingWindow.isDestroyed()) landingWindow.close();
 });
