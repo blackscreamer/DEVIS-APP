@@ -113,15 +113,9 @@ function createLanding() {
 }
 
 function openFromLanding(filePath) {
-  createEditor();
+  createEditor(); // no newMode → normal load, init.js will call loadLocal()
   mainWindow.webContents.once('did-finish-load', () => {
-    setTimeout(async () => {
-      // Flag: came from landing with a file — init.js skips loadLocal()
-      await mainWindow.webContents.executeJavaScript(
-        `sessionStorage.setItem('devis_origin','file')`
-      );
-      sendFileToEditor(filePath);
-    }, 100);
+    setTimeout(() => sendFileToEditor(filePath), 300);
   });
   if (landingWindow && !landingWindow.isDestroyed()) landingWindow.close();
 }
@@ -129,7 +123,7 @@ function openFromLanding(filePath) {
 /* ═══════════════════════════════════════════
    EDITOR WINDOW
 ═══════════════════════════════════════════ */
-function createEditor() {
+function createEditor(newMode) {
   mainWindow = new BrowserWindow({
     width: 1280, height: 860,
     minWidth: 900, minHeight: 600,
@@ -141,7 +135,18 @@ function createEditor() {
       preload: path.join(__dirname, 'preload.js'),
     },
   });
-  mainWindow.loadFile(path.join(__dirname, 'index.html'));
+
+  // If newMode is passed, load with ?new=DQE (or BPU).
+  // init.js reads this param — it's available synchronously in window.onload,
+  // before any IPC can arrive. This is the only reliable way to skip loadLocal().
+  if (newMode) {
+    mainWindow.loadFile(path.join(__dirname, 'index.html'), {
+      query: { new: newMode }
+    });
+  } else {
+    mainWindow.loadFile(path.join(__dirname, 'index.html'));
+  }
+
   if (isDev) mainWindow.webContents.openDevTools();
   buildMenu();
 
@@ -206,16 +211,7 @@ app.on('activate', () => {
    LANDING IPC
 ═══════════════════════════════════════════ */
 ipcMain.handle('landing:new', async (_, mode) => {
-  createEditor();
-  mainWindow.webContents.once('did-finish-load', () => {
-    setTimeout(async () => {
-      // Flag: came from landing as new project — init.js skips loadLocal()
-      await mainWindow.webContents.executeJavaScript(
-        `sessionStorage.setItem('devis_origin','new')`
-      );
-      mainWindow.webContents.send('project:new', mode || 'DQE');
-    }, 100);
-  });
+  createEditor(mode || 'DQE'); // pass mode to createEditor
   if (landingWindow && !landingWindow.isDestroyed()) landingWindow.close();
 });
 
