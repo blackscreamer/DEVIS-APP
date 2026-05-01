@@ -96,3 +96,55 @@ tr.search-hit-active td {
 body.no-prices #ttc-summary                    { visibility: visible; }
 #tbl.no-prices ~ #ttc-summary #ttc-chiffres,
 #tbl.no-prices ~ #ttc-summary #ttc-lettres     { color: transparent !important; }
+
+/* ── Delete choice dialog ── */
+.del-dialog-backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,.55);
+  z-index: 9000; backdrop-filter: blur(2px);
+}
+.del-dialog-box {
+  position: fixed; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9001;
+  background: #131c28; border: 1px solid #1e3048;
+  border-radius: 12px; padding: 20px 22px 16px;
+  min-width: 340px; max-width: 440px;
+  box-shadow: 0 8px 40px rgba(0,0,0,.7);
+  font-family: sans-serif;
+}
+.del-dialog-title {
+  font-size: 13px; font-weight: bold; color: #d0e0f0;
+  margin-bottom: 8px; display: flex; align-items: center;
+}
+.del-dialog-body {
+  font-size: 11.5px; color: #6a8aaa; line-height: 1.5;
+  margin-bottom: 14px;
+}
+.del-dialog-actions {
+  display: flex; flex-direction: column; gap: 6px;
+}
+.del-btn {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 1px;
+  padding: 9px 14px; border-radius: 7px; cursor: pointer;
+  border: 1px solid transparent; font-size: 12px; font-weight: 600;
+  transition: background .13s, border-color .13s, transform .1s;
+  text-align: left;
+}
+.del-btn small { font-weight: 400; font-size: 10px; opacity: .7; }
+.del-btn:hover { transform: translateY(-1px); }
+
+.del-btn-header {
+  background: #1a2a3a; border-color: #2a4a6a; color: #7aacdd;
+}
+.del-btn-header:hover { background: #1e3450; border-color: #4a80c0; }
+
+.del-btn-all {
+  background: #2a1010; border-color: #6a2020; color: #ff8888;
+}
+.del-btn-all:hover { background: #3a1414; border-color: #c04040; }
+
+.del-btn-cancel {
+  background: none; border-color: #1e3048; color: #4a6a8a;
+  font-weight: 400;
+}
+.del-btn-cancel:hover { background: #1a2535; border-color: #2a4060; color: #7a9ab8; }

@@ -1,6 +1,6 @@
 - better UI
 - change side bar top title to its class ( chap/sub-chap/art/sub-art + its numerotation instead of content ) 
-- when delete a chapter or a sub-chapter, give option to either delete only that row and move its content to the upper container or to delete it with its content as it is right now
+- when delete a chapter or a sub-chapter, give option to either delete only that row and move its content to the upper container or to delete it with its content as it is right now ✅
 - remove the possibility to adjust the layout and instead make it definitive to A4 paper size, margins 6mm for left and right, and 15mm top and bottom, keep the orientation optional
 - the numerotation: optional on/off, position bottom-left/bottom-center/bottom-right, and option to choose the starting page number 
 - possibility to open multiple files/windows instead of being limited to only one file/window
