@@ -39,8 +39,22 @@ function updateSidePanel() {
 
   // Info label
   if (n === 1 && r) {
-    const typeLabel = { chap:'Chapitre', sub:'Sous-chap.', art:'Article', subart:'Sous-article', blank:'Ligne vide' };
-    infoEl.textContent = (typeLabel[r.type] || r.type) + (r.desig ? ' — ' + r.desig.substring(0,28) + (r.desig.length>28?'…':'') : '');
+    const typeLabel = {
+      chap:   'Chapitre',
+      sub:    'Sous-chapitre',
+      art:    'Article',
+      subart: 'Sous-article',
+      blank:  'Ligne vide',
+    };
+    // Get the numbering for this row
+    const rowIdx = rows.findIndex(x => x.id === selId);
+    const { nums, letters } = buildNums();
+    const num    = nums[rowIdx]    || '';
+    const letter = letters[rowIdx] || '';
+    const label  = typeLabel[r.type] || r.type;
+    const numStr = letter || num; // subart uses letter, others use num
+
+    infoEl.textContent = numStr ? `${label}  ${numStr}` : label;
     infoEl.className   = 'sp-info sp-' + r.type;
   } else {
     infoEl.textContent = n + ' lignes sélectionnées';
