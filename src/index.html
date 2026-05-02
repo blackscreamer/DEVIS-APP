@@ -161,27 +161,11 @@
   </div>
   <div class="offcanvas-body">
 
-    <p class="text-muted mb-2" style="font-size:11px;font-family:sans-serif">Format du papier</p>
-    <div class="d-flex gap-2 mb-3">
-      <select id="pl-size" class="form-select form-select-sm" style="font-family:sans-serif;font-size:11px">
-        <option value="A4">A4 (210 × 297 mm)</option>
-        <option value="A3">A3 (297 × 420 mm)</option>
-        <option value="Letter">Letter (215 × 279 mm)</option>
-        <option value="Legal">Legal (215 × 356 mm)</option>
-      </select>
-      <select id="pl-orient" class="form-select form-select-sm" style="font-family:sans-serif;font-size:11px">
-        <option value="portrait">Portrait</option>
-        <option value="landscape">Paysage</option>
-      </select>
-    </div>
-
-    <p class="text-muted mb-2" style="font-size:11px;font-family:sans-serif">Marges (mm)</p>
-    <div class="row g-2 mb-3">
-      <div class="col-6"><label style="font-size:10px;font-family:sans-serif">Haut</label>   <input id="pl-mt" type="number" class="form-control form-control-sm" value="15" min="0" max="50"/></div>
-      <div class="col-6"><label style="font-size:10px;font-family:sans-serif">Bas</label>    <input id="pl-mb" type="number" class="form-control form-control-sm" value="15" min="0" max="50"/></div>
-      <div class="col-6"><label style="font-size:10px;font-family:sans-serif">Gauche</label> <input id="pl-ml" type="number" class="form-control form-control-sm" value="15" min="0" max="50"/></div>
-      <div class="col-6"><label style="font-size:10px;font-family:sans-serif">Droite</label> <input id="pl-mr" type="number" class="form-control form-control-sm" value="15" min="0" max="50"/></div>
-    </div>
+    <p class="text-muted mb-2" style="font-size:11px;font-family:sans-serif">Orientation</p>
+    <select id="pl-orient" class="form-select form-select-sm mb-3" style="font-family:sans-serif;font-size:11px">
+      <option value="portrait">Portrait</option>
+      <option value="landscape">Paysage</option>
+    </select>
 
     <p class="text-muted mb-2" style="font-size:11px;font-family:sans-serif">En-tête (gauche)</p>
     <input id="pl-header" type="text" class="form-control form-control-sm mb-1" placeholder="Ex: Ministère de l'Education…" style="font-size:11px"/>
@@ -191,10 +175,29 @@
     </div>
 
     <p class="text-muted mb-2" style="font-size:11px;font-family:sans-serif">Pied de page (gauche)</p>
-    <input id="pl-footer" type="text" class="form-control form-control-sm mb-1" placeholder="Ex: Document confidentiel…" style="font-size:11px"/>
-    <div class="form-check mb-3">
-      <input class="form-check-input" type="checkbox" id="pl-pgnum" checked/>
-      <label class="form-check-label" style="font-size:11px;font-family:sans-serif" for="pl-pgnum">Afficher les numéros de page (droite)</label>
+    <input id="pl-footer" type="text" class="form-control form-control-sm mb-3" placeholder="Ex: Document confidentiel…" style="font-size:11px"/>
+
+    <hr class="my-2"/>
+    <p class="text-muted mb-2" style="font-size:11px;font-family:sans-serif">Numérotation des pages</p>
+
+    <div class="form-check mb-2">
+      <input class="form-check-input" type="checkbox" id="pl-pgnum" checked onchange="document.getElementById('pgnum-options').style.display=this.checked?'block':'none'"/>
+      <label class="form-check-label" style="font-size:11px;font-family:sans-serif" for="pl-pgnum">Afficher les numéros de page</label>
+    </div>
+
+    <div id="pgnum-options">
+      <div class="mb-2">
+        <label style="font-size:10px;font-family:sans-serif;color:#666">Position</label>
+        <div class="d-flex gap-1 mt-1">
+          <button type="button" id="pgpos-left"   class="btn btn-sm btn-outline-secondary flex-fill pgpos-btn" onclick="setPgPos('left')"   style="font-size:10px;padding:3px">◀ Gauche</button>
+          <button type="button" id="pgpos-center" class="btn btn-sm btn-outline-secondary flex-fill pgpos-btn" onclick="setPgPos('center')" style="font-size:10px;padding:3px">● Centre</button>
+          <button type="button" id="pgpos-right"  class="btn btn-sm btn-outline-secondary flex-fill pgpos-btn active" onclick="setPgPos('right')"  style="font-size:10px;padding:3px">▶ Droite</button>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label style="font-size:10px;font-family:sans-serif;color:#666" for="pl-pgstart">Commencer à la page</label>
+        <input id="pl-pgstart" type="number" class="form-control form-control-sm mt-1" value="1" min="0" max="999" style="font-size:11px;width:80px"/>
+      </div>
     </div>
 
     <button class="btn btn-sm btn-primary w-100 mb-2" onclick="applyPageLayout()">

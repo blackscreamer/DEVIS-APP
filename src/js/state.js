@@ -46,11 +46,16 @@ let headerLines = [
 let pageLayout = {
   size:        'A4',
   orient:      'portrait',
-  mt: 15, mb: 15, ml: 15, mr: 15,
+  mt:          15,
+  mb:          15,
+  ml:          6,
+  mr:          6,
   header:      '',
   footer:      '',
   showPageNum: true,
   showDate:    false,
+  pageNumPos:  'right',  // 'left' | 'center' | 'right'
+  pageNumStart: 1,       // first page number
 };
 
 /**

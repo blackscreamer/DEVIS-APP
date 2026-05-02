@@ -37,7 +37,13 @@ function applyLoadedData(d) {
   });
 
   if (d.C) C = d.C;
-  if (d.pageLayout) Object.assign(pageLayout, d.pageLayout);
+  if (d.pageLayout) {
+    Object.assign(pageLayout, d.pageLayout);
+    // Always enforce fixed values regardless of what was saved
+    pageLayout.size = 'A4';
+    pageLayout.mt = 15; pageLayout.mb = 15;
+    pageLayout.ml = 6;  pageLayout.mr = 6;
+  }
   if (d.colWidths && typeof d.colWidths === 'object') {
     if (d.colWidths.DQE) {
       // Merge but replace null values with defaults
@@ -162,30 +168,40 @@ function updateFileLabel(fp) {
 /* ── Page layout UI ── */
 function syncPageLayoutUI() {
   const p = pageLayout, g = id => document.getElementById(id);
-  if(g('pl-size'))   g('pl-size').value    = p.size    || 'A4';
-  if(g('pl-orient')) g('pl-orient').value  = p.orient  || 'portrait';
-  if(g('pl-mt'))     g('pl-mt').value      = p.mt      ?? 15;
-  if(g('pl-mb'))     g('pl-mb').value      = p.mb      ?? 15;
-  if(g('pl-ml'))     g('pl-ml').value      = p.ml      ?? 15;
-  if(g('pl-mr'))     g('pl-mr').value      = p.mr      ?? 15;
-  if(g('pl-header')) g('pl-header').value  = p.header  || '';
-  if(g('pl-footer')) g('pl-footer').value  = p.footer  || '';
-  if(g('pl-pgnum'))  g('pl-pgnum').checked = !!p.showPageNum;
-  if(g('pl-date'))   g('pl-date').checked  = !!p.showDate;
+  if (g('pl-orient'))  g('pl-orient').value  = p.orient  || 'portrait';
+  if (g('pl-header'))  g('pl-header').value  = p.header  || '';
+  if (g('pl-footer'))  g('pl-footer').value  = p.footer  || '';
+  if (g('pl-pgnum'))   g('pl-pgnum').checked = !!p.showPageNum;
+  if (g('pl-date'))    g('pl-date').checked  = !!p.showDate;
+  if (g('pl-pgstart')) g('pl-pgstart').value = p.pageNumStart ?? 1;
+  // Sync position buttons
+  setPgPos(p.pageNumPos || 'right', false);
+  // Show/hide pgnum options
+  const opts = g('pgnum-options');
+  if (opts) opts.style.display = p.showPageNum ? 'block' : 'none';
+}
+
+function setPgPos(pos, save = true) {
+  ['left','center','right'].forEach(p => {
+    const b = document.getElementById('pgpos-' + p);
+    if (b) b.classList.toggle('active', p === pos);
+  });
+  if (save) { pageLayout.pageNumPos = pos; triggerAutosave(); }
 }
 
 function applyPageLayout() {
   const g = id => document.getElementById(id);
-  pageLayout.size       = g('pl-size')?.value   || 'A4';
-  pageLayout.orient     = g('pl-orient')?.value || 'portrait';
-  pageLayout.mt         = parseFloat(g('pl-mt')?.value)  || 15;
-  pageLayout.mb         = parseFloat(g('pl-mb')?.value)  || 15;
-  pageLayout.ml         = parseFloat(g('pl-ml')?.value)  || 15;
-  pageLayout.mr         = parseFloat(g('pl-mr')?.value)  || 15;
-  pageLayout.header     = g('pl-header')?.value || '';
-  pageLayout.footer     = g('pl-footer')?.value || '';
-  pageLayout.showPageNum= !!g('pl-pgnum')?.checked;
-  pageLayout.showDate   = !!g('pl-date')?.checked;
+  pageLayout.orient       = g('pl-orient')?.value   || 'portrait';
+  pageLayout.header       = g('pl-header')?.value   || '';
+  pageLayout.footer       = g('pl-footer')?.value   || '';
+  pageLayout.showPageNum  = !!g('pl-pgnum')?.checked;
+  pageLayout.showDate     = !!g('pl-date')?.checked;
+  pageLayout.pageNumStart = parseInt(g('pl-pgstart')?.value) || 1;
+  // pageNumPos is updated live by setPgPos()
+  // Always enforce fixed values
+  pageLayout.size = 'A4';
+  pageLayout.mt   = 15; pageLayout.mb = 15;
+  pageLayout.ml   = 6;  pageLayout.mr = 6;
   if (typeof updateWorkspaceSize === 'function') updateWorkspaceSize();
   triggerAutosave();
   notif('✓ Mise en page appliquée');
@@ -416,14 +432,14 @@ function buildPrintHTML() {
   </div>` : '';
 
   // Header / footer
-  const hdrHtml = (p.header||p.showDate) ? `
+  const hdrHtml = (p.header || p.showDate) ? `
   <div style="display:flex;justify-content:space-between;padding-bottom:6px;border-bottom:1px solid #000;margin-bottom:10px;font-family:${F};font-size:10pt;">
-    <span>${esc(p.header||projName)}</span><span>${p.showDate?dateStr:''}</span>
+    <span>${esc(p.header || projName)}</span><span>${p.showDate ? dateStr : ''}</span>
   </div>` : '';
 
-  const ftrHtml = (p.footer||p.showPageNum) ? `
-  <div style="display:flex;justify-content:space-between;padding-top:6px;border-top:1px solid #ccc;margin-top:14px;font-family:${F};font-size:10pt;">
-    <span>${esc(p.footer||'')}</span>${p.showPageNum?'<span>Page 1</span>':''}
+  const ftrHtml = (p.footer) ? `
+  <div class="doc-footer" style="padding-top:6px;border-top:1px solid #ccc;margin-top:14px;font-family:${F};font-size:10pt;">
+    <span>${esc(p.footer)}</span>
   </div>` : '';
 
   // Assemble
@@ -433,6 +449,35 @@ function buildPrintHTML() {
       ? `<div style="font-family:${F};font-size:12pt;font-weight:bold;text-transform:uppercase;text-decoration:underline;text-align:center;line-height:1.7;">${escNl(l.text)}</div>`
       : `<div style="font-family:${F};font-size:11pt;font-weight:bold;text-transform:uppercase;text-align:center;line-height:1.6;">${escNl(l.text)}</div>`;
   }).join('');
+
+  // Page number CSS — uses @page margin boxes (only reliable multi-page approach in Chromium)
+  const pgStart   = p.pageNumStart ?? 1;
+  const pgPos     = p.pageNumPos   || 'right';
+  const pgAlign   = pgPos === 'left' ? 'left' : pgPos === 'center' ? 'center' : 'right';
+  // @bottom-left / @bottom-center / @bottom-right are @page margin boxes
+  // They render on EVERY page automatically — no JS, no fixed divs needed
+  const pgMarginBox = `@bottom-${pgPos}`;
+  const pgNumCss = p.showPageNum ? `
+${pgMarginBox} {
+  content: "Page " counter(page);
+  font-family: ${F};
+  font-size: 9pt;
+  color: #000;
+}` : '';
+
+  // Also add @bottom for footer text if present
+  const ftrCss = p.footer ? `
+@bottom-left {
+  content: ${JSON.stringify(p.footer)};
+  font-family: ${F};
+  font-size: 9pt;
+  color: #444;
+}` : '';
+
+  // @top for running header
+  const hdrCss = (p.header || p.showDate) ? `
+@top-left   { content: ${JSON.stringify(p.header || projName)}; font-family:${F}; font-size:9pt; color:#000; }
+@top-right  { content: ${JSON.stringify(p.showDate ? dateStr : '')}; font-family:${F}; font-size:9pt; color:#000; }` : '';
 
   return `<!DOCTYPE html>
 <html lang="fr">
@@ -444,14 +489,17 @@ function buildPrintHTML() {
 @page {
   size: ${pageSize};
   margin: ${p.mt}mm ${p.mr}mm ${p.mb}mm ${p.ml}mm;
+  counter-increment: page;
+  ${pgNumCss}
+  ${ftrCss}
+  ${hdrCss}
 }
+/* Set page counter start */
+html { counter-reset: page ${pgStart - 1}; }
 * { -webkit-print-color-adjust:exact!important; print-color-adjust:exact!important; color-adjust:exact!important; }
 body { font-family:${F}; font-size:11pt; background:#fff; color:#000; }
 table { width:100%; border-collapse:collapse; table-layout:auto; }
 th,td { border:1px solid #000; }
-.doc-titles { text-align:center; margin-bottom:12px; }
-.t1 { font-size:12pt; font-weight:bold; text-transform:uppercase; text-decoration:underline; line-height:1.7; }
-.t2 { font-size:11pt; font-weight:bold; text-transform:uppercase; line-height:1.6; }
 .band { border:2px solid #000; padding:5px; text-align:center; font-weight:bold; font-size:12pt; text-transform:uppercase; margin-bottom:10px; }
 thead { display:table-header-group; }
 tr { page-break-inside:avoid; }
