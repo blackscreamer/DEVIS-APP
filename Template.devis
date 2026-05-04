@@ -3210,7 +3210,7 @@
     {
       "type": "art",
       "id": "r574",
-      "desig": "F/P de tableau d’éclairage extérieur nommé TEE comprenant :-         \nEnveloppe métallique en tôle d’acier laminé de 1.5mm d’épaisseur minimum .\n- 01 Disjoncteur différentiel 4 pôles 32A\n- 01 Sectionneur porte fusible à commande manuel   4 pôles 32A\n- 01 Interrupteur de position(Auto/Manuel)\n- 01 Disjoncteur Magnétothermique 2 pôles 16A\n- 03 Disjoncteur Magnétothermique 4 pôles 16A.\n- 03 Contacteurs 4 Pôles 16A\n- 06 Bouton poussoirs à voyant lumineux le tout monté sur l’enveloppe.\n01 Cellule photoélectrique y compris tout les  accessoires de raccordement (Contacteur, fusible………)\n   presse étoupe.   -  Bornes de raccordement      -borne de terre \n borne de neutre      -étiquette de repérage \ny compris raccordement en fil et câble souple tout en respectant les règles de câblage ainsi que toute sujétion à ordre de marche,tous les équipements devrons être de très bonne qualité.",
+      "desig": "F/P de tableau d’éclairage extérieur nommé TEE comprenant :\n- Enveloppe métallique en tôle d’acier laminé de 1.5mm d’épaisseur minimum .\n- 01 Disjoncteur différentiel 4 pôles 32A\n- 01 Sectionneur porte fusible à commande manuel   4 pôles 32A\n- 01 Interrupteur de position(Auto/Manuel)\n- 01 Disjoncteur Magnétothermique 2 pôles 16A\n- 03 Disjoncteur Magnétothermique 4 pôles 16A.\n- 03 Contacteurs 4 Pôles 16A\n- 06 Bouton poussoirs à voyant lumineux le tout monté sur l’enveloppe.\n01 Cellule photoélectrique y compris tout les  accessoires de raccordement (Contacteur, fusible………)\n   presse étoupe.   -  Bornes de raccordement      -borne de terre \n borne de neutre      -étiquette de repérage \ny compris raccordement en fil et câble souple tout en respectant les règles de câblage ainsi que toute sujétion à ordre de marche,tous les équipements devrons être de très bonne qualité.",
       "unite": "Ens",
       "qty": "1",
       "pu": "240000"
@@ -3335,7 +3335,7 @@
       "pu": "4500"
     }
   ],
-  "mode": "DQE",
+  "mode": "BPU",
   "nid": 590,
   "C": {
     "chapBg": "#ea5d5d",
@@ -3361,14 +3361,16 @@
   "pageLayout": {
     "size": "A4",
     "orient": "portrait",
-    "mt": 5,
-    "mb": 5,
-    "ml": 5,
-    "mr": 5,
+    "mt": 15,
+    "mb": 15,
+    "ml": 6,
+    "mr": 6,
     "header": "",
     "footer": "",
     "showPageNum": false,
-    "showDate": false
+    "showDate": false,
+    "pageNumPos": "right",
+    "pageNumStart": 1
   },
   "colWidths": {
     "DQE": {

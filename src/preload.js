@@ -10,7 +10,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   saveBackup:     (content, currentPath)              => ipcRenderer.invoke('file:saveBackup',  { content, currentPath }),
   saveExcel:      (buffer, defaultName)               => ipcRenderer.invoke('dialog:saveExcel', { buffer, defaultName }),
   printInBrowser: (html)                              => ipcRenderer.invoke('file:print',        { html }),
-  exportPdf:      (html, defaultName)                 => ipcRenderer.invoke('file:exportPdf',   { html, defaultName }),
 
   /* ── Dirty state — tells main if there are unsaved changes ── */
   setDirty: (dirty) => ipcRenderer.send('dirty:update', dirty),
@@ -21,7 +20,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   onMenuSave:         cb => ipcRenderer.on('menu:save',         () => cb()),
   onMenuSaveAs:       cb => ipcRenderer.on('menu:saveAs',       () => cb()),
   onMenuExportExcel:  cb => ipcRenderer.on('menu:exportExcel',  () => cb()),
-  onMenuExportPdf:    cb => ipcRenderer.on('menu:exportPdf',    () => cb()),
   onMenuPrint:        cb => ipcRenderer.on('menu:print',        () => cb()),
   onMenuTogglePrices: cb => ipcRenderer.on('menu:togglePrices', () => cb()),
   onMenuMode:         cb => ipcRenderer.on('menu:mode',         (_, m) => cb(m)),

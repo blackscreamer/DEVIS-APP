@@ -113,9 +113,9 @@ function createLanding() {
 }
 
 function openFromLanding(filePath) {
-  createEditor(); // no newMode → normal load, init.js will call loadLocal()
+  createEditor('file'); // pass 'file' flag — createEditor loads ?file=1
   mainWindow.webContents.once('did-finish-load', () => {
-    setTimeout(() => sendFileToEditor(filePath), 300);
+    setTimeout(() => sendFileToEditor(filePath), 200);
   });
   if (landingWindow && !landingWindow.isDestroyed()) landingWindow.close();
 }
@@ -139,7 +139,13 @@ function createEditor(newMode) {
   // If newMode is passed, load with ?new=DQE (or BPU).
   // init.js reads this param — it's available synchronously in window.onload,
   // before any IPC can arrive. This is the only reliable way to skip loadLocal().
-  if (newMode) {
+  if (newMode === 'file') {
+    // Opening a specific file — skip loadLocal() in init.js
+    mainWindow.loadFile(path.join(__dirname, 'index.html'), {
+      query: { file: '1' }
+    });
+  } else if (newMode) {
+    // New blank project with specific mode
     mainWindow.loadFile(path.join(__dirname, 'index.html'), {
       query: { new: newMode }
     });
@@ -261,7 +267,6 @@ function buildMenu() {
       { type: 'separator' },
       { label: 'Importer Excel…',   click: menuImportExcel                                                   },
       { label: 'Exporter Excel…',   accelerator: 'CmdOrCtrl+E',       click: () => send('menu:exportExcel') },
-      { label: 'Exporter PDF…',     accelerator: 'CmdOrCtrl+Shift+E', click: () => send('menu:exportPdf')   },
       { label: 'Imprimer…',         accelerator: 'CmdOrCtrl+P',       click: () => send('menu:print')       },
       { type: 'separator' },
       { label: 'Quitter',           accelerator: 'CmdOrCtrl+Q',       role: 'quit'                          },
@@ -395,6 +400,7 @@ ipcMain.handle('file:print', async (_, { html }) => {
   try {
     fs.writeFileSync(TEMP_PRINT, html, 'utf-8');
     if (printWin && !printWin.isDestroyed()) printWin.close();
+
     printWin = new BrowserWindow({
       width: 1100, height: 850, minWidth: 800, minHeight: 600,
       title: 'Impression — Devis BTP',
@@ -402,9 +408,13 @@ ipcMain.handle('file:print', async (_, { html }) => {
       show: true,
       webPreferences: { nodeIntegration: false, contextIsolation: true },
     });
-    await printWin.loadFile(TEMP_PRINT);
-    await new Promise(res => setTimeout(res, 300));
+
+    // Use loadURL with file:// — loadFile() only works for paths relative to app root
+    const fileUrl = 'file:///' + TEMP_PRINT.replace(/\\/g, '/');
+    await printWin.loadURL(fileUrl);
+    await new Promise(res => setTimeout(res, 400));
     await printWin.webContents.executeJavaScript('window.print()');
+
     printWin.on('closed', () => {
       printWin = null;
       try { fs.unlinkSync(TEMP_PRINT); } catch {}
@@ -413,43 +423,6 @@ ipcMain.handle('file:print', async (_, { html }) => {
   } catch (e) {
     dialog.showErrorBox('Erreur impression', e.message);
     return false;
-  }
-});
-
-/* ═══════════════════════════════════════════
-   PDF
-═══════════════════════════════════════════ */
-const TEMP_PDF = path.join(os.tmpdir(), 'devis_pdf_render.html');
-
-ipcMain.handle('file:exportPdf', async (_, { html, defaultName }) => {
-  const r = await dialog.showSaveDialog(mainWindow, {
-    title: 'Exporter en PDF', defaultPath: defaultName || 'devis.pdf',
-    filters: [{ name: 'PDF', extensions: ['pdf'] }],
-  });
-  if (r.canceled) return null;
-  fs.writeFileSync(TEMP_PDF, html, 'utf-8');
-  const pdfWin = new BrowserWindow({
-    show: false,
-    webPreferences: { nodeIntegration: false, contextIsolation: true },
-  });
-  try {
-    await new Promise((resolve, reject) => {
-      pdfWin.loadFile(TEMP_PDF);
-      pdfWin.webContents.once('did-finish-load', resolve);
-      pdfWin.webContents.once('did-fail-load', reject);
-    });
-    await new Promise(res => setTimeout(res, 500));
-    const pdfData = await pdfWin.webContents.printToPDF({ printBackground: true });
-    pdfWin.close();
-    try { fs.unlinkSync(TEMP_PDF); } catch {}
-    fs.writeFileSync(r.filePath, pdfData);
-    shell.openPath(r.filePath);
-    return r.filePath;
-  } catch (e) {
-    pdfWin.close();
-    try { fs.unlinkSync(TEMP_PDF); } catch {}
-    dialog.showErrorBox('Erreur PDF', e.message);
-    return null;
   }
 });
 

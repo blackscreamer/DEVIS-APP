@@ -450,34 +450,49 @@ function buildPrintHTML() {
       : `<div style="font-family:${F};font-size:11pt;font-weight:bold;text-transform:uppercase;text-align:center;line-height:1.6;">${escNl(l.text)}</div>`;
   }).join('');
 
-  // Page number CSS — uses @page margin boxes (only reliable multi-page approach in Chromium)
-  const pgStart   = p.pageNumStart ?? 1;
-  const pgPos     = p.pageNumPos   || 'right';
-  const pgAlign   = pgPos === 'left' ? 'left' : pgPos === 'center' ? 'center' : 'right';
-  // @bottom-left / @bottom-center / @bottom-right are @page margin boxes
-  // They render on EVERY page automatically — no JS, no fixed divs needed
-  const pgMarginBox = `@bottom-${pgPos}`;
-  const pgNumCss = p.showPageNum ? `
-${pgMarginBox} {
-  content: "Page " counter(page);
-  font-family: ${F};
-  font-size: 9pt;
-  color: #000;
-}` : '';
+  // Page number CSS
+  // The 'page' counter is automatically incremented by the browser — never set counter-increment manually.
+  // @bottom-* margin boxes are nested INSIDE @page {} — this is the CSS Paged Media spec.
+  // counter-reset on <html> sets the starting page number.
+  const pgStart = p.pageNumStart ?? 1;
+  const pgPos   = p.pageNumPos   || 'right';
 
-  // Also add @bottom for footer text if present
-  const ftrCss = p.footer ? `
-@bottom-left {
-  content: ${JSON.stringify(p.footer)};
-  font-family: ${F};
-  font-size: 9pt;
-  color: #444;
-}` : '';
-
-  // @top for running header
-  const hdrCss = (p.header || p.showDate) ? `
-@top-left   { content: ${JSON.stringify(p.header || projName)}; font-family:${F}; font-size:9pt; color:#000; }
-@top-right  { content: ${JSON.stringify(p.showDate ? dateStr : '')}; font-family:${F}; font-size:9pt; color:#000; }` : '';
+  // Build the margin box content — nested inside @page {}
+  const marginBoxes = [];
+  if (p.showPageNum) {
+    marginBoxes.push(`  @bottom-${pgPos} {
+    content: "Page " counter(page);
+    font-family: ${F};
+    font-size: 9pt;
+    color: #000;
+  }`);
+  }
+  if (p.footer) {
+    // Footer text goes on a different position from the page number
+    const ftrPos = pgPos === 'left' ? 'right' : 'left';
+    marginBoxes.push(`  @bottom-${ftrPos} {
+    content: ${JSON.stringify(p.footer)};
+    font-family: ${F};
+    font-size: 9pt;
+    color: #444;
+  }`);
+  }
+  if (p.header || p.showDate) {
+    marginBoxes.push(`  @top-left {
+    content: ${JSON.stringify(p.header || projName)};
+    font-family: ${F};
+    font-size: 9pt;
+    color: #000;
+  }`);
+    if (p.showDate) {
+      marginBoxes.push(`  @top-right {
+    content: ${JSON.stringify(dateStr)};
+    font-family: ${F};
+    font-size: 9pt;
+    color: #000;
+  }`);
+    }
+  }
 
   return `<!DOCTYPE html>
 <html lang="fr">
@@ -486,16 +501,13 @@ ${pgMarginBox} {
 <title>${esc(projName)}</title>
 <style>
 * { box-sizing:border-box; margin:0; padding:0; }
+/* counter-reset on html sets the first page number */
+html { counter-reset: page ${pgStart - 1}; }
 @page {
   size: ${pageSize};
   margin: ${p.mt}mm ${p.mr}mm ${p.mb}mm ${p.ml}mm;
-  counter-increment: page;
-  ${pgNumCss}
-  ${ftrCss}
-  ${hdrCss}
+${marginBoxes.join('\n')}
 }
-/* Set page counter start */
-html { counter-reset: page ${pgStart - 1}; }
 * { -webkit-print-color-adjust:exact!important; print-color-adjust:exact!important; color-adjust:exact!important; }
 body { font-family:${F}; font-size:11pt; background:#fff; color:#000; }
 table { width:100%; border-collapse:collapse; table-layout:auto; }
@@ -520,35 +532,17 @@ ${ftrHtml}
 }
 
 /* ════════════════════════════════════════
-   PRINT — opens in default browser
+   PRINT — opens in Electron BrowserWindow
 ════════════════════════════════════════ */
 async function doPrint() {
   const html = buildPrintHTML();
   if (!html) { notif('⚠ Erreur: document vide'); return; }
   if (isElectron) {
-    notif('🖨 Ouverture dans le navigateur…');
+    notif('🖨 Ouverture de l\'aperçu impression…');
     await window.electronAPI.printInBrowser(html);
-    notif('✓ Utilisez Ctrl+P dans le navigateur pour imprimer');
   } else {
     const w = window.open('','_blank'); w.document.write(html); w.document.close();
     setTimeout(() => w.print(), 500);
-  }
-}
-
-/* ════════════════════════════════════════
-   PDF — hidden window printToPDF
-════════════════════════════════════════ */
-async function doExportPdf() {
-  const html    = buildPrintHTML();
-  const data    = getSaveData();
-  const defName = (data.l1||'devis').replace(/\s+/g,'_').substring(0,40)+'.pdf';
-  if (isElectron) {
-    notif('⏳ Génération du PDF…');
-    const p = await window.electronAPI.exportPdf(html, defName);
-    if (p) notif('✓ PDF exporté');
-    else   notif('⚠ PDF annulé');
-  } else {
-    window.print();
   }
 }
 
@@ -569,7 +563,6 @@ if (isElectron) {
   window.electronAPI.onMenuSave(()        => fileSave(false));
   window.electronAPI.onMenuSaveAs(()      => fileSave(true));
   window.electronAPI.onMenuExportExcel(() => doExport());
-  window.electronAPI.onMenuExportPdf(()   => doExportPdf());
   window.electronAPI.onMenuPrint(()       => doPrint());
   window.electronAPI.onMenuUndo(()        => undo());
   window.electronAPI.onMenuRedo(()        => redo());

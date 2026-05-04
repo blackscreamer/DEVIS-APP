@@ -18,8 +18,9 @@
  */
 
 window.onload = () => {
-  const params  = new URLSearchParams(window.location.search);
-  const newMode = params.get('new'); // 'DQE', 'BPU', or null
+  const params   = new URLSearchParams(window.location.search);
+  const newMode  = params.get('new');  // 'DQE' | 'BPU' → blank project
+  const fileMode = params.get('file'); // '1'            → file coming via IPC
 
   if (newMode) {
     /* ── Nouveau projet depuis la landing ── */
@@ -29,13 +30,22 @@ window.onload = () => {
     headerLines = [{ text: '', style: 't1' }, { text: '', style: 't2' }];
     currentFilePath = null;
     Object.assign(pageLayout, {
-      size:'A4', orient:'portrait', mt:15, mb:15, ml:15, mr:15,
+      size:'A4', orient:'portrait', mt:15, mb:15, ml:6, mr:6,
       header:'', footer:'', showPageNum:true, showDate:false,
     });
-    // Clear localStorage so F5 doesn't restore old project
     try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+
+  } else if (fileMode) {
+    /* ── Ouverture fichier depuis la landing ── */
+    // Don't load localStorage — file content arrives via IPC file:opened shortly after
+    rows        = [];
+    nid         = 1;
+    showPrices  = true;
+    headerLines = [{ text: '', style: 't1' }, { text: '', style: 't2' }];
+    currentFilePath = null;
+
   } else {
-    /* ── Rechargement ou ouverture fichier ── */
+    /* ── Rechargement direct (F5 dev) ── */
     let loaded = false;
     try { loaded = loadLocal(); } catch(e) { console.warn('loadLocal:', e); }
     if (!loaded) {
@@ -48,8 +58,6 @@ window.onload = () => {
 
   render();
   snapshot();
-
-  // Apply mode: from URL param or from loaded state
   setMode(newMode || mode);
   applyPricesUI();
   updateWorkspaceSize();
